@@ -1,0 +1,12 @@
+{
+  "name": "form-probe-worker",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.60.0"
+  }
+}

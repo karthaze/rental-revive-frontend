@@ -1,0 +1,21 @@
+{
+  /* Convex-standard config: type-checks the functions, emits nothing.
+     The SPA stays plain JS — this file scopes TS to convex/ only. */
+  "compilerOptions": {
+    "allowJs": true,
+    "strict": true,
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "isolatedModules": true,
+    /* node types for process.env only — the runtime is still Convex's
+       V8 isolate, not Node; don't reach for Node APIs beyond env */
+    "types": ["node"],
+    "noEmit": true
+  },
+  "include": ["./**/*"],
+  "exclude": ["./_generated"]
+}
