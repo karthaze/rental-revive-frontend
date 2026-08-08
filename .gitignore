@@ -1,6 +1,6 @@
-# Local env files hold real keys. .env.example is the committed manifest
-# and is deliberately NOT ignored.
+# Env files stay local, including the .env.example manifest.
 .env
+.env.example
 .env.local
 .env.*.local
 
