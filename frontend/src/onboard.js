@@ -647,13 +647,14 @@ function renderGate(app, prefill) {
     <div class="gate-screen" id="gate">
       <div class="gate-bg" aria-hidden="true"></div>
       <header class="gate-top">
-        <a class="gate-logo" href="/"><img src="/img/logo.png" alt="RentalRevive" /></a>
+        <a class="gate-logo" href="/"><img src="/img/logo-light.png" alt="RentalRevive" /></a>
         <span class="gate-badge"><span class="star"></span>Free · 2 minutes · no forms</span>
       </header>
       <div class="gate-hero">
         <span class="gate-eyebrow"><i class="gate-live"></i>The rental revenue leak scan</span>
         <h1>Type your company.<br/><em>We’ll find the leak.</em></h1>
         <p class="gate-sub">US heavy machinery rental yards only, cranes to compactors. No sign-up, no email wall. Just your business name.</p>
+        <div class="gate-search-wrap">
         <div class="gate-search" id="gateSearch">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
           <input id="gateInput" type="text" autocomplete="off" spellcheck="false"
@@ -665,6 +666,7 @@ function renderGate(app, prefill) {
           </button>
         </div>
         <ul class="gate-list" id="gateList" role="listbox"></ul>
+        </div>
         <div class="gate-trust">
           <span>${TRUST_CHECK}Free 2-minute scan</span>
           <span>${TRUST_CHECK}No forms, no sign-up</span>
@@ -724,7 +726,19 @@ function bootGate(prefill) {
       foot.textContent = 'Google Places live · US heavy machinery rental yards only'
       list.appendChild(foot)
     }
+    clampList()
   }
+
+  /* the dropdown overlays the page, so its height must respect the
+     viewport: at short windows (or high browser zoom) it used to run
+     straight off the bottom of the screen */
+  const clampList = () => {
+    const top = list.getBoundingClientRect().top
+    /* floor of ~1.5 rows: past that the window is shorter than any
+       floor could honestly fix, and internal scroll takes over */
+    list.style.maxHeight = Math.max(110, window.innerHeight - top - 16) + 'px'
+  }
+  window.addEventListener('resize', clampList)
 
   const search = async () => {
     const q = input.value.trim()
@@ -1622,7 +1636,7 @@ async function auditStage(row) {
           <div class="fp-tag ${tr.detected === null ? 'unknown' : tr.detected ? 'on' : 'off'}">
             <span class="ft-lab">${esc(tr.label)}</span>
             <span class="ft-val">${
-              tr.detected === null ? 'Not measured' : tr.detected ? (tr.id ? esc(tr.id) : 'Detected') : 'Missing'
+              tr.detected === null ? 'Not measured' : tr.detected ? 'Detected' : 'Missing'
             }</span>
           </div>`).join('')}
       </div>`

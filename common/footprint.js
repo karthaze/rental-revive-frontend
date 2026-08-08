@@ -267,9 +267,25 @@ const SIGNATURES = [
   {
     id: 'facebookPixel',
     label: 'Facebook Pixel',
-    html: [/connect\.facebook\.net\/[^"']*fbevents\.js/i, /\bfbq\s*\(/, /_fbq\b/],
+    /* Two dialects in the wild: the classic pasted snippet (fbevents.js
+       + fbq calls) and platform pixel-loader config — Shopify web
+       pixels ship `"pixel_type":"facebook_pixel"` in served JSON and
+       load fbevents at runtime, so the script reference never appears
+       in the HTML. Observed live on brooklinen.com 2026-08-08. The
+       JSON often arrives escaped inside a script string, hence the
+       optional backslashes. */
+    html: [
+      /connect\.facebook\.net\/[^"']*fbevents\.js/i,
+      /\bfbq\s*\(/,
+      /_fbq\b/,
+      /pixel_type\\?["']\s*:\s*\\?["']facebook_pixel/i,
+    ],
     requests: [/facebook\.com\/tr\?/i, /connect\.facebook\.net/i],
-    id_pattern: /fbq\s*\(\s*['"]init['"]\s*,\s*['"](\d{10,20})['"]/i,
+    id_pattern: [
+      /fbq\s*\(\s*['"]init['"]\s*,\s*['"](\d{10,20})['"]/i,
+      /pixel_id\\?["']\s*:\s*\\?["'](\d{10,20})\\?["'][^{}]{0,160}?facebook_pixel/i,
+      /facebook_pixel[^{}]{0,160}?pixel_id\\?["']\s*:\s*\\?["'](\d{10,20})/i,
+    ],
   },
   {
     id: 'googleTagManager',
@@ -333,7 +349,11 @@ export function detectTrackers(html, requests = null) {
 
     let found = null
     if (evidence && haveHtml && sig.id_pattern) {
-      found = html.match(sig.id_pattern)?.[1] || null
+      /* a signature may know several id dialects — first hit wins */
+      for (const pat of [sig.id_pattern].flat()) {
+        found = html.match(pat)?.[1] || null
+        if (found) break
+      }
     }
 
     trackers[sig.id] = {

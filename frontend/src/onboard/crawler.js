@@ -6,9 +6,12 @@
 //
 // The crawl itself runs in services/convex/enrichment/crawl.ts (Apify, raw HTML
 // via saveHtml — a tracking tag is a script reference and a text-only
-// crawl discards exactly that). Interpretation happens through the
-// shared pure modules (enrich.js, footprint.js), so browser and server
-// read markup through the same eyes.
+// crawl discards exactly that). Without a backend, fetchsite.js reads
+// the same HTML through keyless public CORS mirrors instead — no token
+// to leak, so AD-13's reason for going server-side does not bar it.
+// Interpretation happens through the shared pure modules (enrich.js,
+// footprint.js) either way, so browser and server read markup through
+// the same eyes.
 //
 // HONESTY RULE, unchanged: when the site cannot be read, every finding
 // is `null` — never `false`. This module once shipped a simulateAudit()
@@ -18,6 +21,7 @@
 // fabricates findings; an unconfigured backend reports itself as exactly that.
 
 import { detectTrackers } from '../../../common/footprint.js'
+import { fetchSiteHtml, buildAudit } from './fetchsite.js'
 
 /** Every finding unknown. Used whenever we could not read the site. */
 function unmeasured(reason) {
@@ -44,8 +48,7 @@ export async function auditWebsite(targetUrl, progressCallback = () => {}, meta 
   try {
     const { probeConfigured, getConvex, api } = await import('../dashboard/backend.js')
     if (!probeConfigured()) {
-      progressCallback('[Crawler not configured, site audit skipped]')
-      return unmeasured('Crawler not configured')
+      return mirrorAudit(targetUrl, host, progressCallback)
     }
 
     progressCallback(`[Fetching ${host}...]`)
@@ -57,14 +60,31 @@ export async function auditWebsite(targetUrl, progressCallback = () => {}, meta 
     })
 
     if (!result?.measured) {
-      progressCallback(`[${result?.error || 'Scan failed'}]`)
-      return result ?? unmeasured('Audit failed')
+      /* the backend exists but could not crawl — the mirror path reads
+         the same HTML keylessly before we give up on the audit */
+      return mirrorAudit(targetUrl, host, progressCallback, result?.error)
     }
     progressCallback('[Parsing markup...]')
     progressCallback('[Scanning for tracking tags...]')
     return result
   } catch (e) {
-    progressCallback('[Scan failed]')
-    return unmeasured(e?.message || 'Audit failed')
+    return mirrorAudit(targetUrl, host, progressCallback, e?.message)
   }
+}
+
+/* The keyless fallback: same HTML, same interpreters (fetchsite.js),
+   no backend and no token. Failure still reports unmeasured — the
+   honesty rule above survives every path through this file. */
+async function mirrorAudit(targetUrl, host, progressCallback, upstreamError) {
+  const url = /^https?:/i.test(targetUrl) ? targetUrl : 'https://' + targetUrl
+  progressCallback(`[Fetching ${host}...]`)
+  const got = await fetchSiteHtml(url)
+  if (!got) {
+    progressCallback(`[${upstreamError || 'Site unreachable this scan'}, audit skipped]`)
+    return unmeasured(upstreamError || 'Site unreachable this scan')
+  }
+  progressCallback('[Parsing markup...]')
+  progressCallback('[Scanning for tracking tags...]')
+  const result = buildAudit(got.html)
+  return result ?? unmeasured('Site unreadable this scan')
 }

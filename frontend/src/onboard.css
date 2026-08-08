@@ -1106,7 +1106,7 @@ body::after{
    ============================================================ */
 .gate-screen{
   position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;
-  background:var(--bg);
+  background:#191613;
   transition:opacity .45s var(--ease),transform .45s var(--ease);
 }
 .gate-screen.out{opacity:0;transform:scale(.99);pointer-events:none}
@@ -1114,16 +1114,18 @@ body::after{
   position:absolute;inset:0;z-index:0;
   background-image:url('/img/hero-excavator.jpg');
   background-size:cover;background-position:center 30%;
-  /* a whisper of iron, not a milky veil — the landing hero sits on
-     near-flat ground and the gate should read as the same page.
-     Heavier veil below beats heavier blur here (blur is per-frame). */
-  filter:blur(4px) saturate(.6);transform:scale(1.06);opacity:.55;
+  /* the iron is the hero: graded dark like a machine-brand campaign
+     shot, with a soft depth-of-field blur so the type sits on top.
+     scale hides the blurred edge fringe. */
+  filter:blur(3px) saturate(1.08) contrast(1.05) brightness(.82);transform:scale(1.05);opacity:1;
 }
 .gate-bg::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,
-    rgba(245,245,247,.97) 0%,rgba(245,245,247,.90) 40%,
-    rgba(245,245,247,.82) 72%,rgba(245,245,247,.90) 100%);
+  background:
+    radial-gradient(110% 85% at 50% 40%,rgba(25,22,19,0) 0%,rgba(25,22,19,.38) 62%,rgba(25,22,19,.78) 100%),
+    linear-gradient(180deg,
+      rgba(25,22,19,.88) 0%,rgba(25,22,19,.42) 30%,
+      rgba(25,22,19,.34) 55%,rgba(25,22,19,.93) 100%);
 }
 .gate-top,.gate-hero,.gate-foot{position:relative;z-index:2}
 .gate-top{display:flex;justify-content:space-between;align-items:center;gap:12px;
@@ -1131,31 +1133,34 @@ body::after{
 .gate-logo img{height:26px;width:auto}
 .gate-badge{display:inline-flex;align-items:center;gap:8px;
   font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--body);background:var(--glass-2);
+  color:#EFEAE4;background:rgba(255,255,255,.09);
   -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
-  border-radius:var(--pill);padding:9px 16px;box-shadow:var(--sh-1),var(--edge)}
+  border-radius:var(--pill);padding:9px 16px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
 .gate-hero{width:min(780px,94vw);margin:auto;text-align:center;padding-bottom:6vh}
 .gate-eyebrow{display:inline-flex;align-items:center;gap:9px;
   font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--body);background:#fff;border-radius:var(--pill);
-  padding:10px 18px;margin-bottom:28px;box-shadow:var(--sh-1),var(--edge)}
+  color:#F1EDE7;background:rgba(255,255,255,.10);border-radius:var(--pill);
+  -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  padding:10px 18px;margin-bottom:28px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
 .gate-live{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 2.2s infinite}
 .gate-hero h1{font-size:clamp(38px,5.6vw,66px);line-height:1.02;margin-bottom:18px;
-  font-weight:800;letter-spacing:-.045em;color:var(--ink)}
-.gate-hero h1 em{font-style:normal;color:var(--red);font-weight:800}
-.gate-sub{font-size:16.5px;line-height:1.6;color:var(--body);max-width:520px;margin:0 auto 38px}
+  font-weight:800;letter-spacing:-.045em;color:#F8F5F0;
+  text-shadow:0 2px 28px rgba(0,0,0,.38)}
+.gate-hero h1 em{font-style:normal;color:#FF4046;font-weight:800}
+.gate-sub{font-size:16.5px;line-height:1.6;color:rgba(242,238,231,.82);
+  max-width:520px;margin:0 auto 38px;text-shadow:0 1px 14px rgba(0,0,0,.32)}
 .gate-search{
   display:grid;grid-template-columns:24px minmax(0,1fr) 60px;align-items:center;gap:16px;
   min-height:92px;padding:14px 14px 14px 28px;text-align:left;
   background:var(--pane-3);
   border-radius:30px;
-  box-shadow:0 2px 8px rgba(26,23,20,.05),0 34px 80px -22px rgba(26,23,20,.30),var(--edge);
+  box-shadow:0 2px 10px rgba(0,0,0,.20),0 42px 96px -20px rgba(0,0,0,.60),var(--edge);
   transition:box-shadow .3s var(--ease),transform .3s var(--ease);
 }
 .gate-search:focus-within{
   transform:translateY(-2px);
-  box-shadow:0 2px 8px rgba(26,23,20,.05),0 40px 90px -20px rgba(228,38,44,.30),
-             0 0 0 3px rgba(228,38,44,.14),var(--edge);
+  box-shadow:0 2px 10px rgba(0,0,0,.20),0 46px 100px -18px rgba(228,38,44,.42),
+             0 0 0 3px rgba(228,38,44,.18),var(--edge);
 }
 .gate-search>svg{width:22px;height:22px;color:var(--faint)}
 .gate-search input{width:100%;min-width:0;border:0;outline:0;background:none;
@@ -1170,9 +1175,15 @@ body::after{
 .gate-spin{width:19px;height:19px;border-radius:50%;
   border:2.2px solid rgba(255,255,255,.3);border-top-color:#fff;animation:spin .7s linear infinite}
 .gate-spin.on{display:inline-block;border-color:rgba(26,23,20,.12);border-top-color:var(--red)}
+.gate-search-wrap{position:relative}
 .gate-list{
-  list-style:none;margin:14px 0 0;padding:6px;text-align:left;
-  background:var(--pane-3);
+  /* overlay dropdown: absolute, so opening it never reflows the hero
+     (the headline used to jump when results loaded), and above the
+     focused search card so its red glow can't wash the rows. Height
+     is clamped to the viewport in bootGate. */
+  position:absolute;top:calc(100% + 12px);left:0;right:0;z-index:5;
+  list-style:none;margin:0;padding:6px;text-align:left;
+  background:#fff; /* opaque: it floats over the trust row now */
   border-radius:24px;box-shadow:var(--sh-4),var(--edge);
   max-height:52vh;overflow-y:auto;
 }
@@ -1204,18 +1215,19 @@ body::after{
 .gate-src{display:flex;justify-content:center;padding:10px;
   font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;
   color:var(--faint)}
-.gate-alt{margin-top:22px;font-size:13px;color:var(--mut);line-height:1.6}
-.gate-alt b{color:var(--ink)}
+.gate-alt{margin-top:22px;font-size:13px;color:rgba(238,233,226,.60);line-height:1.6}
+.gate-alt b{color:#fff}
 /* the landing's trust strip, same copy, same checks */
 .gate-trust{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;
-  margin-top:22px;font-size:13.5px;font-weight:600;color:var(--body)}
+  margin-top:22px;font-size:13.5px;font-weight:600;color:rgba(243,239,233,.88);
+  text-shadow:0 1px 10px rgba(0,0,0,.35)}
 .gate-trust span{display:inline-flex;align-items:center;gap:7px}
 .gate-trust svg{width:14px;height:14px;stroke:var(--green);fill:none;
   stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .gate-foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
-  padding:20px clamp(20px,4vw,44px);font-size:11.5px;color:var(--faint)}
-.gate-foot a{font-weight:600;color:var(--mut);text-decoration:none}
-.gate-foot a:hover{color:var(--ink)}
+  padding:20px clamp(20px,4vw,44px);font-size:11.5px;color:rgba(238,233,226,.42)}
+.gate-foot a{font-weight:600;color:rgba(238,233,226,.66);text-decoration:none}
+.gate-foot a:hover{color:#fff}
 
 .splash{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:20px;background:var(--bg);z-index:60}
@@ -1310,7 +1322,8 @@ body::after{
     -webkit-backdrop-filter:none;backdrop-filter:none;
   }
   .topbar{background:var(--pane-3)}
-  .gate-badge{background:var(--pane-3)}
+  /* the gate is dark now — the no-blur fallback must stay dark too */
+  .gate-badge{background:rgba(25,22,19,.85)}
 }
 @media (max-width:460px){
   .seg-grid{grid-template-columns:1fr}
@@ -1623,6 +1636,7 @@ body::after{
 .fp-tag.on      .ft-val{color:var(--green);background:var(--green-soft)}
 .fp-tag.off     .ft-val{color:var(--red);background:var(--red-soft)}
 .fp-tag.unknown .ft-lab{color:var(--mut)}
+.fp-tag.unknown .ft-val{color:var(--mut)}
 
 /* ============================================================
    CRAWL LOG — the machine talking, kept to a whisper

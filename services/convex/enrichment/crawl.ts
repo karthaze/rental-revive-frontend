@@ -21,7 +21,7 @@ import { detectTrackers } from '../../../common/footprint.js'
 import { isFresh } from './cache'
 
 const ACTOR = 'apify~website-content-crawler'
-const MAX_HTML = 400_000
+const MAX_HTML = 2_000_000 // brooklinen.com is 1.6MB; 400k truncated away a real pixel config
 
 /** Every finding unknown — used whenever the site could not be read. */
 const unmeasured = (reason: string) => ({
@@ -54,12 +54,54 @@ export const audit = action({
     }
 
     const token = process.env.APIFY_TOKEN
-    if (!token) return unmeasured('Crawler not configured')
 
     let targetUrl = args.url
     if (!/^https?:\/\//i.test(targetUrl)) targetUrl = 'https://' + targetUrl
 
     let result
+    if (!token) {
+      /* No Apify: a direct server-side fetch of the homepage. One page
+         instead of three and no JS rendering, but the tag signatures
+         (Facebook Pixel, GTM, GA4, Ads) are script references in the
+         served head — exactly what a plain fetch returns. The honesty
+         rule holds: any failure is unmeasured, never a clean bill. */
+      try {
+        const res = await fetch(targetUrl, {
+          redirect: 'follow',
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; RentalRevive scan)' },
+        })
+        if (!res.ok) return unmeasured(`Site answered HTTP ${res.status}`)
+        const html = (await res.text()).slice(0, MAX_HTML)
+        if (!/<!doctype\s+html|<html[\s>]|<head[\s>]|<body[\s>]/i.test(html)) {
+          return unmeasured('Site returned no readable page')
+        }
+        const text = html
+          .replace(/<script[\s\S]*?<\/script\s*>/gi, ' ')
+          .replace(/<style[\s\S]*?<\/style\s*>/gi, ' ')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/\s+/g, ' ')
+        result = {
+          ok: true,
+          measured: true,
+          ...analyzeQuotePath(html, text),
+          trackers: detectTrackers(html, null),
+        }
+      } catch (e) {
+        return unmeasured(e instanceof Error ? e.message : 'Audit failed')
+      }
+      if (args.placeId) {
+        await ctx.runMutation(internal.enrichment.cache.put, {
+          placeId: args.placeId,
+          name: args.name,
+          website: args.url,
+          facet: 'crawl',
+          value: result,
+          now,
+        })
+      }
+      return result
+    }
+
     try {
       const res = await fetch(
         `https://api.apify.com/v2/acts/${ACTOR}/run-sync-get-dataset-items?token=${token}`,
