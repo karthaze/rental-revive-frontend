@@ -32,7 +32,8 @@
    scan still completes end to end.
    ============================================================ */
 
-import './onboard.css'
+/* onboard.css is linked from onboard.html's head so the first paint is
+   already styled — importing it here reintroduces the FOUC flash */
 import { SEGMENTS, segmentById } from '../../common/segments.js'
 import { computeLeaks, money, ASSUMPTIONS } from '../../common/leaks.js'
 import { buildSolution } from './onboard/plan.js'
@@ -55,6 +56,7 @@ const state = {
   /* target */
   place: null,          // lock-on payload from Places (or manual:true)
   phone: '',            // confirmed counter line
+  website: '',          // typed by the owner when the listing carries none
   /* yard */
   segments: [], primary: '', segment: '', // .segment mirrors .primary for the leak engine
   fleet: [], fleetSize: '',
@@ -88,7 +90,6 @@ let appStarted = false    // the shell boots once, however the gate was fired
    they group the question graph, they are no longer drawn. */
 
 /* small inline icon set */
-const TRUST_CHECK = `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`
 
 const ICON = {
   check: '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>',
@@ -159,12 +160,42 @@ const STEPS = [
     stage: (row) => reviewsStage(row),
   },
   {
+    /* Google listings routinely omit the website, and the manual path
+       never had one. Ask instead of shrugging: a typed address feeds
+       the same capture + tag scan as a listed one, and "no website"
+       becomes an answer the owner gave, not a gap we guessed at. */
+    id: 'website', act: 'yard',
+    skip: (s) => !s.place || classifyWebsite(s.place.website).kind !== 'none',
+    prompt: () => state.place?.manual
+      ? 'Does the yard have a website? Type the address, or say so if there isn’t one.'
+      : 'Your Google listing shows no website. If the yard has one, type the address here, or tell me there isn’t one.',
+    hint: 'yourcompany.com',
+    widget: (s, commit) => textWidget({
+      placeholder: 'yourcompany.com',
+      value: s.website || '',
+      allowEmpty: true, emptyLabel: 'We don’t have a website',
+      validate: (v) => classifyWebsite(v).kind !== 'none' && /[a-z0-9][a-z0-9-]*\.[a-z]{2,}/i.test(v),
+      commit: (v) => {
+        const site = classifyWebsite(v)
+        state.place.website = site.kind === 'none' ? '' : site.url
+        commit(v.trim(), site.kind === 'none' ? 'No website' : site.host)
+      },
+    }),
+    react: (s) => {
+      const site = classifyWebsite(s.place?.website)
+      if (site.kind === 'site') return `${site.host}, got it. Pulling up what your customers land on.`
+      if (site.kind !== 'none') return `A ${site.platform} page, noted.`
+      return 'No website, noted. That means every inquiry has exactly one door: the counter line. The rest of this scan prices what happens when that door does not open.'
+    },
+  },
+  {
     /* The digital footprint: profile completeness, what the website
        field actually points at, and whether anything on the site is
        counting visitors. Runs with or without a website — "no website"
-       is a finding, not a reason to skip. */
+       is a finding, not a reason to skip. Manual yards join in once
+       the step above gives them an address worth reading. */
     id: 'website_audit', act: 'yard', noPill: true,
-    skip: (s) => !s.place || s.place.manual,
+    skip: (s) => !s.place || (s.place.manual && classifyWebsite(s.place.website).kind === 'none'),
     stage: (row) => auditStage(row),
   },
   {
@@ -211,6 +242,7 @@ const STEPS = [
     widget: (s, commit) => multiChips({
       options: fleetOptions(s),
       selected: s.fleet,
+      cols: 2, /* machine lists run long — two columns keep them on screen */
       countNoun: 'lines',
       doneLabel: 'That’s the fleet',
       commit: (vals) => commit(vals, vals.length > 2 ? `${vals.slice(0, 2).join(', ')} +${vals.length - 2} more` : vals.join(', ') || 'Mixed fleet'),
@@ -653,7 +685,7 @@ function renderGate(app, prefill) {
       <div class="gate-hero">
         <span class="gate-eyebrow"><i class="gate-live"></i>The rental revenue leak scan</span>
         <h1>Type your company.<br/><em>We’ll find the leak.</em></h1>
-        <p class="gate-sub">US heavy machinery rental yards only, cranes to compactors. No sign-up, no email wall. Just your business name.</p>
+        <p class="gate-sub">Heavy machinery rental yards only, cranes to compactors. No sign-up, no email wall. Just your business name.</p>
         <div class="gate-search-wrap">
         <div class="gate-search" id="gateSearch">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
@@ -668,9 +700,9 @@ function renderGate(app, prefill) {
         <ul class="gate-list" id="gateList" role="listbox"></ul>
         </div>
         <div class="gate-trust">
-          <span>${TRUST_CHECK}Free 2-minute scan</span>
-          <span>${TRUST_CHECK}No forms, no sign-up</span>
-          <span>${TRUST_CHECK}Your leak priced live</span>
+          <span>Free 2-minute scan</span>
+          <span>No forms, no sign-up</span>
+          <span>Your leak priced live</span>
         </div>
         <p class="gate-alt" id="gateAlt">Can’t find it, or no Google listing? Type the yard’s name and hit <b>Enter</b>. The scan runs fine without Google.</p>
       </div>
@@ -723,7 +755,7 @@ function bootGate(prefill) {
     })
     if (rows.length) {
       const foot = el('li', 'gate-src')
-      foot.textContent = 'Google Places live · US heavy machinery rental yards only'
+      foot.textContent = 'Google Places live · heavy machinery rental yards only'
       list.appendChild(foot)
     }
     clampList()
@@ -1924,9 +1956,9 @@ function bandSelect({ options, selected, commit }) {
   return wrap
 }
 
-function multiChips({ options, selected, doneLabel, countNoun, commit }) {
+function multiChips({ options, selected, doneLabel, countNoun, commit, cols }) {
   const wrap = el('div', 'chips-wrap')
-  const group = el('div', 'chip-group')
+  const group = el('div', 'chip-group' + (cols === 2 ? ' two-col' : ''))
   const picked = new Set(selected || [])
 
   const done = el('button', 'btn-commit')
@@ -2049,7 +2081,7 @@ function telForm(commit) {
   return form
 }
 
-function textWidget({ placeholder, value, commit, allowEmpty, emptyLabel }) {
+function textWidget({ placeholder, value, commit, allowEmpty, emptyLabel, validate }) {
   const wrap = el('div', 'chips-wrap')
   const form = el('form', 'text-wrap')
   form.noValidate = true
@@ -2065,8 +2097,16 @@ function textWidget({ placeholder, value, commit, allowEmpty, emptyLabel }) {
   form.addEventListener('submit', (e) => {
     e.preventDefault()
     const v = input.value.trim()
+    /* a caller-supplied validate gates non-empty commits — the empty
+       path stays the emptyLabel button's job */
+    if (v && validate && !validate(v)) {
+      input.classList.add('bad')
+      input.focus()
+      return
+    }
     if (v || allowEmpty) commit(v)
   })
+  input.addEventListener('input', () => input.classList.remove('bad'))
   form.appendChild(input)
   form.appendChild(go)
   wrap.appendChild(form)

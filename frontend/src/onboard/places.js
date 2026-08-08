@@ -90,6 +90,16 @@ const RENTAL_ADJACENT_TYPES = new Set([
   'hardware_store', 'home_goods_store',
 ])
 
+/* Google's granular category types name the vertical outright — a
+   listing categorized "Equipment rental agency" on Maps carries
+   equipment_rental_agency when the API surfaces it. When present, the
+   category IS the verdict, however opaque the business name reads. */
+const RENTAL_YES_TYPES = new Set([
+  'equipment_rental_agency', 'tool_rental_service', 'crane_rental_agency',
+  'forklift_rental_service', 'scaffolding_rental_service',
+  'construction_equipment_supplier', 'construction_machine_rental_service',
+])
+
 const RENTAL_ADJACENT_WORDS = rx([
   'equipment', 'rental', 'rentals?', 'tool', 'tools?', 'hardware', 'contractor',
   'construction', 'industrial', 'machinery', 'crane', 'lift', 'forklift',
@@ -111,7 +121,9 @@ const TAG_RULES = [
 ]
 
 export function rentalTag(text, types = []) {
-  const t = `${String(text || '')} ${(types || []).join(' ')}`
+  /* underscored API types read as words ("equipment_rental_agency" →
+     "equipment rental agency") so the same rules cover both sources */
+  const t = `${String(text || '')} ${(types || []).join(' ').replace(/_/g, ' ')}`
   return TAG_RULES.find((rule) => rule.re.test(t))?.tag || 'Rental yard'
 }
 
@@ -124,6 +136,7 @@ export function rentalTag(text, types = []) {
 export function classifyRental(text, types = []) {
   const t = String(text || '')
   if (HARD_NO.test(t) || types.some((ty) => NO_TYPES.has(ty))) return 'no'
+  if (types.some((ty) => RENTAL_YES_TYPES.has(ty))) return 'yes'
   if (HARD_YES.test(t)) return 'yes'
   if (types.some((ty) => RENTAL_ADJACENT_TYPES.has(ty)) && RENTAL_ADJACENT_WORDS.test(t)) return 'yes'
   return 'maybe'
@@ -138,6 +151,10 @@ const CHAINS = [
   'mobile mini', 'aggreko', 'sunbelt rentals', 'cat rental store', 'wagner equipment',
   'ziegler', 'holt cat', 'empire cat', 'titan machinery', 'rdo equipment', 'alta equipment',
   'kirby-smith', 'kirby smith',
+  /* Australia + Gulf majors — the same midnight answerers, new markets */
+  'coates', 'kennards', 'onsite rental', 'porter hire', 'force access',
+  'al faris', 'johnson arabia', 'byrne equipment', 'al jaber', 'mohsin haider darwish',
+  'rapid access', 'manlift', 'hertz dayim', 'byrne rental', 'gulf crane',
 ]
 export const isNationalChain = (name) => {
   const n = String(name || '').toLowerCase()
@@ -265,12 +282,19 @@ export function searchYards(input) {
           const kind = classifyRental(name, p.types || [])
           const queryIntent = RENTAL_ADJACENT_WORDS.test(query || input)
           const adjacentType = (p.types || []).some((ty) => RENTAL_ADJACENT_TYPES.has(ty))
+          const nameIntent = RENTAL_ADJACENT_WORDS.test(name)
+          /* A 'maybe' is an opaque name, and classifyRental's own law is
+             "let it through with a softer badge rather than hide a real
+             yard". The old gate (rental-ish query AND a hardware-store
+             type) hid legitimate agencies named "ABC Rentals" whose only
+             sin was a broad type list — any one honest signal now
+             suffices; the Unverified badge does the hedging. */
           return {
             placeId: p.place_id,
             name,
             detail,
             kind,
-            accept: kind === 'yes' || (kind === 'maybe' && queryIntent && adjacentType),
+            accept: kind === 'yes' || (kind === 'maybe' && (nameIntent || adjacentType || queryIntent)),
             tag: rentalTag(name, p.types || []),
           }
         })
@@ -288,12 +312,19 @@ export function searchYards(input) {
         })
     }
 
-    const request = (q) => new Promise((res) => {
+    /* The served markets: US, Australia, and the Gulf states. Google
+       caps componentRestrictions at 5 countries per request, so the
+       list rides in two sets and the batches merge downstream. */
+    const COUNTRY_SETS = [
+      ['us', 'au'],
+      ['ae', 'om', 'qa', 'bh', 'kw'],
+    ]
+    const request = (q, countries) => new Promise((res) => {
       acService.getPlacePredictions(
         {
           input: q,
           sessionToken,
-          componentRestrictions: { country: 'us' },
+          componentRestrictions: { country: countries },
           types: ['establishment'],
         },
         (preds, status) => res(status === placeStatusOk() && preds
@@ -323,7 +354,8 @@ export function searchYards(input) {
       ...(lower.includes('container') ? [] : [`${input} storage container rental`]),
     ]
 
-    Promise.all([...new Set(fallbackInputs)].map(request))
+    Promise.all(COUNTRY_SETS.flatMap((set) =>
+      [...new Set(fallbackInputs)].map((q) => request(q, set))))
       .then((batches) => resolve(toRows(batches.flat()).slice(0, 7)))
   })
 }

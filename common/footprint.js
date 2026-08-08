@@ -236,6 +236,20 @@ export function scoreProfile(place) {
     },
   ]
 
+  /* A manual yard has no Google profile behind it — fields we never
+     fetched are unmeasured, not missing (the tri-state law again).
+     What the owner actually typed stands: the name, and the website
+     when the scan asked for one. */
+  if (place.manual) {
+    for (const c of checks) {
+      if (c.id !== 'name' && c.id !== 'website') {
+        c.ok = null
+        c.value = null
+        c.tip = null
+      }
+    }
+  }
+
   /* `ok === null` means unmeasured: it counts toward neither side */
   const measured = checks.filter((c) => c.ok !== null)
   const passed = measured.filter((c) => c.ok)

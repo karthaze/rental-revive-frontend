@@ -20,6 +20,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Linked here, not imported from onboard.js — a JS-side import paints
+       one unstyled frame before the module graph loads (the FOUC glitch). -->
+  <link rel="stylesheet" href="/src/onboard.css" />
 </head>
 <body>
   <div id="app"><!-- rail · thread · leak meter, rendered by onboard.js --></div>

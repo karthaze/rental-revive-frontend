@@ -1,4 +1,5 @@
-import './style.css'
+/* style.css is linked from index.html's head so the first paint is
+   already styled — importing it here reintroduces the FOUC flash */
 import { loadMaps, searchYards } from './onboard/places.js'
 
 /* scroll reveal */

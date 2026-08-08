@@ -8,10 +8,13 @@
      Never "leads" or "lead recovery": our buyer has been burned by agencies selling
      leads. We sell recovered rentals. See 02-INDUSTRY-LANGUAGE-GUIDE. -->
 <title>Missed Rental Recovery for Equipment Rental Yards | RentalRevive</title>
-<meta name="description" content="Every call your counter can't get to, answered and booked. Every open quote chased to a yes or a no. Every quiet account worked back. In your name, on the counter platform you already run. Free Missed Rental Audit + Dead-Quote Autopsy." />
+<meta name="description" content="Every call your counter can't get to, answered and booked. Every open quote chased to a yes or a no. Every quiet account worked back. In your name, with nothing new to run. Serving independent yards across the US, Australia and the Gulf. Free Missed Rental Audit + Dead-Quote Autopsy." />
 <meta name="robots" content="index, follow" />
 <meta name="theme-color" content="#E4262C" />
 <link rel="canonical" href="https://rentalrevive.com/" />
+<!-- Stylesheet linked here, not imported from main.js: a JS-side import
+     paints one unstyled frame before the module graph loads (the giant-logo
+     flash). A head link blocks first paint until the page has its skin. -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="alternate icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/favicon.png" />
@@ -21,7 +24,7 @@
 <meta property="og:site_name" content="RentalRevive" />
 <meta property="og:url" content="https://rentalrevive.com/" />
 <meta property="og:title" content="Get more of your equipment rented out." />
-<meta property="og:description" content="Every call your counter can't get to, answered and booked. Every open quote chased to a yes or a no. Every quiet account worked back. In your name, on the counter platform you already run. Free audit." />
+<meta property="og:description" content="Every call your counter can't get to, answered and booked. Every open quote chased to a yes or a no. Every quiet account worked back. In your name, with nothing new to run. Free audit." />
 <meta property="og:image" content="https://rentalrevive.com/img/hero-excavator.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Get more of your equipment rented out." />
@@ -55,6 +58,7 @@
       "name": "Recovered rentals for independent equipment yards",
       "serviceType": "Missed rental recovery, quote follow-up, and customer reactivation for equipment rental companies",
       "provider": { "@id": "https://rentalrevive.com/#org" },
+      "areaServed": ["US", "AU", "AE", "OM", "QA", "BH", "KW"],
       "audience": { "@type": "BusinessAudience", "name": "Independent equipment rental companies" }
     },
     {
@@ -102,6 +106,11 @@
         },
         {
           "@type": "Question",
+          "name": "Do you work outside the US?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The scan and the audit run for independent yards in the US, Australia, and the Gulf states: UAE, Oman, Qatar, Bahrain and Kuwait. Type your company name and the scan finds you the same way your customers do. Estimates are priced in US dollars for now, with the arithmetic shown line by line, so you can restate any number in your own rates in a minute." }
+        },
+        {
+          "@type": "Question",
           "name": "What if my yard is too small for all this?",
           "acceptedAnswer": { "@type": "Answer", "text": "Then we will tell you, and we will not sell you a Desk. The audit shows whether there is enough on the table to pay for one. For smaller yards there is Yard Dog: $1,200 to set up and $300 a month. It runs the counter side only, the 60-Second Quote on your site plus a live booking and inventory page, working 24/7. No coordinator, no weekly calls, no chasing. It shows you the quotes piling up; it does not work them. We keep seven of these slots total, and if you move up to the Desk the setup comes off the build. Yard Dog runs your counter. The Desk runs your revenue." }
         }
@@ -110,9 +119,9 @@
   ]
 }
 </script>
-  <script type="module" crossorigin src="/assets/places-D2Zs4JB8.js"></script>
-  <script type="module" crossorigin src="/assets/main-DLh0u2WV.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/main-CtwudE5p.css">
+  <script type="module" crossorigin src="/assets/places-CuyG_Ndh.js"></script>
+  <script type="module" crossorigin src="/assets/main-BBKg0iKZ.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-BSBGq4jn.css">
 </head>
 <body>
 
@@ -141,7 +150,7 @@
   <div class="wrap">
     <span class="eyebrow rv"><span class="star"></span>For independent equipment rental companies</span>
     <h1 class="rv d1">Get more of your equipment<br class="h1-br"/> rented out.</h1>
-    <p class="lead rv d2">Missed calls answered and booked. Dead quotes chased to a yes or a no. Quiet accounts worked back. <strong>In your name, on the counter platform you already run.</strong></p>
+    <p class="lead rv d2">Every missed call answered and booked. Every cold quote chased to a yes or a no. Every quiet account brought back. <strong>In your name, with nothing new to run.</strong></p>
 
     <div class="yard-search center rv d3" id="yardSearch">
       <div class="ys-box">
@@ -157,10 +166,9 @@
     </div>
 
     <ul class="hero-trust rv d3">
-      <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Free 2-minute scan</li>
-      <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No forms, no sign-up</li>
-      <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Your leak priced live</li>
-      <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Prefer email? <a href="#audit">Free audit</a></li>
+      <li>Free 2-minute scan</li>
+      <li>No forms, no sign-up</li>
+      <li>Your leak priced live</li>
     </ul>
 
     <!-- the product, not a stock photo: the scan's live leak meter over the yard -->
@@ -195,7 +203,7 @@
     <div class="stat rv"><b>$0</b><span>to start the 30-Day Rescue, first five yards</span></div>
     <div class="stat rv d1"><b>$200</b><span>per completed rental, and only when we land it</span></div>
     <div class="stat rv d2"><b>48 hrs</b><span>from free audit to one page on your desk</span></div>
-    <div class="stat rv d3"><b>8</b><span>kinds of rental yard covered, cranes to compactors</span></div>
+    <div class="stat rv d3"><b>7</b><span>markets served: the US, Australia and the Gulf states</span></div>
   </div>
 </section>
 
@@ -388,7 +396,7 @@
     <div class="head left rv">
       <span class="eyebrow"><span class="star"></span>What we actually do</span>
       <h2>We catch it. We work it. Your counter books it.</h2>
-      <p>We're not selling you traffic. Every man we work already called your yard, asked you for a price, or rented from you before. You paid for all of them once already. We just make sure not one of them slips away while your team is loading a truck.</p>
+      <p>We're not selling you traffic. Everyone we work already called your yard, asked you for a price, or rented from you before. You paid for all of them once already. We just make sure not one of them slips away while your team is loading a truck.</p>
     </div>
     <div class="steps">
       <div class="step rv">
@@ -465,7 +473,7 @@
     <div class="head left rv">
       <span class="eyebrow"><span class="star"></span>Start here</span>
       <h2>Two ways in. Your numbers pick which one.</h2>
-      <p class="sprint-sub">Both run 30 days on your own yard. The audit says which. If your numbers don't support either, we'll tell you that instead.</p>
+      <p class="sprint-sub">Both run 30 days on your own yard, and the audit picks which. If your numbers don't support either, we'll tell you that instead.</p>
     </div>
 
     <div class="sprint-grid">
@@ -663,6 +671,9 @@
         <div class="fa-body"><p>On the Core Rescue, if no rental goes out, you pay nothing. On the Quote Recovery Pilot, you keep the scorecard: contacted, interested, booked, lost reasons, and what the quote pile is really worth.</p></div></details>
       <details class="fa rv"><summary>Why only five yards to start?<span class="pm">+</span></summary>
         <div class="fa-body"><p>Because we actually do the work, and reply speed is the whole product. When a caught caller answers, someone hands him to your counter within the hour. That doesn't scale past a handful of new yards at once, so the free-to-start Rescue is capped at the first five, one per city.</p></div></details>
+      <details class="fa rv"><summary>Do you work outside the US?<span class="pm">+</span></summary>
+        <div class="fa-body"><p>Yes. The scan and the audit run for independent yards in the US, Australia, and the Gulf: UAE, Oman, Qatar, Bahrain and Kuwait. Type your company name and the scan finds you the same way your customers do.</p>
+        <p>Estimates are priced in US dollars for now, with the arithmetic shown line by line, so restating any number in your own rates takes a minute and a calculator.</p></div></details>
       <details class="fa rv"><summary>What if my yard is too small for all this?<span class="pm">+</span></summary>
         <div class="fa-body"><p>Then we'll tell you, and we won't sell you a Desk. The audit shows whether there's enough on the table to pay for one. If there isn't, a Desk would be us taking your money.</p>
         <p>For smaller yards there's <b>Yard Dog</b>: $1,200 to set up, $300 a month. It runs the counter side only: the 60-Second Quote on your site and a live booking and inventory page, working 24/7. No coordinator, no weekly calls, no chasing. It shows you the quotes piling up; it doesn't work them. We keep seven of these slots, total, and if you ever move up to the Desk the setup comes off the build.</p>
@@ -762,7 +773,7 @@
   </div>
   <div class="wrap foot-bottom">
     <span>© 2026 RentalRevive. All rights reserved.</span>
-    <span>Built for independent rental yards · the audit is free either way.</span>
+    <span>Built for independent rental yards in the US, Australia and the Gulf · the audit is free either way.</span>
   </div>
 </footer>
 

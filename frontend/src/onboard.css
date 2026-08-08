@@ -595,6 +595,9 @@ body::after{
 .chips-wrap{display:flex;flex-direction:column;gap:15px;min-height:0;flex:1}
 .chip-group{display:flex;flex-direction:column;gap:8px;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none}
 .chip-group::-webkit-scrollbar{display:none}
+/* long lists (the fleet question) run two-up; phones fall back to one */
+.chip-group.two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px}
+@media (max-width:720px){.chip-group.two-col{grid-template-columns:1fr}}
 .chip{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:var(--pill);border:none;
   background:rgba(0,0,0,0.035);color:var(--ink);font-size:14px;font-weight:500;cursor:pointer;
   letter-spacing:-.005em;
@@ -652,6 +655,8 @@ body::after{
   transition:box-shadow .25s var(--ease),background .25s var(--ease),border-color .2s;
 }
 .text-input:focus{background:#fff;border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft)}
+.text-input.bad,.text-input.bad:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(228,38,44,.28);animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 .text-input::placeholder{color:var(--mut)}
 
 /* --- slider --- */
@@ -1222,8 +1227,6 @@ body::after{
   margin-top:22px;font-size:13.5px;font-weight:600;color:rgba(243,239,233,.88);
   text-shadow:0 1px 10px rgba(0,0,0,.35)}
 .gate-trust span{display:inline-flex;align-items:center;gap:7px}
-.gate-trust svg{width:14px;height:14px;stroke:var(--green);fill:none;
-  stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .gate-foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
   padding:20px clamp(20px,4vw,44px);font-size:11.5px;color:rgba(238,233,226,.42)}
 .gate-foot a{font-weight:600;color:rgba(238,233,226,.66);text-decoration:none}
