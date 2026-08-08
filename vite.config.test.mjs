@@ -26,9 +26,10 @@ describe('vite env loading', () => {
   it('resolves envDir to the directory that holds the .env files', async () => {
     const config = await resolveConfig({ configFile: resolve(repo, 'vite.config.js') }, 'serve')
 
-    /* .env.example is the committed manifest of required vars; .env.local is
-       gitignored, so anchor the assertion on the file that exists in CI too. */
-    expect(existsSync(resolve(config.envDir, '.env.example'))).toBe(true)
+    /* All .env files are gitignored now, .env.example included, so no file
+       existence can anchor this in CI. Assert the resolved directory instead:
+       envDir must be the repo root, where the local .env files live. */
+    expect(resolve(config.envDir)).toBe(resolve(repo))
   })
 
   it('finds the developer .env.local from the resolved envDir', async () => {
