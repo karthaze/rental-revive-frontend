@@ -1011,19 +1011,36 @@ root has no `package.json` — each product owns its own).
   actions (`services/convex/enrichment/`); the `VITE_` secrets are deleted from
   the code. **Still rotate both keys** if any bundle containing them
   was ever deployed — deletion does not un-publish them.
-- **The leak model has no upper sanity bound.** Driving the scan with the
-  worst band at every question produced **$468,293/month — $5.6M/year**
-  recoverable. The arithmetic is internally consistent (165 inquiries ×
-  top crane ticket × the five leaks compounding), but no independent yard
-  believes it is leaking $5.6M a year, and a number nobody believes reads
-  as exactly the sales trick §5 says the shown arithmetic exists to avoid.
-  Worth a clamp — total leak as a plausible share of implied revenue —
-  before this is put in front of anyone.
+- ~~**The leak model has no upper sanity bound.**~~ — **RESOLVED
+  2026-08-06.** `computeLeaks()` now caps the reported total at 50% of
+  the booked revenue the answers imply (`quotes × close × ticket`);
+  when the cap binds, the report renders it as its own ledger line
+  ("Plausibility bound", with the deduction in the amount column) so
+  the table still sums to the headline — same visible-bookkeeping rule
+  as the missed-call volume cap. The score is deliberately NOT capped
+  (urgency is not money), the bound needs an inquiries answer to
+  exist (the early meter climb is untouched), and `plan.js` bounds the
+  self-path subtotal so the cheap path can never "recover" more than
+  the whole leak. Worst-case now reports $356,400/mo (33% of implied
+  won+lost flow) instead of $865k against $713k booked. Same session:
+  missed calls and ticket became numeric inputs (engine accepts
+  numbers AND the legacy band strings — AD-11 vocabulary unchanged),
+  and the recovery assumptions + lag curve were benchmarked against
+  published speed-to-lead / win-back data (`common/leaks.js` comments
+  carry the citations). Tests: 185 passing.
 - **`index.html` vs the real offer ladder** (§1, §10.3) — the landing
   page and the scan currently sell different things. Needs the
   founder's call.
-- **`PROFILE_THRESHOLDS` are guesses** (§7b) — photos/reviews/rating bars
-  were picked by feel, not from a distribution.
+- ~~**`PROFILE_THRESHOLDS` are guesses**~~ — **BENCHMARKED 2026-08-06.**
+  Values held (photos 10 / strong 20 / reviews 25 / rating 4.0), now
+  sourced against published GBP studies: 10+ photos ≈ 2× engagement,
+  20+ photos ≈ +18% clicks, 20+ reviews is the published trust floor
+  (59% of consumers), sub-4.0 ratings are discounted outright. Same
+  pass grounded segments.js (ticket bands vs 2026 rate data; close
+  defaults vs the 38–48% rental inquiry→confirmed benchmark) —
+  citations live in the file comments. Still worth a re-cut against a
+  metro sweep of actual machinery yards; these are cross-industry
+  local-business numbers.
 - **The declutter pass only covered the header.** The same test in §6
   would flag the keyboard-shortcut number chips on the option cards and
   the unicode glyphs in the cooking overlay.

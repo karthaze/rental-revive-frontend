@@ -12,6 +12,31 @@
    *shape* of question to all eight, but never the same words
    and never the same math. That is what makes the reveal land:
    the owner hears his own yard described back to him.
+
+   BENCHMARKED 2026-08-06 — values held, now sourced:
+
+   ticketBands  cross-checked against published 2026 rate data:
+     cranes       operated mobile crane $1,200–2,500/day mid-size,
+                  plus operator/transport/rigging — a 1–3 day lift
+                  lands squarely in the $2,000–5,000 band.
+     earthmoving  excavator averages $719/day · $2,021/wk ·
+                  $5,108/mo — the weekly/monthly dry-rental bands
+                  bracket exactly that.
+     aerial       scissor $495/wk · $984/mo; boom $1,050–1,950/wk,
+                  $2,700–4,600/mo — bands 1–3 match.
+     material     forklift $305–659/day · ~$1,250/wk · ~$3,000/mo;
+                  long-term contract work carries the upper bands.
+
+   defaultClose  the published rental-industry inquiry→confirmed
+   benchmark is 38–48% (50%+ top quartile; sub-30% flags a coverage
+   problem). Our defaults are per-QUOTE close applied after the 80%
+   quoteRate, so the compounded inquiry→booked they imply is
+   0.8 × close = 20% (specialty) to 40% (compact) — at or below the
+   published band for every segment. Deliberate: a conservative
+   close rate keeps every leak priced low. Slow project-quote paths
+   (cranes 30, specialty 25) sit furthest under the average;
+   counter-speed segments (compact 50, aerial 45) sit at the
+   top-quartile line their walk-in mix justifies.
    ============================================================ */
 
 /* Icons are inline stroke SVG paths, drawn in the same 24x24
@@ -36,6 +61,22 @@ export const SEGMENTS = [
       'Crawler cranes', 'Tower cranes', 'Rigging & lift gear',
       'Operated & maintained crews', 'Machinery moving',
     ],
+    /* Which of the segment's four ticket bands each line of iron
+       actually plays in — [lo, hi] index windows into ticketBands.
+       Grounded in the 2026 rate pass: carry decks and rigging gear
+       are small-ticket; crawlers and towers live at the top
+       (tower hire runs $10k+/month before labor). The scan shows an
+       owner only the brackets their ticked fleet can produce. */
+    fleetBands: {
+      'Mobile / all-terrain cranes': [1, 3],
+      'Boom trucks': [0, 2],
+      'Carry deck & industrial': [0, 1],
+      'Crawler cranes': [2, 3],
+      'Tower cranes': [3, 3],
+      'Rigging & lift gear': [0, 1],
+      'Operated & maintained crews': [1, 3],
+      'Machinery moving': [1, 3],
+    },
     ticketBands: [
       { label: 'Under $2,000', mid: 1400 },
       { label: '$2,000 – $5,000', mid: 3300 },
@@ -51,7 +92,7 @@ export const SEGMENTS = [
       'Structural steel erection', 'HVAC rooftop units', 'Precast placement',
       'Plant shutdowns & turnarounds', 'Cell tower work', 'Bridge & utility work',
     ],
-    hook: 'Operated lifts. Highest ticket in the business, and the slowest quote path — which is exactly why a day of silence costs you the whole job.',
+    hook: 'Operated lifts. Highest ticket in the business, and the slowest quote path, which is exactly why a day of silence costs you the whole job.',
     frames: {
       calls: 'A contractor with a Tuesday lift does not leave a second voicemail. He calls the next crane on the list.',
       quotes: 'Nobody rents a crane on price alone. They rent it from whoever answered while the schedule was still soft.',
@@ -76,6 +117,18 @@ export const SEGMENTS = [
       'Wheel loaders', 'Backhoes', 'Motor graders',
       'Articulated haulers & scrapers', 'Attachments & buckets',
     ],
+    /* excavator $719/day · $2,021/wk · $5,108/mo anchors the middle;
+       minis run $300–500/day; attachments are add-on tickets */
+    fleetBands: {
+      'Excavators (standard)': [1, 3],
+      'Mini & compact excavators': [0, 1],
+      'Dozers': [1, 3],
+      'Wheel loaders': [1, 2],
+      'Backhoes': [0, 2],
+      'Motor graders': [2, 3],
+      'Articulated haulers & scrapers': [2, 3],
+      'Attachments & buckets': [0, 0],
+    },
     ticketBands: [
       { label: 'Under $2,000', mid: 1300 },
       { label: '$2,000 – $5,000', mid: 3300 },
@@ -117,6 +170,18 @@ export const SEGMENTS = [
       'Telescopic boom lifts', 'Telehandlers', 'Mast & personnel lifts',
       'Towable boom lifts', 'Push-around & vertical lifts',
     ],
+    /* scissor $495/wk · $984/mo sits in the low bands; big telescopic
+       booms and telehandlers carry the monthly $2,700–4,600 jobs */
+    fleetBands: {
+      'Scissor lifts (electric)': [0, 1],
+      'Rough terrain scissors': [1, 2],
+      'Articulating boom lifts': [1, 2],
+      'Telescopic boom lifts': [1, 3],
+      'Telehandlers': [1, 3],
+      'Mast & personnel lifts': [0, 1],
+      'Towable boom lifts': [0, 1],
+      'Push-around & vertical lifts': [0, 0],
+    },
     ticketBands: [
       { label: 'Under $750', mid: 520 },
       { label: '$750 – $2,000', mid: 1300 },
@@ -133,7 +198,7 @@ export const SEGMENTS = [
       'Interior fit-out & drywall', 'Warehouse & distribution builds', 'Electrical & MEP rough-in',
       'Facade & glazing work', 'Signage & lighting', 'Data centre construction',
     ],
-    hook: 'High volume, long durations, small tickets. One dropped call barely stings — but you drop dozens a month, and that adds up faster than any other segment.',
+    hook: 'High volume, long durations, small tickets. One dropped call barely stings, but you drop dozens a month, and that adds up faster than any other segment.',
     frames: {
       calls: 'Access rentals are a numbers game. Every unanswered call is a whole month of utilization walking to the branch down the road.',
       quotes: 'A scissor lift is a commodity. The only real differentiator you have left is who answers first.',
@@ -158,6 +223,16 @@ export const SEGMENTS = [
       'Compaction & plate tampers', 'Augers & attachments', 'Chippers & stump grinders',
       'Concrete & masonry tools', 'General tool rental',
     ],
+    fleetBands: {
+      'Skid steers & track loaders': [1, 3],
+      'Mini excavators': [1, 3],
+      'Trenchers': [1, 2],
+      'Compaction & plate tampers': [0, 1],
+      'Augers & attachments': [0, 1],
+      'Chippers & stump grinders': [1, 2],
+      'Concrete & masonry tools': [0, 1],
+      'General tool rental': [0, 0],
+    },
     ticketBands: [
       { label: 'Under $500', mid: 340 },
       { label: '$500 – $1,500', mid: 950 },
@@ -174,7 +249,7 @@ export const SEGMENTS = [
       'Residential remodels', 'Landscape & hardscape work', 'Fence & deck permits',
       'Small site prep', 'Storm & cleanup work', 'Municipal small works',
     ],
-    hook: 'Day rates, walk-ins and weekend spikes. Your phone is your counter — and a Saturday morning that rings out is a rental you never even hear about.',
+    hook: 'Day rates, walk-ins and weekend spikes. Your phone is your counter, and a Saturday morning that rings out is a rental you never even hear about.',
     frames: {
       calls: 'Half your customers are calling from a truck with a trailer already hitched. He is renting from whoever picks up.',
       quotes: 'At this ticket nobody waits for a written quote. They want a price on the phone or they hang up and dial the next yard.',
@@ -199,6 +274,18 @@ export const SEGMENTS = [
       'Telehandlers', 'Reach trucks & order pickers', 'Pallet jacks & walkies',
       'Industrial sweepers & scrubbers', 'Yard trucks & spotters',
     ],
+    /* forklift $305–659/day · ~$3,000/mo; pallet jacks are the floor;
+       yard trucks ride long-term contracts at the top */
+    fleetBands: {
+      'Warehouse forklifts (electric)': [1, 2],
+      'IC / propane forklifts': [1, 2],
+      'Rough terrain forklifts': [1, 3],
+      'Telehandlers': [1, 3],
+      'Reach trucks & order pickers': [1, 2],
+      'Pallet jacks & walkies': [0, 0],
+      'Industrial sweepers & scrubbers': [0, 1],
+      'Yard trucks & spotters': [2, 3],
+    },
     ticketBands: [
       { label: 'Under $1,000', mid: 700 },
       { label: '$1,000 – $3,000', mid: 1900 },
@@ -215,7 +302,7 @@ export const SEGMENTS = [
       'Warehouse & 3PL expansion', 'Manufacturing line changes', 'Seasonal peak staffing',
       'Plant maintenance shutdowns', 'Distribution centre openings', 'Cold storage builds',
     ],
-    hook: 'Industrial accounts on long terms with service attached. One lost account here is not one rental — it is a contract you were going to renew for years.',
+    hook: 'Industrial accounts on long terms with service attached. One lost account here is not one rental. It is a contract you were going to renew for years.',
     frames: {
       calls: 'A plant with a truck down calls three suppliers in ten minutes. Position two never gets the order.',
       quotes: 'Long-term forklift deals stall in procurement. The supplier who follows up is the one who gets signed.',
@@ -240,6 +327,16 @@ export const SEGMENTS = [
       'Milling machines', 'Concrete pumps', 'Mixers & batch equipment',
       'Screeds & power trowels', 'Sweepers & distributors',
     ],
+    fleetBands: {
+      'Smooth drum rollers': [0, 2],
+      'Padfoot & soil compactors': [1, 2],
+      'Asphalt pavers': [2, 3],
+      'Milling machines': [2, 3],
+      'Concrete pumps': [1, 3],
+      'Mixers & batch equipment': [0, 1],
+      'Screeds & power trowels': [0, 1],
+      'Sweepers & distributors': [1, 2],
+    },
     ticketBands: [
       { label: 'Under $1,500', mid: 1000 },
       { label: '$1,500 – $4,000', mid: 2600 },
@@ -256,11 +353,11 @@ export const SEGMENTS = [
       'DOT & state lettings', 'Municipal paving contracts', 'Parking lot rehab',
       'Subdivision road work', 'Airport & port projects', 'Utility trench restoration',
     ],
-    hook: 'Seasonal and bid-driven. Demand is on a public calendar months in advance — which means the yard watching the lettings quotes the job before you hear about it.',
+    hook: 'Seasonal and bid-driven. Demand is on a public calendar months in advance, which means the yard watching the lettings quotes the job before you hear about it.',
     frames: {
       calls: 'Paving crews call the morning the weather turns. If you miss that window the machine sits until the next dry stretch.',
       quotes: 'Bid work has a deadline. A quote that arrives after the bid closed was free work you did for nobody.',
-      pile: 'Quotes attached to bids that were never followed up are the cleanest revenue in your business — you already priced them.',
+      pile: 'Quotes attached to bids that were never followed up are the cleanest revenue in your business. You already priced them.',
       quiet: 'Paving contractors run a short season. Miss one season with an account and you have missed a year.',
       outbound: 'Lettings and municipal awards are published. Every one is a schedule of equipment somebody has to rent.',
     },
@@ -281,6 +378,16 @@ export const SEGMENTS = [
       'Pumps & dewatering', 'Temporary HVAC & climate', 'Power distribution & cable',
       'Storage containers & offices', 'Temporary fencing & barriers',
     ],
+    fleetBands: {
+      'Portable generators': [0, 1],
+      'Large power / prime gensets': [2, 3],
+      'Light towers': [0, 1],
+      'Pumps & dewatering': [1, 2],
+      'Temporary HVAC & climate': [1, 3],
+      'Power distribution & cable': [1, 2],
+      'Storage containers & offices': [0, 1],
+      'Temporary fencing & barriers': [0, 0],
+    },
     ticketBands: [
       { label: 'Under $1,000', mid: 700 },
       { label: '$1,000 – $3,500', mid: 2100 },
@@ -297,7 +404,7 @@ export const SEGMENTS = [
       'Storm & outage response', 'Planned plant shutdowns', 'Events & festivals',
       'Data centre & hospital projects', 'Construction site setups', 'Municipal emergency contracts',
     ],
-    hook: 'Emergency demand and long project placements. Half your best money arrives outside business hours — so voicemail is not an inconvenience here, it is the leak.',
+    hook: 'Emergency demand and long project placements. Half your best money arrives outside business hours, so voicemail is not an inconvenience here, it is the leak.',
     frames: {
       calls: 'Nobody needs a generator at 2pm on a Tuesday. They need it when the power is out, and they call until someone answers.',
       quotes: 'Emergency work is won in minutes. A next-day quote in this segment is a quote for a job already covered.',
@@ -323,6 +430,16 @@ export const SEGMENTS = [
       'Demolition equipment & attachments', 'Industrial plant services',
       'Specialized rigging gear', 'Engineering & lift planning',
     ],
+    fleetBands: {
+      'Machinery moving & millwright': [1, 3],
+      'Heavy haul trailers & transport': [0, 2],
+      'Hydraulic gantries & jacking': [1, 3],
+      'Foundation & drilling rigs': [2, 3],
+      'Demolition equipment & attachments': [0, 2],
+      'Industrial plant services': [1, 3],
+      'Specialized rigging gear': [0, 1],
+      'Engineering & lift planning': [0, 1],
+    },
     ticketBands: [
       { label: 'Under $5,000', mid: 3200 },
       { label: '$5,000 – $15,000', mid: 9500 },
@@ -339,7 +456,7 @@ export const SEGMENTS = [
       'Plant relocations', 'Equipment installs & retrofits', 'Turnaround & shutdown schedules',
       'Industrial demolition', 'Wind & energy projects', 'Port & rail infrastructure',
     ],
-    hook: 'Project work at the highest tickets in the industry, with the longest sales cycles. You do not do many of these — which is exactly why losing one hurts so much.',
+    hook: 'Project work at the highest tickets in the industry, with the longest sales cycles. You do not do many of these, which is exactly why losing one hurts so much.',
     frames: {
       calls: 'You do not get many of these calls. Missing one is not a bad week, it is a bad quarter.',
       quotes: 'Engineered work stalls between the estimate and the go-ahead. Whoever keeps the conversation alive gets the award.',

@@ -44,7 +44,7 @@ export async function auditWebsite(targetUrl, progressCallback = () => {}, meta 
   try {
     const { probeConfigured, getConvex, api } = await import('../dashboard/backend.js')
     if (!probeConfigured()) {
-      progressCallback('[Crawler not configured — site audit skipped]')
+      progressCallback('[Crawler not configured, site audit skipped]')
       return unmeasured('Crawler not configured')
     }
 

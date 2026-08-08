@@ -52,23 +52,23 @@ export function renderProofGate(container, ctx) {
   gate.innerHTML = `
     <span class="lab panel-lab">The part you can’t argue with</span>
     <h3>Everything above is an estimate. Estimates are arguable.</h3>
-    <p class="pg-lead">Your crane doesn’t get certified on an estimate — it gets proof-loaded.
+    <p class="pg-lead">Your crane doesn’t get certified on an estimate. It gets proof-loaded.
       Your counter has never been tested once. Authorise it, and the first call goes out
       while you watch.</p>
 
     <div class="pg-disclosure">
-      <span class="lab">What you’d be authorising — all of it, plainly</span>
+      <span class="lab">What you’d be authorising: all of it, plainly</span>
       <ul>
         <li><b>${count} ${count > 1 ? 'inquiries' : 'inquiry'} to your own business, nobody else’s:</b>
           your counter line ${esc(phone)}${email ? `, your inquiry email` : ''}${site ? `, and the form on your website` : ''}.</li>
-        <li><b>The phone:</b> up to 4 short calls over 48 hours — business hours, lunch, and after close,
+        <li><b>The phone:</b> up to 4 short calls over 48 hours: business hours, lunch, and after close,
           never before 8am or after 8pm your time. Calls are recorded, and whoever answers is told
           immediately it’s an authorised booking-response check, not a real rental.</li>
-        <li><b>The written inquiries</b> arrive from <b>Full Circle Contractors</b> — a real, registered
-          company we operate for exactly this — asking availability and rates for machines you already
+        <li><b>The written inquiries</b> arrive from <b>Full Circle Contractors</b>, a real, registered
+          company we operate for exactly this, asking availability and rates for machines you already
           rent. No invented job, no fake delivery date, nothing a dispatcher could reserve iron against.
           Your team gets a debrief note inside 48 hours saying it was part of this check.</li>
-        <li><b>Your staff aren’t warned.</b> That’s the point — but the report names <b>hours, not
+        <li><b>Your staff aren’t warned.</b> That’s the point, but the report names <b>hours, not
           people</b>. No names, no staff audio, ever. We’re testing the system, not the people,
           and that isn’t negotiable in either direction.</li>
         <li><b>Recordings are deleted after ${RETENTION_DAYS} days</b>, automatically. A kill switch
@@ -77,7 +77,7 @@ export function renderProofGate(container, ctx) {
     </div>
 
     <button class="btn-commit pg-cta" type="button" data-activate>Proof-test my counter →</button>
-    <p class="pg-fine">Sign in to authorise — the consent is yours to give and yours to revoke.
+    <p class="pg-fine">Sign in to authorise. The consent is yours to give and yours to revoke.
       If your counter is airtight, the verdict will say exactly that.</p>
     <p class="pg-status" role="status" aria-live="polite" data-status hidden></p>`
 
@@ -113,7 +113,7 @@ export function renderProofGate(container, ctx) {
       cta.disabled = false
       status.textContent =
         e?.message?.includes('timezone')
-          ? 'We couldn’t pin your yard’s timezone, so the call windows can’t be set safely. This one needs a hand — reply to your report email.'
+          ? 'We couldn’t pin your yard’s timezone, so the call windows can’t be set safely. This one needs a hand: reply to your report email.'
           : `Couldn’t start the test: ${e?.message || 'unknown error'}. Nothing was dispatched.`
     }
   })

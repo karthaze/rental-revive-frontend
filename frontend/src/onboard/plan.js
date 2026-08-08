@@ -79,7 +79,7 @@ export const FIXES = {
     label: 'Missed calls',
     fix: 'Missed inquiry workflow',
     /* 08-SPRINT-DELIVERY-SOP §3 days 4–7 */
-    what: 'Every unanswered call captured and turned into a structured rental conversation — logged, chased and handed back to the counter in your name.',
+    what: 'Every unanswered call captured and turned into a structured rental conversation: logged, chased and handed back to the counter in your name.',
     self: false,
     /* 11 §11.3 — the starter explicitly excludes missed call management */
     selfNote: 'The starter does not manage missed calls. This leak stays open on the self-managed path.',
@@ -97,7 +97,7 @@ export const FIXES = {
     label: 'Quotes going cold',
     fix: 'Worked quote pile, three touches',
     /* 08 §6 — same day, +2 business days, +5 business days */
-    what: 'Your open quotes classified by value and urgency, then worked on a three-touch sequence — same day, two days, five days — until every one is a yes, a no or a logged lost reason.',
+    what: 'Your open quotes classified by value and urgency, then worked on a three-touch sequence (same day, two days, five days) until every one is a yes, a no or a logged lost reason.',
     self: false,
     selfNote: 'The starter excludes human quote follow up. Nobody chases the pile on the self-managed path but your own team.',
     live: 'Week 2',
@@ -105,7 +105,7 @@ export const FIXES = {
   quiet: {
     label: 'Quiet accounts',
     fix: 'Account reactivation',
-    what: 'The accounts that stopped calling get worked back — approved scripts, your name on every message, lost reasons recorded.',
+    what: 'The accounts that stopped calling get worked back: approved scripts, your name on every message, lost reasons recorded.',
     self: false,
     selfNote: 'Customer reactivation is not in the starter. This one only moves on the managed path.',
     live: 'Week 4',
@@ -114,7 +114,7 @@ export const FIXES = {
     label: 'Jobs you never hear about',
     fix: 'Project Radar signals',
     /* 11 §8/§9 — filtered signals, scored /100, never "leads" */
-    what: '25 filtered local project signals a month — permits and planned work inside your radius, scored on fit, timing and contactability, with a suggested angle for each. Signals, not guaranteed customers.',
+    what: '25 filtered local project signals a month: permits and planned work inside your radius, scored on fit, timing and contactability, with a suggested angle for each. Signals, not guaranteed customers.',
     self: true,
     live: 'Week 3',
   },
@@ -152,7 +152,7 @@ function deskGate(L, state) {
       detail: missing && slow ? 'Both, on your answers'
         : missing ? 'Missed calls, on your answers'
         : slow ? 'Response lag, on your answers'
-        : 'Neither — your counter is holding',
+        : 'Neither, your counter is holding',
     },
     {
       label: 'Follow-up capacity is genuinely short',
@@ -199,7 +199,7 @@ function recommend(L, state, names, gate) {
       price: PRICES.audit,
       headline: 'Low urgency. We are not going to sell you a managed desk.',
       why: 'Your counter is holding. On these answers there is not enough sitting on the table to justify a monthly service, and pretending otherwise would be the sales trick this scan exists to avoid.',
-      next: 'If you want the findings written up properly — quote path reviewed, competitors compared, 15 local project signals, a 30 minute call — that is the audit pack. Otherwise, keep doing what you are doing.',
+      next: 'If you want the findings written up properly (quote path reviewed, competitors compared, 15 local project signals, a 30 minute call), that is the audit pack. Otherwise, keep doing what you are doing.',
       tone: 'calm',
     }
   }
@@ -210,7 +210,7 @@ function recommend(L, state, names, gate) {
       name: names.starter,
       price: PRICES.starter,
       headline: 'Starter fit. Your team can run this one internally.',
-      why: 'The leak is real but it is concentrated in the quote path and the radius — both of which are system problems, not staffing problems. You do not need us answering your phone to fix them.',
+      why: 'The leak is real but it is concentrated in the quote path and the radius, both of which are system problems, not staffing problems. You do not need us answering your phone to fix them.',
       next: 'Installed inside 7 business days or the activation fee comes back. If you upgrade to the managed sprint within 30 days the activation credits against it.',
       tone: 'calm',
     }
@@ -222,11 +222,11 @@ function recommend(L, state, names, gate) {
       name: names.sprint,
       price: PRICES.sprint,
       headline: s > 20
-        ? 'Severe leak — but the desk gate is not met yet. Sprint first.'
+        ? 'Severe leak, but the desk gate is not met yet. Sprint first.'
         : 'Managed sprint fit. This is the one that pays for itself first.',
       why: s > 20
         ? `Your leak score is ${s}/25, which is desk territory, but only ${gate.met} of the ${gate.criteria.length} qualification criteria are met on your answers and we need ${gate.needed}. Selling you the desk today would be selling ahead of the proof.`
-        : 'More than half your leak sits in work nobody currently has time to do — chasing quotes, catching calls, reviving accounts. That is capacity, and capacity is what a managed sprint is.',
+        : 'More than half your leak sits in work nobody currently has time to do: chasing quotes, catching calls, reviving accounts. That is capacity, and capacity is what a managed sprint is.',
       next: 'Two months. If dashboard-attributed booked revenue does not exceed the fees you paid, we keep working up to 60 more days without another service fee.',
       tone: 'urgent',
     }
@@ -236,7 +236,7 @@ function recommend(L, state, names, gate) {
     key: 'desk',
     name: names.desk,
     price: PRICES.desk,
-    headline: 'Desk candidate — and the gate agrees.',
+    headline: 'Desk candidate, and the gate agrees.',
     why: `A ${s}/25 leak score, with ${gate.met} of the ${gate.criteria.length} qualification criteria met and only ${gate.needed} required. You are not missing a tool. You are missing a revenue function.`,
     next: 'The sprint still runs first, and the desk only follows if the sprint proves the number on your own yard. We are not going to ask you to sign something permanent off the back of a two minute scan.',
     tone: 'urgent',
@@ -256,7 +256,7 @@ function sequence(L, state) {
     {
       when: 'Days 1 – 3',
       title: 'Intake',
-      body: `Website and quote-form access, a look at how quotes reach you today, your pricing rules, your service area${pileCount ? `, and ${Math.min(50, pileCount)} of the open quotes off that pile` : ''}. Nothing else — no customer database on day one.`,
+      body: `Website and quote-form access, a look at how quotes reach you today, your pricing rules, your service area${pileCount ? `, and ${Math.min(50, pileCount)} of the open quotes off that pile` : ''}. Nothing else: no customer database on day one.`,
     },
     {
       when: 'Days 4 – 7',
@@ -267,18 +267,18 @@ function sequence(L, state) {
       when: 'Days 8 – 21',
       title: 'Recovery push one',
       body: firstPush
-        ? `Your top ${firstPush} open quotes classified by value and urgency, then worked on the three-touch sequence. Replies tracked, lost reasons logged — including the ones you will not like.`
+        ? `Your top ${firstPush} open quotes classified by value and urgency, then worked on the three-touch sequence. Replies tracked, lost reasons logged, including the ones you will not like.`
         : 'Every new inquiry worked the day it lands, with lost reasons logged from the start.',
     },
     {
       when: 'Days 22 – 45',
       title: 'Recovery push two',
-      body: `${secondPush ? `The remaining ${secondPush} quotes worked, and ` : ''}Project Radar signals start landing — filtered on your radius and your ${L.segment.jobs}. Intake gaps we keep hitting get fixed rather than worked around.`,
+      body: `${secondPush ? `The remaining ${secondPush} quotes worked, and ` : ''}Project Radar signals start landing, filtered on your radius and your ${L.segment.jobs}. Intake gaps we keep hitting get fixed rather than worked around.`,
     },
     {
       when: 'Days 46 – 60',
       title: 'The count',
-      body: 'Booked revenue attributed in the dashboard against the fees you paid. That number decides what happens next — continue, step up, or stop. It is not a renewal conversation, it is an arithmetic one.',
+      body: 'Booked revenue attributed in the dashboard against the fees you paid. That number decides what happens next: continue, step up, or stop. It is not a renewal conversation, it is an arithmetic one.',
     },
   ]
 }
@@ -298,10 +298,16 @@ export function buildSolution(L, state) {
     amount: leak.amount,
   }))
 
-  /* what each path can actually close, in dollars */
-  const selfAmount = active
-    .filter((l) => SELF_CLOSES.includes(l.id))
-    .reduce((sum, l) => sum + l.amount, 0)
+  /* what each path can actually close, in dollars. L.monthly is the
+     plausibility-bounded total, but per-leak amounts are raw — so the
+     self path's subset sum must be bounded too, or a clamped scan
+     could show the cheap path "recovering" more than the whole leak. */
+  const selfAmount = Math.min(
+    active
+      .filter((l) => SELF_CLOSES.includes(l.id))
+      .reduce((sum, l) => sum + l.amount, 0),
+    L.monthly,
+  )
   const managedAmount = L.monthly
   const selfGap = Math.max(0, managedAmount - selfAmount)
   const uncovered = active.filter((l) => !SELF_CLOSES.includes(l.id))
@@ -357,7 +363,7 @@ export function buildSolution(L, state) {
     /* 04-MYSTERY-CALL-SOP — the free real-world verification */
     verification: {
       title: 'Before any of that: we check the scan against reality',
-      body: `Everything above is built from what you told me. So the next step is not a sales call — it is three inbound calls to ${state.place?.name || 'your yard'} at different times of day, one timed quote request through your website, and a count of what came back. Scored out of 10: live answer, intake questions, contact captured, clear next step, response time stated, follow-up received.`,
+      body: `Everything above is built from what you told me. So the next step is not a sales call. It is three inbound calls to ${state.place?.name || 'your yard'} at different times of day, one timed quote request through your website, and a count of what came back. Scored out of 10: live answer, intake questions, contact captured, clear next step, response time stated, follow-up received.`,
       note: 'Simple inquiries only, no invented jobs, no wasted dispatcher time. If your counter scores 8+, we will tell you that and there is nothing to sell.',
     },
   }

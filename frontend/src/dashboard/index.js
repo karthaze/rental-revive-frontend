@@ -20,8 +20,8 @@ export async function mountDashboard(container, runId) {
 
   if (!convex) {
     shell.innerHTML = `<div class="probe-dash"><p class="pd-note">
-      The probe backend isn’t reachable from this page. Your run is safe —
-      it lives server-side — but this view can’t connect. Try again from
+      The probe backend isn’t reachable from this page. Your run is safe:
+      it lives server-side, but this view can’t connect. Try again from
       the link in your report email.</p></div>`
     return () => shell.remove()
   }

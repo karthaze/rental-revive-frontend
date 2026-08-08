@@ -24,9 +24,9 @@
                       against a visible qualification gate
      7. THE CLOSE     "where should I send it?" — asked last
 
-   The leak metrics appear in exactly ONE place: the meter sheet
-   that slides up from the bottom edge, and the ledger inside
-   the report. They used to be rendered three times over.
+   The leak metrics appear in exactly ONE place: the estimate panel
+   mounted in the right stage once the numbers act starts, and the
+   ledger inside the report. They used to be rendered three times over.
 
    No Maps key? Every stage degrades to a manual path and the
    scan still completes end to end.
@@ -78,8 +78,7 @@ const state = {
 const answeredSteps = new Set()
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-let thread, composer, meterFig, railEl, stageRight
-let sheetEl, sheetScrim, sheetOpen = false
+let thread, composer, railEl, stageRight
 let stepIndex = 0
 let editingId = null
 let awaitingStep = null   // the step whose widget is live in the dock
@@ -89,6 +88,8 @@ let appStarted = false    // the shell boots once, however the gate was fired
    they group the question graph, they are no longer drawn. */
 
 /* small inline icon set */
+const TRUST_CHECK = `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`
+
 const ICON = {
   check: '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>',
   cross: '<svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>',
@@ -105,7 +106,7 @@ const ICON = {
 /* ---- reach ----
    The negative answer is a constant because two follow-ups skip on it —
    a yard that markets nothing is never asked which medium works. */
-const NO_MARKETING = 'No — word of mouth and repeat accounts'
+const NO_MARKETING = 'No, word of mouth and repeat accounts'
 
 /* Operational mediums, the way a yard would name them —
    02-INDUSTRY-LANGUAGE-GUIDE §1: "avoid generic marketing terms". */
@@ -175,17 +176,17 @@ const STEPS = [
       : 'What number rings at the counter when a customer calls?',
     hint: 'Confirm the counter line',
     widget: (s, commit) => phoneWidget(s, commit),
-    react: () => 'Good. That line is exactly where the first leak usually hides — hold that thought.',
+    react: () => 'Good. That line is exactly where the first leak usually hides. Hold that thought.',
   },
   {
     id: 'segments', act: 'yard', structural: true,
     prompt: () => [
-      'Now, what kind of iron goes out your gate? Most yards are more than one thing — tap everything you rent.',
+      'Now, what kind of iron goes out your gate? Most yards are more than one thing, so tap everything you rent.',
     ],
     hint: 'Select every line you run',
     widget: (s, commit) => segmentGrid(s, commit),
     react: (s) => s.segments.length > 1
-      ? `A ${s.segments.length}-line yard. That's more surface area for revenue — and more places for it to leak.`
+      ? `A ${s.segments.length}-line yard. That's more surface area for revenue, and more places for it to leak.`
       : segmentById(s.segments[0]).hook,
   },
   {
@@ -205,7 +206,7 @@ const STEPS = [
   },
   {
     id: 'fleet', act: 'yard',
-    prompt: () => 'Down to the machines. Tap everything in the fleet — this feeds your report.',
+    prompt: () => 'Down to the machines. Tap everything in the fleet. This feeds your report.',
     hint: 'Select all that apply',
     widget: (s, commit) => multiChips({
       options: fleetOptions(s),
@@ -225,7 +226,7 @@ const STEPS = [
     }),
     react: (s) => (s.fleetSize === '26 – 60' || s.fleetSize === '60+')
       ? 'That is real iron. Every day a unit sits, the leak is paying someone else’s note.'
-      : 'Tight fleet — which means every single booking matters more, not less.',
+      : 'Tight fleet, which means every single booking matters more, not less.',
   },
 
   /* ---------- ACT 2 · the market ---------- */
@@ -238,14 +239,14 @@ const STEPS = [
     id: 'rivals', act: 'market',
     prompt: () => state.radar.competitors.length
       ? 'Which of these actually take jobs from you? Tap all that apply.'
-      : 'Who takes jobs from you around here? Name the yards — comma separated is fine.',
+      : 'Who takes jobs from you around here? Name the yards. Comma separated is fine.',
     hint: () => state.radar.competitors.length ? 'From your radius sweep' : 'Name them',
     widget: (s, commit) => s.radar.competitors.length
       ? rivalsWidget(s, commit)
       : textWidget({
           placeholder: 'e.g. United Rentals, Smith Crane, ACME Equipment',
           value: s.rivals.join(', '),
-          allowEmpty: true, emptyLabel: 'Honestly — nobody worth naming',
+          allowEmpty: true, emptyLabel: 'Honestly, nobody worth naming',
           commit: (v) => {
             const list = v.split(',').map((x) => x.trim()).filter(Boolean).slice(0, 8)
             commit(list, list.length ? list.join(', ') : 'No one named')
@@ -253,16 +254,16 @@ const STEPS = [
         }),
     react: (s) => {
       const nats = s.rivals.filter((n) => isNationalChain(n)).length
-      if (!s.rivals.length) return 'Then whatever is leaking, it isn’t leaking to a better yard — it’s leaking to whoever picks up the phone first.'
+      if (!s.rivals.length) return 'Then whatever is leaking, it isn’t leaking to a better yard. It’s leaking to whoever picks up the phone first.'
       return nats
-        ? `${nats === s.rivals.length ? 'All' : nats} of those ${nats === 1 ? 'is a national branch' : 'are national branches'}. They don’t out-rent you — they out-answer you. Their phone picks up at midnight.`
-        : 'Independents like you. Which means the fight is winnable — it comes down to who answers and who follows up.'
+        ? `${nats === s.rivals.length ? 'All' : nats} of those ${nats === 1 ? 'is a national branch' : 'are national branches'}. They don’t out-rent you, they out-answer you. Their phone picks up at midnight.`
+        : 'Independents like you. Which means the fight is winnable. It comes down to who answers and who follows up.'
     },
   },
   {
     id: 'whyTheyWin', act: 'market',
     skip: (s) => !s.rivals.length,
-    prompt: () => 'When one of them wins a job you wanted — why? Tap every reason that\'s true.',
+    prompt: () => 'When one of them wins a job you wanted, why? Tap every reason that\'s true.',
     hint: 'Select all that apply',
     widget: (s, commit) => multiChips({
       options: ['They answer first', 'Lower price', 'Bigger fleet', 'Machine was available', 'Relationships', 'Closer to the job'],
@@ -273,15 +274,15 @@ const STEPS = [
     }),
     react: (s) => s.whyTheyWin.includes('They answer first')
       ? 'You said it yourself: they answer first. That is not a fleet problem or a price problem. That is the leak this scan prices.'
-      : 'Notice what’s NOT on your list: nobody beats you on the iron itself. The gap is in the follow-through — good news, because follow-through is fixable.',
+      : 'Notice what’s NOT on your list: nobody beats you on the iron itself. The gap is in the follow-through. Good news, because follow-through is fixable.',
   },
 
   /* ---------- ACT 3 · the numbers ---------- */
   {
     id: 'inquiries', act: 'numbers',
     prompt: () => [
-      'Numbers time. Ballpark is fine — tap any answer later to change it and the whole model re-runs.',
-      'How many rental inquiries land in a normal month? Calls, forms, emails, walk-ins — all of it.',
+      'Numbers time. Ballpark is fine. Tap any answer later to change it and the whole model re-runs.',
+      'How many rental inquiries land in a normal month? Calls, forms, emails, walk-ins, all of it.',
     ],
     hint: 'Every door, added up',
     widget: (s, commit) => bandSelect({
@@ -302,7 +303,7 @@ const STEPS = [
     }),
     react: (s) => s.channels.length >= 4
       ? `${s.channels.length} channels, one counter. Every extra door is another place a rental can slip out unnoticed.`
-      : 'Few doors, easy to guard — as long as somebody is actually standing at them.',
+      : 'Few doors, easy to guard, as long as somebody is actually standing at them.',
   },
 
   /* ---------- ACT 3b · reach — what makes the phone ring ----------
@@ -311,16 +312,16 @@ const STEPS = [
   {
     id: 'marketing', act: 'numbers',
     invalidates: ['marketingChannels', 'marketingWorks'],
-    prompt: () => 'Now — are you actively marketing the yard, or does the work mostly find you?',
+    prompt: () => 'Now, are you actively marketing the yard, or does the work mostly find you?',
     hint: 'What makes the phone ring',
     widget: (s, commit) => bandSelect({
-      options: ['Yes — running it consistently', 'On and off, when it goes quiet', NO_MARKETING],
+      options: ['Yes, running it consistently', 'On and off, when it goes quiet', NO_MARKETING],
       selected: s.marketing, commit,
     }),
     react: (s) => s.marketing === NO_MARKETING
-      ? 'All of it earned, none of it bought. That is an asset — and it means every inquiry that does come in is harder to replace, because there is no second wave behind it.'
+      ? 'All of it earned, none of it bought. That is an asset, and it means every inquiry that does come in is harder to replace, because there is no second wave behind it.'
       : s.marketing === 'On and off, when it goes quiet'
-        ? 'On and off is the usual rhythm — spend when the yard is quiet, stop when it fills up. Which puts the pressure on the counter exactly when it is least ready for it.'
+        ? 'On and off is the usual rhythm: spend when the yard is quiet, stop when it fills up. Which puts the pressure on the counter exactly when it is least ready for it.'
         : 'Then you are already paying to make that phone ring. Which is what makes the next part expensive: what happens after it rings.',
   },
   {
@@ -343,8 +344,8 @@ const STEPS = [
       const paid = s.marketingChannels.filter((m) => PAID_MEDIA.includes(m))
       if (!s.marketingChannels.length) return ''
       return paid.length
-        ? `So you are paying for the phone to ring. Every call that rings out is that spend walking back out the gate — which is the first thing this scan prices.`
-        : 'Earned reach rather than bought — the profile, the site, the relationships. It works, and it is slow to rebuild, so wasting what it brings in costs more than it looks.'
+        ? `So you are paying for the phone to ring. Every call that rings out is that spend walking back out the gate, which is the first thing this scan prices.`
+        : 'Earned reach rather than bought: the profile, the site, the relationships. It works, and it is slow to rebuild, so wasting what it brings in costs more than it looks.'
     },
   },
   {
@@ -356,15 +357,15 @@ const STEPS = [
     hint: (s) => s.marketingChannels.length === 1 ? 'Is it earning its keep?' : 'The one that pays for itself',
     widget: (s, commit) => bandSelect({
       options: s.marketingChannels.length === 1
-        ? ['Yes — it brings work in', 'Some, hard to tell', 'Not really']
+        ? ['Yes, it brings work in', 'Some, hard to tell', 'Not really']
         : [...s.marketingChannels, NOTHING_WORKS],
       selected: s.marketingWorks, commit,
     }),
     react: (s) => {
       const dud = s.marketingWorks === NOTHING_WORKS || s.marketingWorks === 'Not really'
-      if (dud) return 'Then more of it is not the fix. Paying to make a phone ring that nobody gets to is the most expensive thing a yard can do — and it is exactly what the rest of this scan measures.'
-      if (s.marketingWorks === 'Some, hard to tell') return 'Hard to tell usually means nobody is tracking what happened after the call. That gap is where the money hides — and it is the same gap this scan opens up.'
-      return `${s.marketingWorks} earns its keep. Worth knowing — because the cheapest revenue in this scan is not more inquiries, it is the ones already reaching you.`
+      if (dud) return 'Then more of it is not the fix. Paying to make a phone ring that nobody gets to is the most expensive thing a yard can do, and it is exactly what the rest of this scan measures.'
+      if (s.marketingWorks === 'Some, hard to tell') return 'Hard to tell usually means nobody is tracking what happened after the call. That gap is where the money hides, and it is the same gap this scan opens up.'
+      return `${s.marketingWorks} earns its keep. Worth knowing, because the cheapest revenue in this scan is not more inquiries, it is the ones already reaching you.`
     },
   },
 
@@ -372,10 +373,57 @@ const STEPS = [
     id: 'ticket', act: 'numbers',
     prompt: (s) => `What does an average ${segmentById(s.primary).job} run? Total invoice, not day rate.`,
     hint: 'Total invoice',
-    widget: (s, commit) => bandSelect({
-      options: segmentById(s.primary).ticketBands.map((b) => b.label),
-      selected: s.ticket, commit,
-    }),
+    /* Ranges plus an exact-invoice entry — the same shape as missed
+       calls, because the same two owners exist: the one who thinks in
+       brackets and the one who can read the number off last month's
+       invoices. The ranges ARE the segment's own ticketBands, priced
+       at their midpoints; ticket multiplies EVERY leak, so the exact
+       entry matters most here. Both commit a NUMBER — a band label
+       stored as a string would silently stop resolving if the owner
+       later changed their primary segment. */
+    widget: (s, commit) => {
+      const seg = segmentById(s.primary)
+      /* The ranges follow the IRON the yard actually ticked. Each
+         fleet entry carries a [lo, hi] window into its segment's
+         ticket bands (fleetBands, grounded in the 2026 rate pass) —
+         so a yard renting carry decks and rigging gear sees the two
+         low crane brackets, and only ticking crawlers or towers
+         surfaces "$12,000+". Windows union across every ticked
+         machine in every picked segment; the primary's version wins
+         label collisions, everything sorts by midpoint. A machine
+         with no window (or an edited flow with no fleet yet) falls
+         back to its segment's full four bands — the options may
+         narrow on good data, never on missing data. The custom box
+         still takes any number, so a hidden bracket can never block
+         a true answer. */
+      const picked = (s.segments.length ? s.segments : [s.primary]).map(segmentById)
+      const ordered = [seg, ...picked.filter((g) => g.id !== seg.id)]
+      const unlocked = ordered.flatMap((g) => {
+        const idx = new Set()
+        for (const m of s.fleet) {
+          const w = g.fleetBands?.[m]
+          if (w) for (let i = w[0]; i <= w[1]; i++) idx.add(i)
+        }
+        return [...idx].map((i) => g.ticketBands[i])
+      })
+      const pool = unlocked.length ? unlocked : ordered.flatMap((g) => g.ticketBands)
+      const bands = [...new Map(pool.map((b) => [b.label, b])).values()]
+        .sort((a, b) => a.mid - b.mid)
+      return bandsWithCustom({
+        options: bands.map((b) => ({ label: b.label, value: b.mid })),
+        selected: typeof s.ticket === 'number' ? s.ticket : undefined,
+        customLabel: 'I know my exact number',
+        customPlaceholder: 'Average total invoice in dollars',
+        /* typed entries may exceed the top band — that is the point of
+           the box — but not without limit: twice the derived ceiling
+           of the DEAREST picked segment (≈ 3× its top band midpoint;
+           $54,000 for cranes, $180,000 for heavy haul). The
+           plausibility bound still guards the total downstream. */
+        customMax: Math.max(...ordered.map((g) => ticketRange(g).max)) * 2,
+        formatCustom: (v, capped) => `${money(v)}${capped ? '+' : ''} a ${seg.job}`,
+        commit,
+      })
+    },
   },
   {
     id: 'closeRate', act: 'numbers',
@@ -388,7 +436,7 @@ const STEPS = [
       commit: (v) => commit(v * 10, `${v} of 10 book`),
     }),
     react: (s, L) =>
-      `The meter is armed: ${money(L.ticket)} a ${segmentById(s.primary).job}, ${Math.round(L.close * 100)}% of quotes booking. From here, every answer prices a leak. Watch the number at the bottom.`,
+      `The meter is armed: ${money(L.ticket)} a ${segmentById(s.primary).job}, ${Math.round(L.close * 100)}% of quotes booking. From here, every answer prices a leak. Watch the meter beside the chat climb.`,
   },
   {
     id: 'team', act: 'numbers',
@@ -399,10 +447,10 @@ const STEPS = [
       selected: s.team, commit,
     }),
     react: (s) => s.team === 'Just me'
-      ? 'One pair of hands on the phone and a yard to run. Nobody catches everything alone — that’s not a criticism, it’s arithmetic.'
+      ? 'One pair of hands on the phone and a yard to run. Nobody catches everything alone. That’s not a criticism, it’s arithmetic.'
       : s.team === 'An answering service'
-        ? 'A service catches the call — the question this scan answers is whether anyone turns those messages into bookings.'
-        : 'A real counter team. The leak, if there is one, will be in the handoffs — lunch, shift change, 5:01pm.',
+        ? 'A service catches the call. The question this scan answers is whether anyone turns those messages into bookings.'
+        : 'A real counter team. The leak, if there is one, will be in the handoffs: lunch, shift change, 5:01pm.',
   },
 
   /* ---------- ACT 4 · the five leaks ---------- */
@@ -410,17 +458,36 @@ const STEPS = [
     id: 'missedCalls', act: 'leaks',
     prompt: () => [
       'Leak one: the missed call.',
-      'In a busy week, how many calls ring out — lunch, after hours, everyone loading a truck?',
+      'In a busy week, how many calls ring out? Lunch, after hours, everyone loading a truck.',
     ],
     hint: 'Leak 1 of 5 · missed calls',
-    widget: (s, commit) => bandSelect({
-      options: ['Almost none', '1 – 3 a week', '4 – 10 a week', '10+ a week'],
-      selected: s.missedCalls, commit,
+    /* Ranges plus an exact-number entry. Nobody counts their missed
+       calls, so ranges are the fast path — but the owner who checks
+       a call log should not be rounded to a bucket. Ranges commit
+       their midpoint as a NUMBER (the engine prices numbers at face
+       value; no new strings enter the AD-11 vocabulary), and the top
+       range exists because published benchmarks put a mid-size shop
+       at 40–90 missed a week — the old "15+" ceiling collapsed every
+       busy yard into one bucket. */
+    widget: (s, commit) => bandsWithCustom({
+      options: [
+        { label: 'Almost none', value: 0 },
+        { label: '1 – 5 a week', value: 3 },
+        { label: '6 – 15 a week', value: 10 },
+        { label: '16 – 40 a week', value: 26 },
+        { label: 'More than 40', value: 55 },
+      ],
+      selected: typeof s.missedCalls === 'number' ? s.missedCalls : undefined,
+      customLabel: 'I know my exact number',
+      customPlaceholder: 'Calls a week',
+      customMax: 150,
+      suffix: 'a week',
+      commit,
     }),
   },
   {
     id: 'afterHours', act: 'leaks',
-    prompt: () => 'And when the counter closes — what happens to a call at 6pm?',
+    prompt: () => 'And when the counter closes, what happens to a call at 6pm?',
     hint: 'After hours',
     widget: (s, commit) => bandSelect({
       options: ['Voicemail', 'Nothing, it just rings', 'Answering service', 'Someone on call'],
@@ -428,7 +495,7 @@ const STEPS = [
     }),
     react: (s, L) => {
       const leak = L.leaks.find((l) => l.id === 'calls')
-      if (!leak || leak.amount <= 0) return 'Your phone is tight. That is rarer than you’d think — most yards leak here first.'
+      if (!leak || leak.amount <= 0) return 'Your phone is tight. That is rarer than you’d think. Most yards leak here first.'
       return `${segmentById(s.primary).frames.calls} On your numbers that’s ≈ ${money(leak.amount)} a month. It just hit the meter.`
     },
   },
@@ -453,7 +520,7 @@ const STEPS = [
     id: 'quotePile', act: 'leaks',
     prompt: () => [
       'Leak three: the pile.',
-      'Quotes you sent that never got a yes or a no — how many are sitting open right now?',
+      'Quotes you sent that never got a yes or a no: how many are sitting open right now?',
     ],
     hint: 'Leak 3 of 5 · the open pile',
     widget: (s, commit) => bandSelect({
@@ -463,7 +530,7 @@ const STEPS = [
     react: (s, L) => {
       const leak = L.leaks.find((l) => l.id === 'pile')
       if (!leak || !leak.standing) return ''
-      return `${segmentById(s.primary).frames.pile} Worked properly, that standing pile alone is worth ≈ ${money(leak.standing)} — before we count the new quotes going cold every month.`
+      return `${segmentById(s.primary).frames.pile} Worked properly, that standing pile alone is worth ≈ ${money(leak.standing)}, before we count the new quotes going cold every month.`
     },
   },
   {
@@ -486,7 +553,7 @@ const STEPS = [
     id: 'outbound', act: 'leaks',
     prompt: (s) => [
       'Last leak: the job you never hear about.',
-      `${projectExample(s)} Do you work local project activity before it calls you — permits, lettings, planned work?`,
+      `${projectExample(s)} Do you work local project activity before it calls you: permits, lettings, planned work?`,
     ],
     hint: 'Leak 5 of 5 · project intelligence',
     widget: (s, commit) => bandSelect({
@@ -495,7 +562,7 @@ const STEPS = [
     }),
     react: (s, L) => {
       const leak = L.leaks.find((l) => l.id === 'outbound')
-      if (!leak || leak.amount <= 0) return 'Good. Most yards only ever react — working the radius puts you a call ahead.'
+      if (!leak || leak.amount <= 0) return 'Good. Most yards only ever react. Working the radius puts you a call ahead.'
       return segmentById(s.primary).frames.outbound
     },
   },
@@ -505,7 +572,7 @@ const cap = (str) => str.charAt(0).toUpperCase() + str.slice(1)
 
 function projectExample(s) {
   const sig = segmentById(s.primary).signals
-  return `${sig[0]}, ${sig[1].toLowerCase()}, ${sig[2].toLowerCase()} — all happening in your radius right now.`
+  return `${sig[0]}, ${sig[1].toLowerCase()}, ${sig[2].toLowerCase()}. All happening in your radius right now.`
 }
 
 /* union of every selected segment's fleet list, capped so the grid
@@ -540,7 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* return visit to a live or finished run: no gate, no questionnaire —
    just the board, in the same shell language as the scan */
 async function bootProbeDashboard(app, runId) {
-  document.title = 'Proof load test — RentalRevive'
+  document.title = 'Proof load test · RentalRevive'
   app.innerHTML = `
     <main class="stage">
       <header class="topbar">
@@ -556,7 +623,7 @@ async function bootProbeDashboard(app, runId) {
   } catch (e) {
     console.warn('dashboard unavailable', e)
     document.getElementById('dashHost').innerHTML =
-      '<div class="probe-dash"><p class="pd-note">The probe backend isn’t reachable from this page. Your run is safe server-side — try the link from your report email.</p></div>'
+      '<div class="probe-dash"><p class="pd-note">The probe backend isn’t reachable from this page. Your run is safe server-side. Try the link from your report email.</p></div>'
   }
 }
 
@@ -586,7 +653,7 @@ function renderGate(app, prefill) {
       <div class="gate-hero">
         <span class="gate-eyebrow"><i class="gate-live"></i>The rental revenue leak scan</span>
         <h1>Type your company.<br/><em>We’ll find the leak.</em></h1>
-        <p class="gate-sub">US heavy machinery rental yards only — cranes to compactors. No sign-up, no email wall. Just your business name.</p>
+        <p class="gate-sub">US heavy machinery rental yards only, cranes to compactors. No sign-up, no email wall. Just your business name.</p>
         <div class="gate-search" id="gateSearch">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
           <input id="gateInput" type="text" autocomplete="off" spellcheck="false"
@@ -598,7 +665,12 @@ function renderGate(app, prefill) {
           </button>
         </div>
         <ul class="gate-list" id="gateList" role="listbox"></ul>
-        <p class="gate-alt" id="gateAlt">Can’t find it, or no Google listing? Type the yard’s name and hit <b>Enter</b> — the scan runs fine without Google.</p>
+        <div class="gate-trust">
+          <span>${TRUST_CHECK}Free 2-minute scan</span>
+          <span>${TRUST_CHECK}No forms, no sign-up</span>
+          <span>${TRUST_CHECK}Your leak priced live</span>
+        </div>
+        <p class="gate-alt" id="gateAlt">Can’t find it, or no Google listing? Type the yard’s name and hit <b>Enter</b>. The scan runs fine without Google.</p>
       </div>
       <footer class="gate-foot">
         <a href="/">← rentalrevive.com</a>
@@ -624,7 +696,7 @@ function bootGate(prefill) {
 
   const mapsPromise = loadMaps().then((ok) => {
     ready = ok
-    if (!ok) alt.innerHTML = 'Live search is offline right now — type the yard’s name and hit <b>Enter</b>. The scan runs fine without Google.'
+    if (!ok) alt.innerHTML = 'Live search is offline right now. Type the yard’s name and hit <b>Enter</b>. The scan runs fine without Google.'
     return ok
   })
 
@@ -704,8 +776,8 @@ function bootGate(prefill) {
       lockBusy = false
       list.innerHTML = `
         <li class="gate-item err">
-          <span class="gi-txt"><b>${esc(details.name)}</b> reads like a different kind of rental business — this scan is built for heavy machinery yards.
-          <small><button type="button" id="giAnyway">It IS a machinery yard — continue</button> · or pick another result</small></span>
+          <span class="gi-txt"><b>${esc(details.name)}</b> reads like a different kind of rental business. This scan is built for heavy machinery yards.
+          <small><button type="button" id="giAnyway">It IS a machinery yard · continue</button> · or pick another result</small></span>
         </li>`
       document.getElementById('giAnyway')?.addEventListener('click', () => enterApp(details))
       return
@@ -720,9 +792,10 @@ function bootGate(prefill) {
    PHASE 2 — the app shell
    ------------------------------------------------------------
    Two panes, not three. The old right-hand HUD was one of three
-   places the same five leak figures were rendered; it is gone.
-   The meter now lives only in the dock strip and the sheet it
-   opens.
+   places the same five leak figures were rendered; it is gone —
+   and so are the dock pill and the bottom sheet that replaced it.
+   The meter now lives only in the estimate panel on the right
+   stage, until the report renders the arithmetic.
    ============================================================ */
 function enterApp(place) {
   /* the gate can fire twice — Enter on the manual path, or Enter racing the
@@ -757,13 +830,6 @@ function enterApp(place) {
             <div class="dock">
               <div class="dock-inner">
                 <div class="composer" id="composer"></div>
-                <button class="meter-strip" id="meterBtn" type="button"
-                        aria-expanded="false" aria-controls="meterSheet">
-                  <span class="ms-led" aria-hidden="true"></span>
-                  <span class="ms-lab">Est. monthly leak</span>
-                  <b class="ms-fig" id="meterFig">$0</b>
-                  <span class="ms-chev" aria-hidden="true">${ICON.chevUp}</span>
-                </button>
               </div>
             </div>
           </div>
@@ -774,13 +840,11 @@ function enterApp(place) {
     thread = document.getElementById('thread')
     watchFollow(document.getElementById('threadWrap'))
     composer = document.getElementById('composer')
-    meterFig = document.getElementById('meterFig')
     railEl = document.getElementById('tbProgress')
     stageRight = document.getElementById('stageRight')
 
     document.getElementById('tbYard').textContent = place.name
 
-    buildSheet()
 
     /* deep-linked segment (landing cards): pre-select, still confirmable */
     const pre = new URLSearchParams(location.search).get('segment')
@@ -795,52 +859,36 @@ function enterApp(place) {
 }
 
 /* ------------------------------------------------------------
-   the meter sheet — the single home for the live metrics
+   the estimate panel — the single home for the live metrics
+   ------------------------------------------------------------
+   Replaces the floating dock pill + bottom sheet (2026-08-06).
+   Once the numbers act starts the right stage stops being a
+   gallery and becomes the instrument: a dark panel that prices
+   every answer as it lands. Same discipline as the sheet it
+   replaces — the metrics live in exactly ONE place until the
+   report renders the arithmetic.
    ------------------------------------------------------------ */
-function buildSheet() {
-  sheetScrim = el('div', 'sheet-scrim')
-  sheetScrim.id = 'sheetScrim'
-  sheetEl = el('section', 'sheet')
-  sheetEl.id = 'meterSheet'
-  sheetEl.setAttribute('role', 'dialog')
-  sheetEl.setAttribute('aria-label', 'Leak meter')
-  sheetEl.setAttribute('aria-hidden', 'true')
-  sheetEl.innerHTML = `
-    <div class="sheet-grip"></div>
-    <div class="sheet-head">
+function mountEstimatePanel() {
+  if (document.getElementById('estPanel')) return
+  const card = el('section', 'est-panel')
+  card.id = 'estPanel'
+  card.setAttribute('aria-label', 'Live leak estimate')
+  card.innerHTML = `
+    <div class="est-head">
       <span class="lab">Leak meter · live</span>
-      <button class="sheet-close" type="button" aria-label="Close leak meter">${ICON.cross}</button>
+      <b class="est-score" id="estScore">– / 25</b>
     </div>
-    <div class="sheet-money">
-      <b id="sheetMoney">$0</b>
-      <span id="sheetAnnual"></span>
+    <div class="est-hero">
+      <b id="estMoney">–</b>
+      <span id="estAnnual">Arms once we have your average job value</span>
     </div>
-    <div class="sheet-bar"><i id="sheetFill"></i></div>
-    <div class="sheet-score">
-      <span class="lab">Leak score</span>
-      <b id="sheetScore">— / 25</b>
-    </div>
-    <div class="ledger" id="ledger"></div>
-    <p class="sheet-note" id="sheetNote">Answer the numbers questions and the meter arms. Every figure is an estimate built from your answers and deliberately conservative recovery rates — the arithmetic is shown in your report.</p>`
-  document.body.appendChild(sheetScrim)
-  document.body.appendChild(sheetEl)
-
-  const toggle = () => setSheet(!sheetOpen)
-  document.getElementById('meterBtn').addEventListener('click', toggle)
-  sheetEl.querySelector('.sheet-close').addEventListener('click', () => setSheet(false))
-  sheetEl.querySelector('.sheet-grip').addEventListener('click', () => setSheet(false))
-  sheetScrim.addEventListener('click', () => setSheet(false))
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && sheetOpen) setSheet(false) })
-}
-
-function setSheet(open) {
-  sheetOpen = open
-  sheetEl.classList.toggle('on', open)
-  sheetScrim.classList.toggle('on', open)
-  sheetEl.setAttribute('aria-hidden', open ? 'false' : 'true')
-  const btn = document.getElementById('meterBtn')
-  btn?.classList.toggle('open', open)
-  btn?.setAttribute('aria-expanded', open ? 'true' : 'false')
+    <div class="est-bar"><i id="estFill"></i></div>
+    <div class="ledger" id="estLedger"></div>
+    <p class="est-note" id="estNote">Every figure is an estimate built from your answers and deliberately conservative recovery rates. The full arithmetic lands in your report.</p>`
+  stageRight.innerHTML = ''
+  stageRight.appendChild(card)
+  requestAnimationFrame(() => card.classList.add('in'))
+  renderMeter()
 }
 
 /* ------------------------------------------------------------
@@ -858,6 +906,10 @@ async function runStep(index) {
   const row = rowFor(step)
 
   renderRail()
+
+  /* the calculation phase begins — the stage becomes the instrument.
+     Re-mounts after a structural edit replays the radar over it. */
+  if (step.act === 'numbers' || step.act === 'leaks') mountEstimatePanel()
 
   if (step.stage) {
     await step.stage(row)
@@ -1155,9 +1207,10 @@ function typeBubble(container, text, extra = '') {
 /* ============================================================
    STAGES — the agentic beats, rendered as artifacts
    ============================================================ */
-function artifact(label, live) {
+function artifact(label, live, icon) {
   const card = el('div', 'artifact')
   card.innerHTML = `<div class="art-head">
+    ${icon ? `<img class="art-ic" src="${icon}" alt="" />` : ''}
     <span class="lab${live ? ' live' : ''}">${esc(label)}</span>
   </div>`
   return card
@@ -1169,10 +1222,10 @@ async function lockonStage(row) {
   const art = stageRight
 
   await botSay(row, p.manual
-    ? `${p.name}${p.city ? `, ${p.city}` : ''} — noted. No listing needed, the scan works the same.`
+    ? `${p.name}${p.city ? `, ${p.city}` : ''}. Noted. No listing needed, the scan works the same.`
     : `Found you. Let me pull up what your customers see…`)
 
-  const card = artifact('Google footprint')
+  const card = artifact('Google footprint', false, '/google-business.png')
   card.insertAdjacentHTML('beforeend', `
     ${!p.manual && mapsUp() ? '<div class="lo-map" id="loMap"></div>' : ''}
     <div class="lo-card">
@@ -1204,7 +1257,7 @@ async function lockonStage(row) {
   await wait(reduced ? 0 : 700)
   if (!p.manual) {
     const line = p.reviews
-      ? `${p.rating}★ across ${p.reviews} reviews — your customers already trust the yard. This scan is about the ones who never got through.`
+      ? `${p.rating}★ across ${p.reviews} reviews. Your customers already trust the yard. This scan is about the ones who never got through.`
       : `Listing's a bit bare, but that's a different conversation. This scan is about the calls and quotes you never see.`
     await botReact(row, line)
   }
@@ -1480,7 +1533,7 @@ async function auditStage(row) {
   const mkBody = (card) => { const b = el('div', 'fp'); card.appendChild(b); return b }
 
   /* --- 1. the Google Business Profile scorecard --- */
-  const profileCard = artifact('Google Business Profile')
+  const profileCard = artifact('Google Business Profile', false, '/google-business.png')
   const profileBody = mkBody(profileCard)
   const tone = profile.pct === null ? 'unknown'
     : profile.pct >= 85 ? 'good' : profile.pct >= 60 ? 'warn' : 'bad'
@@ -1488,7 +1541,7 @@ async function auditStage(row) {
   sheet.innerHTML = `
     <div class="fp-head">
       <span class="fp-score ${tone}">
-        <b>${profile.pct === null ? '—' : profile.pct}<i>%</i></b>
+        <b>${profile.pct === null ? '–' : profile.pct}<i>%</i></b>
         <em>${profile.passed} of ${profile.measured} complete</em>
       </span>
     </div>
@@ -1545,8 +1598,8 @@ async function auditStage(row) {
     state.footprint.audit = result
   } else {
     feed(site.kind === 'none'
-      ? '[No website on the Google profile — nothing to crawl]'
-      : `[Google profile points at ${site.platform} — no site to crawl]`)
+      ? '[No website on the Google profile, nothing to crawl]'
+      : `[Google profile points at ${site.platform}, no site to crawl]`)
   }
 
   /* --- tracking rows --- */
@@ -1586,7 +1639,7 @@ async function auditStage(row) {
   }
 
   if (profile.gaps.length >= 3) {
-    await botReact(row, `Your Google profile is ${profile.pct}% filled in — ${profile.gaps.slice(0, 3).join(', ').toLowerCase()} ${profile.gaps.length > 3 ? 'and more are' : 'are'} missing. That is the page most of your customers see before they ever reach you.`)
+    await botReact(row, `Your Google profile is ${profile.pct}% filled in: ${profile.gaps.slice(0, 3).join(', ').toLowerCase()} ${profile.gaps.length > 3 ? 'and more are' : 'are'} missing. That is the page most of your customers see before they ever reach you.`)
   }
 
   if (result?.measured) {
@@ -1622,7 +1675,7 @@ async function radarStage(row) {
   const cached = state.radar.ranTag === tag && state.radar.ranTag !== ''
 
   await botSay(row, cached
-    ? 'Same yard, same lines — your radius scan still stands.'
+    ? 'Same yard, same lines. Your radius scan still stands.'
     : `Hold on. Sweeping the radius around ${p.city || 'your yard'} for everyone renting against you…`)
 
   const card = artifact('Competitor radar', true)
@@ -1632,12 +1685,12 @@ async function radarStage(row) {
       <div class="rad-map" id="radMap"></div>
       <span class="rad-sweep"></span>
       <span class="rad-ring"></span><span class="rad-ring r2"></span>
-      <span class="rad-scope" id="radScope">SWEEP · — MI</span>
+      <span class="rad-scope" id="radScope">SWEEP · – MI</span>
     </div>
     <div class="rad-stats">
       <span><b id="radN">0</b><i>yards found</i></span>
       <span><b id="radNat">0</b><i>national</i></span>
-      <span><b id="radR">—</b><i>mile radius</i></span>
+      <span><b id="radR">–</b><i>mile radius</i></span>
     </div>
     <div class="rad-list" id="radList"></div>`
   card.appendChild(box)
@@ -1647,6 +1700,9 @@ async function radarStage(row) {
 
   const map = new google.maps.Map(document.getElementById('radMap'), {
     center: { lat: p.lat, lng: p.lng }, zoom: 9,
+    /* the final frame locks to the nearest cluster — cap the zoom so
+       a lone next-door competitor cannot land us on a rooftop */
+    maxZoom: 15,
     disableDefaultUI: true, styles: MAP_STYLE, backgroundColor: MAP_BACKDROP,
   })
   const selfMarker = new google.maps.Marker({
@@ -1672,9 +1728,10 @@ async function radarStage(row) {
   }
 
   const { competitors, radiusMi } = result
-  document.getElementById('radR').textContent = radiusMi || '—'
-  box.classList.add('done')
-  card.querySelector('.lab')?.classList.remove('live')
+  document.getElementById('radR').textContent = radiusMi || '–'
+  /* the sweep stays live while the pins land — killing it here made
+     the most theatrical moment of the scan play out on a dead dish.
+     The done state (sweep fade + LOCKED scope) waits for the loop. */
 
   /* pins + list, staggered */
   const listEl = document.getElementById('radList')
@@ -1691,32 +1748,47 @@ async function radarStage(row) {
       icon: markerDot(c.national ? '#FF8A8E' : '#46C46E', 7),
       title: c.name,
     })
-    if (i < 6) {
+    /* Labels and the final frame cover the yard + its FOUR nearest
+       rivals (the list is distance-sorted). Six labels crowded the
+       centre and fitting all 18 pins zoomed out to the whole metro —
+       the locked frame should read at street level, where the fight
+       actually is: with the nearest rivals at 1–2 miles this lands
+       around zoom 13, streets visible, labels separated. Farther
+       pins sit off-frame; the ledger below carries all of them. */
+    if (i < 4) {
       pinLabel(map, marker,
         `<b>${esc(c.name)}</b><small>${c.national ? 'National branch' : 'Independent'} · ${c.distance.toFixed(1)} mi</small>`,
         c.national ? 'nat' : 'ind')
+      bounds.extend({ lat: c.lat, lng: c.lng })
     }
-    bounds.extend({ lat: c.lat, lng: c.lng })
-    if (i < 8) {
-      const item = el('div', 'rad-item')
-      item.innerHTML = `
-        <div class="ri-main">
-          <b class="ri-name">${esc(c.name)}</b>
-          <div class="ri-metrics">
-            ${c.rating ? `<span class="ri-stars">${starRow(c.rating)} <em>${c.rating}</em></span>` : '<span class="ri-unrated">Unrated</span>'}
-            <span class="ri-dist">${c.distance.toFixed(1)} MI</span>
-          </div>
+    /* EVERY competitor gets a list row — the stat says "18 yards
+       found" and the ledger below it must show all 18, not the top 8.
+       The list scrolls past ~7 rows (CSS max-height); labels on the
+       map itself stay capped at 6 so the pins remain readable. */
+    const item = el('div', 'rad-item')
+    item.innerHTML = `
+      <div class="ri-main">
+        <b class="ri-name">${esc(c.name)}</b>
+        <div class="ri-metrics">
+          ${c.rating ? `<span class="ri-stars">${starRow(c.rating)} <em>${c.rating}</em></span>` : '<span class="ri-unrated">Unrated</span>'}
+          <span class="ri-dist">${c.distance.toFixed(1)} MI</span>
         </div>
-        <i class="ri-tag ${c.national ? 'nat' : 'ind'}">${c.national ? 'National' : 'Independent'}</i>`
-      listEl.appendChild(item)
-      requestAnimationFrame(() => item.classList.add('in'))
-    }
+      </div>
+      <i class="ri-tag ${c.national ? 'nat' : 'ind'}">${c.national ? 'National' : 'Independent'}</i>`
+    listEl.appendChild(item)
+    requestAnimationFrame(() => item.classList.add('in'))
+    /* keep the newest row in view while the sweep is landing them */
+    if (i > 5) listEl.scrollTop = listEl.scrollHeight
     shownN++
     if (c.national) shownNat++
-    document.getElementById('radN').textContent = shownN
-    document.getElementById('radNat').textContent = shownNat
+    tick('radN', shownN)
+    if (c.national) tick('radNat', shownNat)
   }
-  if (competitors.length) map.fitBounds(bounds, 40)
+  listEl.scrollTop = 0
+  if (competitors.length) map.fitBounds(bounds, 56)
+  box.classList.add('done')
+  card.querySelector('.lab')?.classList.remove('live')
+  setScope(radiusMi || 0, true)
   scrollToEnd()
 
   await wait(reduced ? 0 : 500)
@@ -1725,14 +1797,37 @@ async function radarStage(row) {
   const nats = competitors.filter((c) => c.national).length
   await botReact(row,
     competitors.length === 0
-      ? `Quiet radius — no direct competitors surfaced inside ${radiusMi} miles. Every leak you have is pure loss, because there was nobody else to lose to.`
-      : `${competitors.length} yards renting against you inside ${radiusMi} miles${nats ? ` — and ${nats} ${nats === 1 ? 'is a national branch' : 'are national branches'}. The nationals answer at midnight. That's who picks up when you don't.` : '. All independents — this market is still winnable on hustle.'}`
+      ? `Quiet radius: no direct competitors surfaced inside ${radiusMi} miles. Every leak you have is pure loss, because there was nobody else to lose to.`
+      : `${competitors.length} yards renting against you inside ${radiusMi} miles${nats ? `, and ${nats} ${nats === 1 ? 'is a national branch' : 'are national branches'}. The nationals answer at midnight. That's who picks up when you don't.` : '. All independents. This market is still winnable on hustle.'}`
   )
 }
 
-function setScope(mi) {
+function setScope(mi, locked = false) {
   const scope = document.getElementById('radScope')
-  if (scope) scope.textContent = `SWEEP · ${mi} MI`
+  if (scope) scope.textContent = locked ? `LOCKED · ${mi} MI` : `SWEEP · ${mi} MI`
+}
+
+/* pop a stat counter as it changes — the count-up is the radar's
+   heartbeat, so each landing should be felt, not just written.
+   WAAPI, not a CSS-class restart: eighteen landings arrive 40–170ms
+   apart, and cancel-then-animate composes cleanly where the
+   remove/reflow/re-add trick visibly stuttered. (The element is
+   inline-block in CSS for the same reason — transform is a spec
+   no-op on plain inline elements.) */
+function tick(id, n) {
+  const b = document.getElementById(id)
+  if (!b) return
+  b.textContent = n
+  if (reduced || !b.animate) return
+  b.getAnimations().forEach((a) => a.cancel())
+  b.animate(
+    [
+      { transform: 'scale(1)' },
+      { transform: 'scale(1.16)', color: '#E4262C', offset: 0.35 },
+      { transform: 'scale(1)' },
+    ],
+    { duration: 320, easing: 'cubic-bezier(.22,.9,.35,1)' },
+  )
 }
 
 function pinLabel(map, marker, content, tone = '') {
@@ -1760,7 +1855,7 @@ function segmentGrid(s, commit) {
   const sync = () => {
     done.disabled = picked.size === 0
     done.textContent = picked.size === 0 ? 'Tap what you rent'
-      : picked.size === 1 ? `Continue — ${segmentById([...picked][0]).short} →`
+      : picked.size === 1 ? `Continue · ${segmentById([...picked][0]).short} →`
       : `Continue with ${picked.size} lines →`
   }
 
@@ -1827,7 +1922,7 @@ function multiChips({ options, selected, doneLabel, countNoun, commit }) {
     done.disabled = picked.size === 0
     done.textContent = picked.size === 0
       ? 'Tap all that apply'
-      : `${doneLabel || 'Done'} — ${picked.size} ${countNoun || 'picked'} →`
+      : `${doneLabel || 'Done'} · ${picked.size} ${countNoun || 'picked'} →`
   }
 
   options.forEach((opt, i) => {
@@ -1862,7 +1957,7 @@ function rivalsWidget(s, commit) {
   done.type = 'button'
   const none = el('button', 'btn-ghostly')
   none.type = 'button'
-  none.textContent = 'None of these — we mostly lose to no-shows'
+  none.textContent = 'None of these, we mostly lose to no-shows'
 
   const sync = () => {
     done.disabled = picked.size === 0
@@ -1898,7 +1993,7 @@ function phoneWidget(s, commit) {
     const group = el('div', 'band-group')
     const yes = el('button', 'band')
     yes.type = 'button'
-    yes.innerHTML = `<span class="band-key">1</span>Yes — that’s the counter line`
+    yes.innerHTML = `<span class="band-key">1</span>Yes, that’s the counter line`
     const no = el('button', 'band')
     no.type = 'button'
     no.innerHTML = `<span class="band-key">2</span>It’s a different number`
@@ -1971,23 +2066,117 @@ function textWidget({ placeholder, value, commit, allowEmpty, emptyLabel }) {
   return wrap
 }
 
-function sliderWidget({ min, max, value, suffix, commit }) {
+/* Band buttons plus an "exact number" escape hatch — the phoneWidget
+   pattern. Ranges are the fast path (nobody counts their missed
+   calls); the custom entry is for the owner who actually knows.
+   Options carry {label, value}: the pill shows the label, the engine
+   gets the NUMBER, so no new strings enter the AD-11 vocabulary. */
+function bandsWithCustom({ options, selected, commit, customLabel, customPlaceholder, customMax, suffix, formatCustom }) {
+  const wrap = el('div', 'phone-wrap')
+  const group = el('div', 'band-group')
+  options.forEach((opt, i) => {
+    const b = el('button', 'band')
+    b.type = 'button'
+    if (selected === opt.value) b.classList.add('selected')
+    b.innerHTML = `<span class="band-key">${i + 1}</span>${esc(opt.label)}`
+    b.addEventListener('click', () => {
+      group.querySelectorAll('.band').forEach((x) => x.classList.remove('selected'))
+      b.classList.add('selected')
+      setTimeout(() => commit(opt.value, opt.label), reduced ? 0 : 190)
+    })
+    group.appendChild(b)
+  })
+  const custom = el('button', 'band')
+  custom.type = 'button'
+  custom.innerHTML = `<span class="band-key">${options.length + 1}</span>${esc(customLabel)}`
+  custom.addEventListener('click', () => {
+    const form = el('form', 'text-wrap')
+    form.noValidate = true
+    const input = el('input', 'text-input')
+    input.type = 'number'
+    input.inputMode = 'numeric'
+    input.min = 0
+    input.max = customMax
+    input.placeholder = customPlaceholder
+    const go = el('button', 'btn-commit')
+    go.type = 'submit'
+    go.textContent = 'That’s the number'
+    go.style.alignSelf = 'auto'
+    form.addEventListener('submit', (e) => {
+      e.preventDefault()
+      const n = Math.round(Number(input.value))
+      if (Number.isFinite(n) && n >= 0) {
+        const v = Math.min(n, customMax)
+        const capped = n >= customMax
+        commit(v, formatCustom ? formatCustom(v, capped) : `${v}${capped ? '+' : ''} ${suffix}`)
+      } else input.focus()
+    })
+    form.appendChild(input)
+    form.appendChild(go)
+    wrap.innerHTML = ''
+    wrap.appendChild(form)
+    focusFirst(wrap)
+  })
+  group.appendChild(custom)
+  wrap.appendChild(group)
+  numberKeys(wrap, options.length + 1, (i) =>
+    (i < options.length ? group.children[i] : custom).click())
+  return wrap
+}
+
+/* The ticket slider spans the segment's OWN economics: half the
+   cheapest band midpoint up to half again above the dearest, in
+   roughly a hundred readable steps. A crane yard drags $500–$27,000
+   at $500 a notch; a tool counter drags $200–$9,000 at $100. Derived
+   from ticketBands rather than declared separately, so a segment's
+   economics stay defined in exactly one place (segments.js). */
+function ticketRange(seg) {
+  const mids = seg.ticketBands.map((b) => b.mid)
+  const rawMin = mids[0] / 2
+  const rawMax = mids[mids.length - 1] * 1.5
+  const step = niceStep((rawMax - rawMin) / 100)
+  return {
+    min: Math.max(step, Math.round(rawMin / step) * step),
+    max: Math.round(rawMax / step) * step,
+    step,
+  }
+}
+
+/* 1 / 2 / 5 × 10ⁿ — the increments a person reads without doing
+   arithmetic. A $263 step is noise; $500 is a number. */
+function niceStep(x) {
+  const mag = Math.pow(10, Math.floor(Math.log10(Math.max(1, x))))
+  const n = x / mag
+  return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * mag
+}
+
+/* `format` lets a caller render the head differently at the extremes —
+   a 0 that should read "None", or a top stop that is a floor, not a
+   ceiling ("100+"). Defaults reproduce the original close-rate slider
+   exactly, so that call site is unchanged. */
+function sliderWidget({ min, max, step, value, suffix, commit, ariaLabel, doneLabel, format }) {
   const wrap = el('div', 'slider-wrap')
   const display = el('div', 'slider-val')
   const slider = el('input', 'slider')
   slider.type = 'range'
-  slider.min = min; slider.max = max; slider.value = value
-  slider.setAttribute('aria-label', 'Quotes that become booked work, out of ten')
+  slider.min = min; slider.max = max
+  if (step) slider.step = step
+  /* clamp: a stored answer from a different segment (the owner changed
+     his primary line) can sit outside this segment's range entirely */
+  slider.value = Math.min(max, Math.max(min, value))
+  slider.setAttribute('aria-label', ariaLabel || 'Quotes that become booked work, out of ten')
   const paint = () => {
-    const pct = ((+slider.value - min) / (max - min)) * 100
+    const v = +slider.value
+    const pct = ((v - min) / (max - min)) * 100
     slider.style.setProperty('--fill', pct + '%')
-    display.innerHTML = `${slider.value}<em>${esc(suffix)}</em>`
+    display.innerHTML = format ? format(v, v === +max) : `${v}<em>${esc(suffix)}</em>`
+    slider.setAttribute('aria-valuetext', display.textContent)
   }
   slider.addEventListener('input', paint)
   paint()
   const set = el('button', 'btn-commit')
   set.type = 'button'
-  set.textContent = 'That’s about right'
+  set.textContent = doneLabel || 'That’s about right'
   set.addEventListener('click', () => commit(+slider.value))
   wrap.appendChild(display)
   wrap.appendChild(slider)
@@ -2011,22 +2200,22 @@ let shownMoney = 0
 let moneyRaf = 0
 
 function renderMeter() {
-  if (!meterFig) return
+  if (!document.getElementById('estPanel')) return
   const L = computeLeaks(leakState())
 
   animateMoney(L.monthly, L.live)
 
-  const annual = document.getElementById('sheetAnnual')
+  const annual = document.getElementById('estAnnual')
   if (annual) {
     annual.textContent = L.monthly > 0 ? `${money(L.annual)} a year`
-      : L.live ? 'Armed — no leaks priced yet'
+      : L.live ? 'Armed, no leaks priced yet'
       : 'Arms once we have your average job value'
   }
 
-  const score = document.getElementById('sheetScore')
+  const score = document.getElementById('estScore')
   if (score) score.textContent = `${L.leakScore} / 25 · ${L.band.label}`
 
-  const ledger = document.getElementById('ledger')
+  const ledger = document.getElementById('estLedger')
   if (ledger) {
     ledger.innerHTML = ''
     L.leaks.forEach((leak) => {
@@ -2037,20 +2226,25 @@ function renderMeter() {
       row.innerHTML = `
         <span class="lr-ic">${LEAK_ICONS[leak.icon]}</span>
         <span class="lr-lab">${leak.label}</span>
-        <span class="lr-val">${leak.answered ? (leak.amount > 0 ? money(leak.amount) : 'Clear') : '—'}</span>`
+        <span class="lr-val">${leak.answered ? (leak.amount > 0 ? money(leak.amount) : 'Clear') : '–'}</span>`
       ledger.appendChild(row)
     })
   }
 
-  const fill = document.getElementById('sheetFill')
+  const fill = document.getElementById('estFill')
   if (fill) {
     setFill(fill, (L.leakScore / 25) * 100)
     fill.dataset.tone = L.band.tone
   }
 
-  const note = document.getElementById('sheetNote')
+  const note = document.getElementById('estNote')
   if (note && L.live) {
-    note.innerHTML = `Estimate, not a promise — <b>${money(L.ticket)}</b> average ${L.segment.job}, <b>${Math.round(L.close * 100)}%</b> close, conservative recovery rates. Full arithmetic in your report.`
+    /* when the plausibility bound bites, the rows above no longer sum
+       to the hero — say so here, or the panel's own arithmetic looks
+       broken to exactly the skeptic it exists to convince */
+    note.innerHTML = L.clamped
+      ? `The rows sum to <b>${money(L.rawMonthly)}</b>, capped at half the booked revenue your answers imply. The report shows that working in full.`
+      : `Estimate, not a promise: <b>${money(L.ticket)}</b> average ${L.segment.job}, <b>${Math.round(L.close * 100)}%</b> close, conservative recovery rates. Full arithmetic in your report.`
   }
 }
 
@@ -2062,13 +2256,12 @@ function leakState() {
 
 function animateMoney(target, live) {
   cancelAnimationFrame(moneyRaf)
+  const fig = document.getElementById('estMoney')
+  if (!fig) { shownMoney = target; return }
   const paint = (v) => {
     /* "$0" before the model is armed reads as "you have no leak", which is
        the opposite of true — it just means we have not asked yet. */
-    const txt = live ? money(v) : '—'
-    meterFig.textContent = txt
-    const big = document.getElementById('sheetMoney')
-    if (big) big.textContent = txt
+    fig.textContent = live ? money(v) : '–'
   }
   if (reduced || !live) { shownMoney = target; paint(target); return }
   const from = shownMoney
@@ -2124,7 +2317,7 @@ async function finale() {
   reveal.innerHTML = `
     <span class="lab rev-sup">${esc(state.place?.name || 'Your yard')} · estimated recoverable</span>
     <div class="rev-fig" id="revFig">$0</div>
-    <div class="rev-sub">a month in recoverable ${esc(L.segment.job)} revenue — from inquiries you already paid for, quotes you already sent, and accounts you already earned.
+    <div class="rev-sub">a month in recoverable ${esc(L.segment.job)} revenue, from inquiries you already paid for, quotes you already sent, and accounts you already earned.
       <span class="rev-annual">${money(L.annual)} a year</span></div>
     ${L.pileStanding > 0 ? `<div class="rev-pile">And separately, a one-time <b>${money(L.pileStanding)}</b> sitting in the ${esc(state.quotePile)} open quotes on your shelf right now.</div>` : ''}
     <button class="btn-commit rev-cta" id="revNext" type="button">So what do I actually do about it?</button>
@@ -2164,13 +2357,13 @@ function cookingOverlay(L, S) {
     const callLeak = L.leaks.find((l) => l.id === 'calls')
     const stages = [
       { ic: '◎', t: `Pinning ${p.name || 'your yard'} on the map` },
-      p.reviews ? { ic: '★', t: `Reading your Google footprint — ${p.rating}★ across ${p.reviews} reviews` } : null,
-      rad.ranTag ? { ic: '⦿', t: `Folding in the radius sweep — ${rad.competitors.length} competing yards in ${rad.radiusMi} mi` } : null,
+      p.reviews ? { ic: '★', t: `Reading your Google footprint: ${p.rating}★ across ${p.reviews} reviews` } : null,
+      rad.ranTag ? { ic: '⦿', t: `Folding in the radius sweep: ${rad.competitors.length} competing yards in ${rad.radiusMi} mi` } : null,
       state.rivals.length ? { ic: '⚑', t: `Weighing the ${state.rivals.length} rival${state.rivals.length > 1 ? 's' : ''} you named` } : null,
-      { ic: '◍', t: callLeak && callLeak.amount > 0 ? `Pricing the missed calls — ${money(callLeak.amount)} a month` : 'Checking the phone line — running clean' },
-      L.pileStanding > 0 ? { ic: '▤', t: `Valuing the standing quote pile — ${money(L.pileStanding)} on the shelf` } : null,
+      { ic: '◍', t: callLeak && callLeak.amount > 0 ? `Pricing the missed calls: ${money(callLeak.amount)} a month` : 'Checking the phone line: running clean' },
+      L.pileStanding > 0 ? { ic: '▤', t: `Valuing the standing quote pile: ${money(L.pileStanding)} on the shelf` } : null,
       { ic: '∑', t: 'Running the conservative recovery math' },
-      S.fastest ? { ic: '⚡', t: `Picking the fastest fix — ${S.fastest.fix}` } : null,
+      S.fastest ? { ic: '⚡', t: `Picking the fastest fix: ${S.fastest.fix}` } : null,
       { ic: '⌘', t: `Sequencing the 60 day plan and testing it against the desk gate` },
     ].filter(Boolean)
 
@@ -2248,7 +2441,7 @@ function renderSolution(L, S) {
     <div class="sol-head">
       <span class="lab">The plan</span>
       <h2>Here is what actually closes it.</h2>
-      <p>Five leaks, but they do not all get fixed the same way, in the same week, or by the same people. This is the order that pays first — and what each path can genuinely close, priced against your own numbers.</p>
+      <p>Five leaks, but they do not all get fixed the same way, in the same week, or by the same people. This is the order that pays first, and what each path can genuinely close, priced against your own numbers.</p>
     </div>
 
     ${S.fastest ? `
@@ -2261,7 +2454,7 @@ function renderSolution(L, S) {
       <p>${esc(S.fastest.what)}</p>
       <div class="sf-worth">
         <b>${money(S.fastest.amount)}</b>
-        <span>a month — the ${esc(S.fastest.label.toLowerCase())} leak, closed by this one change alone.</span>
+        <span>a month. The ${esc(S.fastest.label.toLowerCase())} leak, closed by this one change alone.</span>
       </div>
     </div>` : ''}
 
@@ -2282,7 +2475,7 @@ function renderSolution(L, S) {
     <div class="sol-head" style="padding-top:8px">
       <span class="lab">Two ways to run it</span>
       <h2>Your team, or our desk.</h2>
-      <p>Not a yes or a no — a choice of delivery. The honest difference is not the price, it is which of your leaks each one is actually able to close.</p>
+      <p>Not a yes or a no, a choice of delivery. The honest difference is not the price, it is which of your leaks each one is actually able to close.</p>
     </div>
 
     <div class="sol-paths">
@@ -2295,7 +2488,7 @@ function renderSolution(L, S) {
             <b>${money(p.recovers)}</b>
             <span>of your ${money(L.monthly)} monthly leak</span>
           </div>
-          ${p.gap > 0 ? `<p class="path-gap">Leaves ${money(p.gap)} a month still leaking — ${esc(p.leaves.join(', ').toLowerCase())} are not in scope.</p>` : ''}
+          ${p.gap > 0 ? `<p class="path-gap">Leaves ${money(p.gap)} a month still leaking: ${esc(p.leaves.join(', ').toLowerCase())} are not in scope.</p>` : ''}
           <div class="path-list">
             ${p.closes.map((c) => `<div class="yes">${ICON.check}<span>${esc(c)}</span></div>`).join('')}
             ${p.leaves.map((c) => `<div class="no">${ICON.minus}<span>${esc(c)}</span></div>`).join('')}
@@ -2360,18 +2553,18 @@ function renderSolution(L, S) {
 function reachSummary() {
   if (!state.marketing) return ''
   if (state.marketing === NO_MARKETING) {
-    return 'Making the phone ring: nothing paid for — word of mouth and repeat accounts.'
+    return 'Making the phone ring: nothing paid for, word of mouth and repeat accounts.'
   }
   const media = esc(state.marketingChannels.join(', ') || 'not specified')
   const w = state.marketingWorks
   let verdict = ''
   if (w && state.marketingChannels.length === 1) {
     verdict = w === 'Not really' ? ' By your own account it is not bringing work in.'
-      : w === 'Some, hard to tell' ? ' Whether it brings work in is hard to tell — nothing tracks what happened after the call.'
+      : w === 'Some, hard to tell' ? ' Whether it brings work in is hard to tell. Nothing tracks what happened after the call.'
       : ' It brings work in.'
   } else if (w) {
     verdict = w === NOTHING_WORKS
-      ? ' None of it brings work in by your own account — which is why the recovery below starts with the inquiries already reaching you.'
+      ? ' None of it brings work in by your own account, which is why the recovery below starts with the inquiries already reaching you.'
       : ` Earning its keep: <b>${esc(w)}</b>.`
   }
   return `Making the phone ring: ${media}.${verdict}`
@@ -2381,8 +2574,10 @@ function reachSummary() {
    REPORT — the arithmetic, and the ledger's one home
    ============================================================ */
 async function renderReport(L, S) {
-  const report = el('div', 'report')
+  const report = el('div', 'report report-doc')
   report.id = 'report'
+  /* every priced leak carries its documented fix into the report */
+  const fixOf = Object.fromEntries(S.active.map((f) => [f.id, f]))
   const dominant = L.dominant
   const p = state.place || {}
   const rad = state.radar
@@ -2391,7 +2586,8 @@ async function renderReport(L, S) {
   report.innerHTML = `
     <div class="rep-head">
       <span class="lab">Revenue leak scan · the arithmetic</span>
-      <h2>${esc(p.name || 'Your yard')} — every number, and where it came from.</h2>
+      <button type="button" class="rep-download" id="repDl">Download PDF</button>
+      <h2>${esc(p.name || 'Your yard')}: every number, and where it came from.</h2>
       <p class="rep-meta">${esc(state.segments.map((id) => segmentById(id).short).join(' + '))} · ${esc(state.fleetSize || '')} units · ${esc(state.inquiries || '')} inquiries a month${p.city ? ` · ${esc(p.city)}${p.state ? ', ' + esc(p.state) : ''}` : ''}</p>
     </div>
 
@@ -2411,7 +2607,7 @@ async function renderReport(L, S) {
     <div class="panel rep-market">
       <span class="lab panel-lab">Your market</span>
       <p>${rad.ranTag
-        ? `<b>${rad.competitors.length}</b> yards renting against you inside <b>${rad.radiusMi} mi</b>${rad.competitors.filter((c) => c.national).length ? ` — <b>${rad.competitors.filter((c) => c.national).length}</b> national` : ''}.`
+        ? `<b>${rad.competitors.length}</b> yards renting against you inside <b>${rad.radiusMi} mi</b>${rad.competitors.filter((c) => c.national).length ? `, <b>${rad.competitors.filter((c) => c.national).length}</b> national` : ''}.`
         : ''}
       ${state.rivals.length ? ` You lose jobs to: <b>${esc(state.rivals.join(', '))}</b>.` : ''}
       ${state.whyTheyWin.length ? ` Why they win: ${esc(state.whyTheyWin.join(', ').toLowerCase())}.` : ''}</p>
@@ -2421,7 +2617,7 @@ async function renderReport(L, S) {
     ${dominant ? `
     <div class="rep-dominant">
       <span class="lab panel-lab">Your biggest leak</span>
-      <h3>${esc(dominant.label)} — ≈ ${money(dominant.amount)} a month</h3>
+      <h3>${esc(dominant.label)}: ≈ ${money(dominant.amount)} a month</h3>
       <p>${esc(dominant.note)}</p>
     </div>` : ''}
 
@@ -2430,15 +2626,35 @@ async function renderReport(L, S) {
       ${L.leaks.map((l) => `
         <div class="rt-row ${l.amount > 0 ? 'hot' : 'clear'}">
           <span class="rt-lab">${LEAK_ICONS[l.icon]} ${l.label}</span>
-          <span class="rt-math">${esc(l.formula)}${l.id === 'pile' && l.standing ? `<em>Standing pile: ${esc(l.standingFormula)} = ${money(l.standing)} one-time</em>` : ''}</span>
-          <span class="rt-val">${l.amount > 0 ? money(l.amount) : '—'}</span>
+          <span class="rt-math">${esc(l.formula)}${l.id === 'pile' && l.standing ? `<em>Standing pile: ${esc(l.standingFormula)} = ${money(l.standing)} one-time</em>` : ''}${fixOf[l.id] ? `<em class="rt-fix"><b>The fix: ${esc(fixOf[l.id].fix)}, live ${esc(fixOf[l.id].live)}.</b> ${esc(fixOf[l.id].what)}${!fixOf[l.id].self ? ' Managed path only.' : ''}</em>` : ''}</span>
+          <span class="rt-val">${l.amount > 0 ? money(l.amount) : '–'}</span>
+        </div>`).join('')}
+      ${L.clamped ? `
+        <div class="rt-row clear">
+          <span class="rt-lab">Plausibility bound</span>
+          <span class="rt-math">The five leaks sum to ${money(L.rawMonthly)}, but your own answers imply ≈ ${money(L.impliedMonthly)}/mo in booked work (${L.quotes % 1 ? L.quotes.toFixed(1) : L.quotes} quotes × ${Math.round(L.close * 100)}% booked × ${money(L.ticket)}), and we will not claim you are leaking more than half of what you book. Past that line the honest reading is noisy answers, not more money.</span>
+          <span class="rt-val">− ${money(L.rawMonthly - L.monthly)}</span>
+        </div>` : ''}
+    </div>
+
+    <div class="panel rep-paths">
+      <span class="lab panel-lab">The two ways to close it</span>
+      ${S.paths.map((pt) => `
+        <div class="rp-path${S.recommendation.key === (pt.key === 'self' ? 'starter' : 'sprint') ? ' pick' : ''}">
+          <div class="rp-top"><b>${esc(pt.kind)} · ${esc(pt.name)}</b><span>${esc(pt.price)}</span></div>
+          <p>Closes ${pt.closes.join(', ').toLowerCase() || 'nothing yet'} · recovers ≈ ${money(pt.recovers)}/mo${pt.leaves.length ? ` · leaves ${pt.leaves.join(', ').toLowerCase()} open` : ' · leaves nothing open'}.</p>
         </div>`).join('')}
     </div>
 
-    <p class="rep-assume">Recovery assumptions, held deliberately low: ${Math.round(ASSUMPTIONS.reachable * 100)}% of missed callers still reachable, ${Math.round(ASSUMPTIONS.winnable * 100)}% of lag-lost quotes winnable, ${Math.round(ASSUMPTIONS.revivable * 100)}% of a cold pile revivable, ${Math.round(ASSUMPTIONS.reactivated * 100)}% of quiet accounts reactivated. Leak score is the 0–25 scale from our own audit spec. Think a number is off? Tap any answer in the transcript and the whole model re-runs, plan included.</p>
+    <p class="rep-assume">Recovery assumptions, held deliberately low: ${Math.round(ASSUMPTIONS.reachable * 100)}% of missed callers still reachable, ${Math.round(ASSUMPTIONS.winnable * 100)}% of lag-lost quotes winnable, ${Math.round(ASSUMPTIONS.revivable * 100)}% of a cold pile revivable, ${Math.round(ASSUMPTIONS.reactivated * 100)}% of quiet accounts reactivated. The total is additionally capped at half the booked revenue your own answers imply. We will never claim you leak more than half of what you book. Leak score is the 0–25 scale from our own audit spec. Think a number is off? Tap any answer in the transcript and the whole model re-runs, plan included.</p>
   `
-  thread.appendChild(report)
+  /* the stage's final act: the instrument gives way to the document.
+     The chat keeps the conversation; the right panel IS the report —
+     and the same DOM prints as the PDF. */
+  stageRight.innerHTML = ''
+  stageRight.appendChild(report)
   requestAnimationFrame(() => report.classList.add('in'))
+  document.getElementById('repDl')?.addEventListener('click', () => window.print())
   setTimeout(scrollToEnd, 80)
 
   /* --- the proof gate: measurement, offered only after the owner has
@@ -2466,7 +2682,7 @@ async function renderReport(L, S) {
   row.innerHTML = `<div class="row-bot"></div>`
   thread.appendChild(row)
   await botSay(row, [
-    'That’s the scan. I’ll put the whole thing on one page — the leaks, the arithmetic, your market sweep, the 60 day sequence and both paths.',
+    'That’s the scan. Your full report is on the right: every leak, the arithmetic behind it, the fix for each one, and both paths. Download PDF puts it in your hands.',
     'Where should I send it? And who should it be addressed to?',
   ])
   swapComposer(sendForm(L, S), 'Where to send the report')
@@ -2495,7 +2711,7 @@ function sendForm(L, S) {
       </label>
     </div>
     <button class="btn-commit sf-send" type="submit">Send my report →</button>
-    <p class="sf-fine">One page, your numbers, the arithmetic shown. Then we run the real-world check against ${esc(p.name || 'your yard')} — three calls at different times, one timed quote request, scored out of 10 — and reply within 48 hours. No cost, no obligation, and if your counter scores well we will say so.</p>
+    <p class="sf-fine">One page, your numbers, the arithmetic shown. Then we run the real-world check against ${esc(p.name || 'your yard')} (three calls at different times, one timed quote request, scored out of 10) and reply within 48 hours. No cost, no obligation, and if your counter scores well we will say so.</p>
   `
 
   form.querySelectorAll('.sf-role').forEach((b) => {
@@ -2798,7 +3014,10 @@ function scrollToEnd() {
   requestAnimationFrame(() => {
     scrollQueued = false
     const wrap = document.getElementById('threadWrap')
-    if (!wrap || !following) return
+    /* ALWAYS follow — product decision 2026-08-06: a new bot line
+       pulls the thread down even if the owner had scrolled up.
+       (The read-position guard this replaces lives in git history.) */
+    if (!wrap) return
     /* long enough to cover the smooth scroll we are about to start */
     selfScrollUntil = performance.now() + 700
     wrap.scrollTo({ top: wrap.scrollHeight, behavior: reduced ? 'auto' : 'smooth' })

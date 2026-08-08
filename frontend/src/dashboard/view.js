@@ -61,11 +61,11 @@ function attemptStatus(a, tz, now) {
   if (a.outcome === null) {
     if (a.dispatchedAt === null) {
       return a.scheduledFor > now
-        ? { cls: 'wait', text: `Scheduled · ${fmtAt(a.scheduledFor, tz)}${a.window ? ` — ${WINDOW_LABEL[a.window]}` : ''}` }
+        ? { cls: 'wait', text: `Scheduled · ${fmtAt(a.scheduledFor, tz)}${a.window ? ` · ${WINDOW_LABEL[a.window]}` : ''}` }
         : { cls: 'wait', text: 'Queued…' }
     }
     if (a.channel === 'phone') {
-      if (m.answeredAt) return { cls: 'live', text: 'Connected — on the line now' }
+      if (m.answeredAt) return { cls: 'live', text: 'Connected, on the line now' }
       if (m.ringStartedAt) {
         const rings = Math.max(1, Math.round((now - m.ringStartedAt) / 6000))
         return { cls: 'live', text: `Ringing… about ${rings} ring${rings > 1 ? 's' : ''}` }
@@ -75,7 +75,7 @@ function attemptStatus(a, tz, now) {
     return {
       cls: 'wait',
       text: m.deliveryStatus === 'delivered' || m.submissionSucceeded
-        ? 'Delivered · awaiting a reply — the clock is running'
+        ? 'Delivered · awaiting a reply, the clock is running'
         : 'Sent · confirming delivery',
     }
   }
@@ -89,24 +89,24 @@ function attemptStatus(a, tz, now) {
       const t = typeof m.msToFirstReply === 'number' ? ` in ${fmtDur(m.msToFirstReply)}` : ''
       const facts = [m.containedPrice ? 'included a price' : null, m.containedNextStep ? 'asked a next step' : null]
         .filter(Boolean).join(', ')
-      return { cls: 'ok', text: `Human reply${t}${facts ? ` — ${facts}` : ''}` }
+      return { cls: 'ok', text: `Human reply${t}${facts ? ` · ${facts}` : ''}` }
     }
     case 'no_response':
       if (a.channel === 'phone') {
         return m.answeredBy === 'voicemail'
-          ? { cls: 'gap', text: `Voicemail${m.voicemailBoxFull ? ' — box full' : ''} — audit message left` }
-          : { cls: 'gap', text: 'Rang out — nobody answered' }
+          ? { cls: 'gap', text: `Voicemail${m.voicemailBoxFull ? ', box full' : ''}, audit message left` }
+          : { cls: 'gap', text: 'Rang out, nobody answered' }
       }
-      return { cls: 'gap', text: 'Delivered — no reply inside the window' }
+      return { cls: 'gap', text: 'Delivered, no reply inside the window' }
     case 'undeliverable_theirs':
       if (a.channel === 'phone') return { cls: 'gap', text: 'Number invalid or disconnected' }
       if (a.channel === 'email') return { cls: 'gap', text: 'Published address bounced' }
-      return { cls: 'gap', text: m.submissionSucceeded === false && m.fieldsFilled ? 'Form broke — it ate the submission' : 'No working inquiry form found' }
+      return { cls: 'gap', text: m.submissionSucceeded === false && m.fieldsFilled ? 'Form broke, it ate the submission' : 'No working inquiry form found' }
     case 'blocked_by_target':
-      return { cls: 'gap', text: 'Blocked by a captcha on your form — real customers hit it too' }
+      return { cls: 'gap', text: 'Blocked by a captcha on your form, real customers hit it too' }
     case 'undeliverable_ours':
       /* NFR7 — rendered as OUR row, never a finding about the yard */
-      return { cls: 'ours', text: 'We couldn’t get through — our side, not yours. Not counted against you.' }
+      return { cls: 'ours', text: 'We couldn’t get through. Our side, not yours. Not counted against you.' }
     default:
       return { cls: 'wait', text: 'Cancelled' }
   }
@@ -150,7 +150,7 @@ function liveCall(attempts, tz, now) {
         <span class="pd-pulse"></span>
         <div class="pd-live-txt">
           <b>${phase}${rings ? ` · ~${rings} RING${rings > 1 ? 'S' : ''}` : ''}</b>
-          <small>Calling your counter line now — watch what your customers get.</small>
+          <small>Calling your counter line now. Watch what your customers get.</small>
         </div>
       </div>`
   }
@@ -159,7 +159,7 @@ function liveCall(attempts, tz, now) {
       <span class="pd-pulse quiet"></span>
       <div class="pd-live-txt">
         <b>NEXT CALL · ${esc(fmtAt(next.scheduledFor, tz).toUpperCase())}</b>
-        <small>${esc(WINDOW_LABEL[next.window] || 'scheduled')} — attempts are spread across the day on purpose.</small>
+        <small>${esc(WINDOW_LABEL[next.window] || 'scheduled')} · attempts are spread across the day on purpose.</small>
       </div>
     </div>`
 }
@@ -177,7 +177,7 @@ function verdictPanel(state) {
     `${c.dispatched} ${c.dispatched === 1 ? 'inquiry' : 'inquiries'} went out.`,
     c.reachedHuman ? `${c.reachedHuman} reached a human.` : 'None reached a human.',
     c.noResponse ? `${c.noResponse} never got a response.` : null,
-    c.unreachableOurs ? `${c.unreachableOurs} couldn’t be delivered by our side — not counted.` : null,
+    c.unreachableOurs ? `${c.unreachableOurs} couldn’t be delivered by our side, not counted.` : null,
     v.fastestResponseMs !== null ? `Fastest response: ${fmtDur(v.fastestResponseMs)}.` : null,
   ].filter(Boolean).join(' ')
 
@@ -211,7 +211,7 @@ function verdictPanel(state) {
               <span class="pd-sub-key">${esc(
                 s.key === 'missedCalls' ? 'Missed calls' : s.key === 'quoteSpeed' ? 'Quote speed' : 'After hours',
               )}</span>
-              <span class="pd-sub-vals"><em>${esc(s.from ?? '—')}</em> → <b>${esc(s.to)}</b></span>
+              <span class="pd-sub-vals"><em>${esc(s.from ?? '–')}</em> → <b>${esc(s.to)}</b></span>
             </div>`).join('')}
         </div>
       </div>`
@@ -219,11 +219,11 @@ function verdictPanel(state) {
 
   return `
     <div class="pd-verdict">
-      <span class="lab">The verdict — counts and times, not a grade</span>
+      <span class="lab">The verdict: counts and times, not a grade</span>
       <p class="pd-counts">${esc(sentence)}</p>
       ${repriceBlock}
-      ${v.partial ? `<p class="pd-note">Some channels couldn’t be measured this run — this verdict covers what actually landed, and claims nothing else.</p>` : ''}
-      ${v.biasNote ? `<p class="pd-note">The first call told your counter an audit was running. The email and form clocks started before it — so alerting could only have made these numbers better, never worse.</p>` : ''}
+      ${v.partial ? `<p class="pd-note">Some channels couldn’t be measured this run. This verdict covers what actually landed, and claims nothing else.</p>` : ''}
+      ${v.biasNote ? `<p class="pd-note">The first call told your counter an audit was running. The email and form clocks started before it, so alerting could only have made these numbers better, never worse.</p>` : ''}
     </div>`
 }
 
@@ -236,25 +236,25 @@ function hoursPanel(state) {
 
   const headline =
     h.openWhileYouClosedCount === null
-      ? `${h.swept} yards in your ${h.radiusMi} mi radius publish their hours — yours aren’t published, so there’s nothing to compare against.`
+      ? `${h.swept} yards in your ${h.radiusMi} mi radius publish their hours. Yours aren’t published, so there’s nothing to compare against.`
       : h.openWhileYouClosedCount === 0
-        ? `${h.swept} yards inside ${h.radiusMi} mi. None of the ${h.measured} publishing hours covers time you don’t — your schedule holds the line.`
-        : `${h.swept} yards inside ${h.radiusMi} mi. ${h.openWhileYouClosedCount} of them ${h.openWhileYouClosedCount === 1 ? 'is' : 'are'} reachable at hours you’re closed — that’s where the missed call goes next.`
+        ? `${h.swept} yards inside ${h.radiusMi} mi. None of the ${h.measured} publishing hours covers time you don’t. Your schedule holds the line.`
+        : `${h.swept} yards inside ${h.radiusMi} mi. ${h.openWhileYouClosedCount} of them ${h.openWhileYouClosedCount === 1 ? 'is' : 'are'} reachable at hours you’re closed. That’s where the missed call goes next.`
 
   return `
     <div class="pd-hours">
-      <span class="lab">Where the next call goes — published hours, nobody contacted</span>
+      <span class="lab">Where the next call goes: published hours, nobody contacted</span>
       <p class="pd-counts">${esc(headline)}</p>
       ${h.competitors.slice(0, 3).map((c) => `
         <div class="pd-sub">
           <span class="pd-sub-key">${esc(c.name)}${c.national ? ' <em class="pd-nat">national</em>' : ''}</span>
           <span class="pd-sub-vals">${c.weeklyHours}h/wk open${
             c.hoursWhileYouClosed !== null && c.hoursWhileYouClosed > 0
-              ? ` — <b>${c.hoursWhileYouClosed}h while you’re closed</b>`
+              ? ` · <b>${c.hoursWhileYouClosed}h while you’re closed</b>`
               : ''
           }</span>
         </div>`).join('')}
-      ${h.yardWeeklyHours !== null ? `<p class="pd-note">Your published counter hours: ${h.yardWeeklyHours}h a week. ${h.unmeasured ? `${h.unmeasured} nearby yard${h.unmeasured > 1 ? 's publish' : ' publishes'} no hours — not counted either way.` : ''}</p>` : ''}
+      ${h.yardWeeklyHours !== null ? `<p class="pd-note">Your published counter hours: ${h.yardWeeklyHours}h a week. ${h.unmeasured ? `${h.unmeasured} nearby yard${h.unmeasured > 1 ? 's publish' : ' publishes'} no hours, not counted either way.` : ''}</p>` : ''}
     </div>`
 }
 
@@ -283,11 +283,11 @@ export function renderDashboard(state, opts = {}) {
       ${state.run.status === 'active' ? `<button class="pd-kill" type="button" data-kill>Stop everything</button>` : ''}
     </div>
     ${state.run.status === 'active' ? liveCall(state.attempts, tz, now) : ''}
-    ${state.run.status === 'killed' ? `<p class="pd-note">You pulled the switch — every scheduled probe stood down. What landed before that is below; nothing else will fire.</p>` : ''}
+    ${state.run.status === 'killed' ? `<p class="pd-note">You pulled the switch. Every scheduled probe stood down. What landed before that is below; nothing else will fire.</p>` : ''}
     ${verdictPanel(state)}
     ${state.verdict ? hoursPanel(state) : ''}
     <div class="pd-log">
-      <span class="lab">The attempt log — every attempt, including the ones that connected</span>
+      <span class="lab">The attempt log: every attempt, including the ones that connected</span>
       ${state.attempts.map((a) => attemptRow(a, tz, now)).join('')}
     </div>
     <div class="pd-artifacts" data-artifacts></div>`
@@ -307,7 +307,7 @@ export function renderArtifacts(list) {
   box.innerHTML = `
     <span class="lab">Evidence</span>
     ${list.map((a) => a.expired
-      ? `<span class="pd-proof expired">${esc(kindLabel(a.kind))} — expired per the retention window you were shown</span>`
+      ? `<span class="pd-proof expired">${esc(kindLabel(a.kind))}, expired per the retention window you were shown</span>`
       : a.contentType.startsWith('audio/')
         ? `<figure class="pd-proof"><figcaption>${esc(kindLabel(a.kind))}</figcaption><audio controls preload="none" src="${esc(a.url)}"></audio></figure>`
         : a.contentType.startsWith('image/')

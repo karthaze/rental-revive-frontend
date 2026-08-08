@@ -1,0 +1,12 @@
+# Local env files hold real keys. .env.example is the committed manifest
+# and is deliberately NOT ignored.
+.env
+.env.local
+.env.*.local
+
+# Project-local Python venv holding the graphify CLI (machine-specific;
+# the hooks in .claude/settings.json reference it by absolute path).
+.venv/
+
+# graphify build output (regenerate with /graphify .)
+graphify-out/

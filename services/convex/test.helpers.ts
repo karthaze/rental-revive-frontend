@@ -80,7 +80,7 @@ export const BASE_ANSWERS: Record<string, unknown> = {
   ticket: '$3,000 – $8,000',
   inquiries: '60 – 120',
   closeRate: 40,
-  missedCalls: '1 – 3 a week',
+  missedCalls: '1 – 5 a week',
   afterHours: 'Voicemail',
   quoteSpeed: 'Same day',
   quotePile: '20 – 50',

@@ -327,7 +327,7 @@ describe('the run resolves into a verdict (FR23, FR26, AD-11)', () => {
     expect(verdict!.biasNote).toBe(true)
 
     // the yard answered its phone: the measurement REPLACES the owner's
-    // self-reported '1 – 3 a week' with 'Almost none' — the counter-metric
+    // self-reported '1 – 5 a week' with 'Almost none' — the counter-metric
     // case (M4): a yard that performs well sees its number go DOWN
     const subs = (verdict!.measured as { substitutions: { key: string; to: string }[] })
       .substitutions

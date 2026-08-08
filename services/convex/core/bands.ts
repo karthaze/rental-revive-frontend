@@ -30,9 +30,9 @@
 /* The band vocabularies, exactly as leaks.js spells them. */
 export const MISSED_BANDS = [
   'Almost none',
-  '1 – 3 a week',
-  '4 – 10 a week',
-  '10+ a week',
+  '1 – 5 a week',
+  '6 – 15 a week',
+  '15+ a week',
 ] as const
 
 export const SPEED_BANDS = [
@@ -71,9 +71,23 @@ const HOUR = 60 * 60 * 1000
 
 /** Share of probe calls that never reached a human → missed-call band.
     The probe measures a rate, not a weekly volume; the band midpoints
-    in leaks.js then re-apply his own inquiry volume. Thresholds are
-    [ASSUMPTION]: 0 missed of N → the leak isn't the phone; 1 of 3 →
-    the lightest real band; half → the middle; worse → the top. */
+    in leaks.js carry the volume, and leaks.js caps the result against
+    the owner's own inquiry count so a high band cannot price more
+    missed rentals than actually reach the yard.
+
+    NOTE: an earlier version of this comment claimed leaks.js
+    "re-applies his own inquiry volume" to the midpoint. It never did —
+    the missed-call leak was the one leak fully independent of volume.
+    The cap added 2026-08-06 is what finally makes that true-ish, and
+    it bounds rather than scales. Do not read this mapping as
+    volume-aware.
+
+    Thresholds are [ASSUMPTION]: 0 missed of N → the leak isn't the
+    phone; 1 of 3 → the lightest real band; half → the middle; worse →
+    the top. The band VOLUMES were re-cut 2026-08-06 against published
+    contractor benchmarks (see leaks.js); these SHARE thresholds were
+    not — a measured 1-in-3 miss rate still reads as the lightest real
+    band, which is now a heavier weekly number than it used to be. */
 export function measuredMissedCallsBand(
   phone: MeasuredReachability['phone'],
 ): MissedBand | null {
@@ -81,9 +95,9 @@ export function measuredMissedCallsBand(
   /* integer count first — `1 - 2/3` overshoots 1/3 in floating point */
   const missedShare = (phone.valid - phone.reachedHuman) / phone.valid
   if (missedShare <= 0) return 'Almost none'
-  if (missedShare <= 1 / 3) return '1 – 3 a week'
-  if (missedShare <= 1 / 2) return '4 – 10 a week'
-  return '10+ a week'
+  if (missedShare <= 1 / 3) return '1 – 5 a week'
+  if (missedShare <= 1 / 2) return '6 – 15 a week'
+  return '15+ a week'
 }
 
 /** Fastest measured human response to a written inquiry → quote-speed
@@ -158,4 +172,16 @@ export function substituteBands(
   return { answers, substitutions: subs }
 }
 
-const str = (x: unknown): string | null => (typeof x === 'string' ? x : null)
+/* The owner answers missed calls on a 0–100 slider now, so a
+   self-reported value may be a NUMBER. Render it in the same weekly
+   vocabulary the bands use — otherwise the dashboard's before/after
+   row shows a blank exactly where his own answer belongs, and the
+   substitution reads as if it came from nowhere. */
+const str = (x: unknown): string | null =>
+  typeof x === 'string'
+    ? x
+    : typeof x === 'number' && Number.isFinite(x)
+      ? x === 0
+        ? 'Almost none'
+        : `${x} a week`
+      : null

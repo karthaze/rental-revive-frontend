@@ -29,20 +29,24 @@
   /* --- ground --- */
   --bg:#f5f5f7;
   --bg-warm:#ebebeb;
-  --ink:#1d1d1f;
-  --body:#424245;
-  --mut:#86868b;
-  --faint:#d2d2d7;
+  /* aligned to the landing page 2026-08-08 — the scan ran on cool
+     Apple greys while the site speaks warm brown-blacks; same family
+     (Plus Jakarta Sans) but the temperature mismatch read as a
+     different product. These are style.css's values verbatim. */
+  --ink:#241F1C;
+  --body:#57524C;
+  --mut:#6A645A;
+  --faint:#CBC5BD;
 
   /* --- accents --- */
   --red:#E4262C;
-  --red-d:#C01B21;
+  --red-d:#BE1B21;
   --red-soft:rgba(228,38,44,.10);
   --green:#2E7D46;
   --green-soft:rgba(46,125,70,.10);
   --amber:#B96A15;
-  --char:#1C1A18;
-  --char-2:#2A2622;
+  --char:#26231F;
+  --char-2:#332E29;
 
   /* --- glass --- */
   --glass:rgba(255,255,255,.62);
@@ -193,7 +197,16 @@ body::after{
 .stage{display:flex;flex-direction:column;height:100dvh;min-width:0}
 .stage-body{
   flex:1;min-height:0;
-  display:grid;grid-template-columns:50fr 50fr;
+  /* 55/45, not 50/50 — the left column is where the owner ACTS
+     (question + composer); the right is reference. The hierarchy
+     runs one way: bigger, sharper, elevated on the left; quieter
+     on the right. */
+  display:grid;grid-template-columns:55fr 45fr;
+  /* one explicit row clamped to the container — without this the
+     implicit row auto-sizes to the tallest child, and the report
+     document mounting in stage-right stretches the whole page past
+     the viewport instead of scrolling inside its own column */
+  grid-template-rows:minmax(0,1fr);
 }
 .stage-left{
   display:flex;flex-direction:column;position:relative;
@@ -206,9 +219,10 @@ body::after{
 }
 .stage-right{
   position:relative;overflow-y:auto;overflow-x:hidden;
-  /* the meter pill is position:fixed at bottom:30px and ~53px tall,
-     and it floats over exactly this corner — the last card has to be
-     able to clear it or its bottom edge sits under the pill */
+  /* white ground — quieter than the page grey the chat sits on.
+     (The floating meter pill that once dodged this corner is gone;
+     the meter is the .est-panel mounted inside this stage.) */
+  background:#fff;
   padding:24px clamp(18px,3vw,40px) var(--meter-clear);
   min-height:0;min-width:0;
   /* 18px, not 12px: these are separate cards now, and the gap between
@@ -224,6 +238,9 @@ body::after{
    before the fix: content ran 342px past the pane with
    scrollHeight === clientHeight (849 === 849). */
 .stage-right > *{flex:0 0 auto}
+/* output cards sit back: reduced elevation, same content */
+.stage-right .artifact{box-shadow:var(--sh-2),var(--edge)}
+.stage-right .est-panel{box-shadow:var(--sh-2),var(--edge)}
 @media (max-width: 900px) {
   .stage-body { display:flex; flex-direction:column; }
   .stage-left::after { display:none; }
@@ -267,8 +284,9 @@ body::after{
   background:#fff;
   color:var(--ink);
   padding:16px 24px;border-radius:18px;
-  border:1px solid rgba(0,0,0,0.03);
-  box-shadow:0 8px 30px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02);
+  border:1px solid rgba(0,0,0,0.05);
+  /* flat by design — the composer is the only card on the left that
+     carries a shadow, so elevation alone says "act here" */
   font-size:16px;line-height:1.62;letter-spacing:-.005em;
   animation:rise .5s var(--ease-out) both;
 }
@@ -361,6 +379,7 @@ body::after{
   box-shadow:var(--sh-3),var(--edge);
   animation:rise .6s var(--ease-out) both;
 }
+.art-ic{width:16px;height:16px;flex-shrink:0;border-radius:4px;margin-right:8px}
 .art-head{
   display:flex;align-items:center;gap:9px;padding:13px 18px;
   border-bottom:1px solid var(--hair-2);
@@ -434,14 +453,25 @@ body::after{
 .rad-stats span{flex:1;display:flex;flex-direction:column;gap:2px;padding:14px 18px;
   border-right:1px solid var(--hair-2)}
 .rad-stats span:last-child{border-right:none}
-.rad-stats b{font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.03em;line-height:1}
+/* inline-block so the tick transform actually applies (transform is a
+   no-op on plain inline elements); tabular digits so 9 -> 10 doesn't
+   shove the label sideways mid-animation */
+.rad-stats b{display:inline-block;font-size:22px;font-weight:800;color:var(--ink);
+  letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;
+  transform-origin:left center}
 .rad-stats i{font-family:var(--mono);font-style:normal;font-size:9.5px;letter-spacing:.13em;
   text-transform:uppercase;color:var(--faint)}
-.rad-list{display:flex;flex-direction:column}
+/* the full ledger — every yard the sweep found, scrolling past ~7 rows.
+   The stat count and this list must always agree. */
+.rad-list{display:flex;flex-direction:column;max-height:322px;overflow-y:auto;
+  scroll-behavior:smooth;-ms-overflow-style:none;scrollbar-width:thin;
+  scrollbar-color:rgba(0,0,0,.18) transparent}
+.rad-list::-webkit-scrollbar{width:4px}
+.rad-list::-webkit-scrollbar-thumb{background:rgba(0,0,0,.18);border-radius:2px}
 .rad-item{display:flex;align-items:center;gap:12px;padding:13px 20px;
   border-bottom:1px solid var(--hair-2);
-  opacity:0;transform:translateY(6px);
-  transition:opacity .45s var(--ease-out),transform .45s var(--ease-out)}
+  opacity:0;transform:translateY(7px) translateX(-6px);
+  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
 .rad-item:last-child{border-bottom:none}
 .rad-item.in{opacity:1;transform:none}
 .ri-main{display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -498,14 +528,21 @@ body::after{
 }
 .composer{
   position:relative;
-  background:rgba(255,255,255,.96);
+  background:#fff;
   border-radius:24px;
-  border:1px solid rgba(0,0,0,0.06);
-  box-shadow:0 20px 40px rgba(0,0,0,0.06);
+  border:1px solid rgba(0,0,0,0.08);
+  /* the deepest shadow on the page belongs to the surface that wants
+     the click — deeper than any output card by design */
+  box-shadow:0 2px 6px rgba(26,23,20,.05),0 26px 56px -14px rgba(26,23,20,.20);
   padding:24px 28px;
   max-height:min(52vh,540px);
   display: flex;
   flex-direction: column;
+  transition:box-shadow .35s var(--ease-out);
+}
+/* focus follows the hand: interacting lifts the card another step */
+.composer:focus-within{
+  box-shadow:0 2px 6px rgba(26,23,20,.06),0 30px 64px -14px rgba(26,23,20,.26),0 0 0 3px var(--red-soft);
 }
 .composer:empty{display:none}
 /* the swap between questions */
@@ -653,37 +690,6 @@ body::after{
 .btn-ghostly:hover{color:var(--ink)}
 .phone-wrap{display:flex;flex-direction:column;gap:9px}
 
-/* ============================================================
-   THE METER — one place, sliding up from the bottom edge
-   ============================================================ */
-.meter-strip{
-  position:fixed;right:24px;bottom:30px;z-index:60;
-  display:flex;align-items:center;gap:12px;width:auto;cursor:pointer;
-  background:rgba(255,255,255,.9);
-  -webkit-backdrop-filter:saturate(180%) blur(12px);backdrop-filter:saturate(180%) blur(12px);
-  border:1px solid rgba(0,0,0,.05);
-  border-radius:30px;
-  padding:14px 24px;
-  box-shadow:0 8px 30px rgba(0,0,0,.08);
-  transition:transform .3s var(--ease),background .3s;
-}
-.meter-strip:hover{
-  background:#fff;
-  transform:translateY(-2px);
-}
-.ms-led{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;
-  animation:pulse 2.1s infinite}
-.ms-lab{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--mut)}
-.ms-fig{font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-.025em;margin-left:4px}
-.ms-chev{width:16px;height:16px;flex-shrink:0;color:var(--mut);
-  transition:transform .4s var(--ease),color .3s;margin-left:8px}
-.ms-chev svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;
-  stroke-linecap:round;stroke-linejoin:round}
-.meter-strip:hover .ms-chev{color:var(--ink)}
-.meter-strip.open .ms-chev{transform:rotate(180deg)}
-
-/* the sheet */
 /* --- Deep Reviews Dashboard --- */
 .review-dash {
   display: flex;
@@ -729,83 +735,87 @@ body::after{
   background: var(--green);
 }
 
-/* The scrim is built once on boot and then lives in the body for the
-   whole session. It must NOT carry a backdrop-filter in its resting
-   state: opacity:0 hides the element but does not release the blur —
-   a fixed inset:0 element keeps a full-viewport backdrop layer alive,
-   and Chrome re-samples it behind everything that moves. Measured at
-   1440x757, that was 1,090,080px of blur maintained for a scrim
-   nobody was looking at. The filter belongs on .on only, where the
-   sheet is actually open and there is something to frost. */
-.sheet-scrim{
-  position:fixed;inset:0;z-index:70;background:rgba(26,23,20,.32);
-  opacity:0;pointer-events:none;transition:opacity .4s var(--ease);
+/* ============================================================
+   THE ESTIMATE PANEL — the live meter's home (was: dock pill +
+   bottom sheet). A white instrument card in the right stage: the
+   gallery becomes the gauge once the calculation starts.
+   ============================================================ */
+.est-panel{
+  border-radius:var(--r-lg);overflow:hidden;
+  background:#fff;
+  box-shadow:var(--sh-2),var(--edge);
+  color:var(--ink);padding:20px 22px 16px;
+  opacity:0;transform:translateY(12px);
+  transition:opacity .6s var(--ease-out),transform .6s var(--ease-out);
 }
-.sheet-scrim.on{
-  opacity:1;pointer-events:auto;
-  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
-}
-.sheet{
-  position:fixed;left:50%;bottom:0;z-index:71;width:min(680px,100vw);
-  transform:translate(-50%,101%);
-  background:linear-gradient(165deg,var(--char-2),var(--char));
-  border-radius:var(--r-xl) var(--r-xl) 0 0;
-  box-shadow:0 -30px 80px -20px rgba(26,23,20,.6),var(--edge-dark);
-  padding:10px 24px calc(26px + env(safe-area-inset-bottom,0px));
-  transition:transform .5s var(--ease-out);
-  max-height:86dvh;overflow-y:auto;overscroll-behavior:contain;
-  color:#fff;
-}
-.sheet.on{transform:translate(-50%,0)}
-.sheet-grip{width:38px;height:4px;border-radius:2px;background:rgba(255,255,255,.2);
-  margin:0 auto 20px;cursor:pointer}
-.sheet-head{display:flex;align-items:baseline;gap:10px;margin-bottom:20px}
-.sheet-head .lab{color:rgba(255,255,255,.42)}
-.sheet-close{margin-left:auto;background:none;border:none;cursor:pointer;
-  width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
-  background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);transition:background .25s,color .25s}
-.sheet-close:hover{background:rgba(255,255,255,.16);color:#fff}
-.sheet-close svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.4;
-  stroke-linecap:round}
+.est-panel.in{opacity:1;transform:none}
+.est-head{display:flex;align-items:baseline;gap:10px;margin-bottom:16px}
+.est-head .lab{color:var(--mut);display:flex;align-items:center;gap:6px}
+.est-head .lab::before{content:"";width:5px;height:5px;border-radius:50%;
+  background:var(--red);animation:pulse 1.8s infinite}
+.est-score{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.13em;
+  color:var(--body);font-weight:600}
+.est-hero{display:flex;flex-direction:column;gap:3px;margin-bottom:16px}
+.est-hero b{font-size:clamp(34px,3.2vw,46px);font-weight:800;letter-spacing:-.04em;
+  line-height:1;font-variant-numeric:tabular-nums}
+.est-hero span{font-size:12.5px;color:var(--mut)}
+.est-bar{height:3px;border-radius:2px;background:rgba(0,0,0,.08);overflow:hidden;
+  margin-bottom:14px}
+.est-bar i{display:block;height:100%;width:100%;background:var(--red);
+  transform-origin:left;transform:scaleX(0);transition:transform .8s var(--ease-out)}
+.est-bar i[data-tone="good"]{background:var(--green)}
+.est-bar i[data-tone="warn"]{background:#D98324}
+.est-note{margin-top:14px;font-size:11px;line-height:1.65;color:var(--mut)}
+.est-note b{color:var(--ink);font-weight:600}
 
-.sheet-money{display:flex;flex-direction:column;gap:3px;margin-bottom:18px}
-.sheet-money b{font-size:clamp(38px,7vw,52px);font-weight:800;letter-spacing:-.04em;
-  line-height:1;color:#fff}
-.sheet-money span{font-size:13px;color:rgba(255,255,255,.46)}
-.sheet-bar{height:3px;border-radius:2px;background:rgba(255,255,255,.10);overflow:hidden;
-  margin-bottom:6px}
-.sheet-bar i{display:block;height:100%;width:100%;background:var(--red);
-  transform:scaleX(0);transform-origin:left center;
-  transition:transform .9s var(--ease)}
-.sheet-bar i[data-tone="good"]{background:var(--green)}
-.sheet-bar i[data-tone="warn"]{background:#D98324}
-.sheet-score{display:flex;justify-content:space-between;margin-bottom:16px}
-.sheet-score .lab{color:rgba(255,255,255,.38)}
-.sheet-score b{font-family:var(--mono);font-size:10px;letter-spacing:.13em;color:rgba(255,255,255,.7);
-  font-weight:500}
+/* ============================================================
+   THE REPORT DOCUMENT — the stage's final act. The same DOM
+   prints as the PDF (Download PDF -> window.print()).
+   ============================================================ */
+.report-doc{
+  background:#fff;border-radius:var(--r-lg);
+  box-shadow:var(--sh-2),var(--edge);
+  padding:26px 26px 30px;
+}
+.report-doc .rep-head{position:relative}
+.rep-download{
+  position:absolute;top:0;right:0;
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;background:var(--red);border:none;border-radius:9px;
+  padding:8px 14px;cursor:pointer;font-weight:600;
+  transition:background .25s var(--ease),transform .25s var(--ease);
+}
+.rep-download:hover{background:var(--red-d);transform:translateY(-1px)}
+.rt-fix{display:block;margin-top:6px;font-style:normal;font-size:11.5px;line-height:1.55;color:var(--body)}
+.rt-fix b{color:var(--ink);font-weight:600}
+.rep-paths{display:flex;flex-direction:column;gap:10px}
+.rp-path{border:1px solid rgba(0,0,0,.07);border-radius:12px;padding:12px 14px}
+.rp-path.pick{border-color:var(--red);background:var(--red-soft)}
+.rp-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rp-top b{font-size:13.5px;letter-spacing:-.01em;color:var(--ink)}
+.rp-top span{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--body)}
+.rp-path p{margin:5px 0 0;font-size:12px;line-height:1.6;color:var(--body)}
 
-/* the ledger — the single canonical metric list */
 .ledger{display:flex;flex-direction:column}
 .ledger-row{
   display:flex;align-items:center;gap:12px;padding:13px 0;
-  border-bottom:1px solid var(--hair-dark);
+  border-bottom:1px solid rgba(0,0,0,.06);
   transition:opacity .5s var(--ease);
 }
 .ledger-row:last-child{border-bottom:none}
 .ledger-row.pending{opacity:.3}
-.lr-ic{width:15px;height:15px;flex-shrink:0;color:rgba(255,255,255,.4)}
+.lr-ic{width:15px;height:15px;flex-shrink:0;color:var(--mut)}
 .lr-ic svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;
   stroke-linecap:round;stroke-linejoin:round}
 .ledger-row.hot .lr-ic{color:var(--red)}
 .ledger-row.clear .lr-ic{color:var(--green)}
-.lr-lab{font-size:13.5px;font-weight:500;color:rgba(255,255,255,.82);letter-spacing:-.005em}
-.lr-val{margin-left:auto;font-size:14px;font-weight:700;color:rgba(255,255,255,.32);
+.lr-lab{font-size:13.5px;font-weight:500;color:var(--ink);letter-spacing:-.005em}
+.lr-val{margin-left:auto;font-size:14px;font-weight:700;color:var(--faint);
   letter-spacing:-.015em}
-.ledger-row.hot .lr-val{color:#fff}
+.ledger-row.hot .lr-val{color:var(--ink)}
 .ledger-row.clear .lr-val{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;
   text-transform:uppercase;color:var(--green);font-weight:500}
-.sheet-note{margin-top:18px;font-size:11.5px;line-height:1.7;color:rgba(255,255,255,.38)}
-.sheet-note b{color:rgba(255,255,255,.72);font-weight:600}
+
 
 /* ============================================================
    REVEAL — the number, and nothing else.
@@ -1104,32 +1114,35 @@ body::after{
   position:absolute;inset:0;z-index:0;
   background-image:url('/img/hero-excavator.jpg');
   background-size:cover;background-position:center 30%;
-  filter:blur(5px) saturate(.85);transform:scale(1.08);
+  /* a whisper of iron, not a milky veil — the landing hero sits on
+     near-flat ground and the gate should read as the same page.
+     Heavier veil below beats heavier blur here (blur is per-frame). */
+  filter:blur(4px) saturate(.6);transform:scale(1.06);opacity:.55;
 }
 .gate-bg::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(105deg,
-    rgba(245,245,247,.975) 0%,rgba(245,245,247,.93) 34%,
-    rgba(245,245,247,.74) 62%,rgba(245,245,247,.52) 100%);
+  background:linear-gradient(180deg,
+    rgba(245,245,247,.97) 0%,rgba(245,245,247,.90) 40%,
+    rgba(245,245,247,.82) 72%,rgba(245,245,247,.90) 100%);
 }
 .gate-top,.gate-hero,.gate-foot{position:relative;z-index:2}
 .gate-top{display:flex;justify-content:space-between;align-items:center;gap:12px;
   padding:24px clamp(20px,4vw,44px)}
 .gate-logo img{height:26px;width:auto}
 .gate-badge{display:inline-flex;align-items:center;gap:8px;
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--mut);background:var(--glass-2);
+  font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--body);background:var(--glass-2);
   -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
   border-radius:var(--pill);padding:9px 16px;box-shadow:var(--sh-1),var(--edge)}
 .gate-hero{width:min(780px,94vw);margin:auto;text-align:center;padding-bottom:6vh}
 .gate-eyebrow{display:inline-flex;align-items:center;gap:9px;
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--green);background:var(--green-soft);border-radius:var(--pill);
-  padding:9px 16px;margin-bottom:28px}
-.gate-live{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2.2s infinite}
+  font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--body);background:#fff;border-radius:var(--pill);
+  padding:10px 18px;margin-bottom:28px;box-shadow:var(--sh-1),var(--edge)}
+.gate-live{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 2.2s infinite}
 .gate-hero h1{font-size:clamp(38px,5.6vw,66px);line-height:1.02;margin-bottom:18px;
   font-weight:800;letter-spacing:-.045em;color:var(--ink)}
-.gate-hero h1 em{font-style:italic;color:var(--red);font-weight:800}
+.gate-hero h1 em{font-style:normal;color:var(--red);font-weight:800}
 .gate-sub{font-size:16.5px;line-height:1.6;color:var(--body);max-width:520px;margin:0 auto 38px}
 .gate-search{
   display:grid;grid-template-columns:24px minmax(0,1fr) 60px;align-items:center;gap:16px;
@@ -1193,6 +1206,12 @@ body::after{
   color:var(--faint)}
 .gate-alt{margin-top:22px;font-size:13px;color:var(--mut);line-height:1.6}
 .gate-alt b{color:var(--ink)}
+/* the landing's trust strip, same copy, same checks */
+.gate-trust{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;
+  margin-top:22px;font-size:13.5px;font-weight:600;color:var(--body)}
+.gate-trust span{display:inline-flex;align-items:center;gap:7px}
+.gate-trust svg{width:14px;height:14px;stroke:var(--green);fill:none;
+  stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .gate-foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
   padding:20px clamp(20px,4vw,44px);font-size:11.5px;color:var(--faint)}
 .gate-foot a{font-weight:600;color:var(--mut);text-decoration:none}
@@ -1287,13 +1306,11 @@ body::after{
      backgrounds these sit on are near-flat anyway; the only thing
      lost is a refraction nobody can see at this size. Print does
      the same thing further down, for the same reason. */
-  .topbar,.meter-strip,.gate-badge,.rad-tag,.rad-pin-label,.sheet-scrim.on{
+  .topbar,.gate-badge,.rad-tag,.rad-pin-label{
     -webkit-backdrop-filter:none;backdrop-filter:none;
   }
   .topbar{background:var(--pane-3)}
-  .meter-strip{background:rgba(255,255,255,.97)}
   .gate-badge{background:var(--pane-3)}
-  .sheet-scrim.on{background:rgba(26,23,20,.46)}
 }
 @media (max-width:460px){
   .seg-grid{grid-template-columns:1fr}
@@ -1312,20 +1329,19 @@ body::after{
   body{overflow:visible;background:#fff}
   body::before,body::after{display:none}
   #app{display:block;height:auto;max-width:100%}
-  .topbar,.dock,.sheet,.sheet-scrim,.row,.reveal,.cook,.gate-screen,
-  .rg-actions,.send-form{display:none!important}
+  /* the conversation is not the deliverable — only the document prints */
+  .topbar,.dock,.stage-left,.est-panel,.cook,.gate-screen{display:none!important}
   .stage{display:block;height:auto}
-  .thread-wrap{overflow:visible;padding:0}
-  .thread{max-width:100%;padding:0;gap:14px}
-  .report,.solution{opacity:1;transform:none}
-  .panel,.sol-fastest,.sol-verify,.rep-dominant,.path{
-    -webkit-backdrop-filter:none;backdrop-filter:none;background:#fff;
+  .stage-body{display:block;height:auto}
+  .stage-right{overflow:visible;background:#fff;padding:0;box-shadow:none}
+  .report-doc{opacity:1;transform:none;box-shadow:none;border:none;border-radius:0;padding:0}
+  .rep-download{display:none!important}
+  .report *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .panel,.rep-dominant,.rp-path{
+    -webkit-backdrop-filter:none;backdrop-filter:none;
     box-shadow:none;border:1px solid #e4e0da;
+    page-break-inside:avoid;
   }
-  .sol-rec,.path.pick{background:#fff!important;color:var(--ink)!important;
-    border:1px solid #e4e0da;box-shadow:none}
-  .sol-rec h3,.sol-rec p,.path.pick h3,.path.pick .path-list div{color:var(--ink)!important}
-  .gate-txt b,.gate-title .lab,.gate-title b{color:var(--ink)!important}
 }
 
 @media (prefers-reduced-motion:reduce){

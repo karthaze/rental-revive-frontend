@@ -124,8 +124,25 @@ export function websiteVerdict(site) {
    a gym's review volume or its star average, so scoring it on
    gym numbers would manufacture a failing grade.
 
-   Thresholds are [ASSUMPTION] — tune once a metro sweep gives
-   real distributions.
+   Thresholds BENCHMARKED 2026-08-06 against published Google
+   Business Profile studies (values held, no longer guesses):
+
+   photos 10        10+ photos ≈ 2× engagement (calls + messages);
+                    the average verified profile has under one photo,
+                    so 10 is a real bar without being punitive.
+   photosStrong 20  20+ photos earn ~18% more clicks; home-services
+                    profiles average ~70, so 20 is still modest.
+   reviews 25       59% of consumers only trust a star rating backed
+                    by 20+ reviews; the average local business holds
+                    ~39. 25 sits above the trust floor and below the
+                    average — a yard failing it genuinely looks thin.
+   rating 4.0       consumers discount ratings below 4.0 outright;
+                    the most-trusted band is 4.2–4.5. 4.0 is the
+                    published trust floor, not a style choice.
+
+   Still worth re-cutting against a metro sweep of actual machinery
+   yards when one exists — these are cross-industry local-business
+   numbers.
    ------------------------------------------------------------ */
 export const PROFILE_THRESHOLDS = {
   photos: 10,
@@ -178,7 +195,7 @@ export function scoreProfile(place) {
       value: hours?.weekdayText?.length ? `${hours.weekdayText.length} day schedule published` : null,
       ok: !!hours,
       tip: !hours
-        ? 'With no published hours Google leaves you out of "open now" searches — the exact search a contractor runs when a machine goes down.'
+        ? 'With no published hours Google leaves you out of "open now" searches, the exact search a contractor runs when a machine goes down.'
         : null,
     },
     {
@@ -196,7 +213,7 @@ export function scoreProfile(place) {
       value: photoCount === null ? null : `${photoCount} on file`,
       ok: photoCount === null ? null : photoCount >= PROFILE_THRESHOLDS.photos,
       tip: photoCount !== null && photoCount < PROFILE_THRESHOLDS.photos
-        ? `Under ${PROFILE_THRESHOLDS.photos} photos. Contractors want to see the iron before they call — ${PROFILE_THRESHOLDS.photosStrong}+ shots of real machines is the bar.`
+        ? `Under ${PROFILE_THRESHOLDS.photos} photos. Contractors want to see the iron before they call. ${PROFILE_THRESHOLDS.photosStrong}+ shots of real machines is the bar.`
         : null,
     },
     {
@@ -205,7 +222,7 @@ export function scoreProfile(place) {
       value: place.rating ? `${place.rating.toFixed(1)} of 5.0` : null,
       ok: place.rating ? place.rating >= PROFILE_THRESHOLDS.rating : null,
       tip: place.rating && place.rating < PROFILE_THRESHOLDS.rating
-        ? 'Below the local trust band. Answer the critical reviews in public — silence reads as agreement.'
+        ? 'Below the local trust band. Answer the critical reviews in public. Silence reads as agreement.'
         : null,
     },
     {
@@ -214,7 +231,7 @@ export function scoreProfile(place) {
       value: reviewCount ? `${reviewCount} reviews` : null,
       ok: reviewCount >= PROFILE_THRESHOLDS.reviews,
       tip: reviewCount < PROFILE_THRESHOLDS.reviews
-        ? `Under ${PROFILE_THRESHOLDS.reviews} reviews. Ask the accounts that rent from you every month — they will say yes.`
+        ? `Under ${PROFILE_THRESHOLDS.reviews} reviews. Ask the accounts that rent from you every month. They will say yes.`
         : null,
     },
   ]
@@ -275,13 +292,12 @@ const SIGNATURES = [
     requests: [/googleads\.g\.doubleclick\.net/i, /googleadservices\.com/i],
     id_pattern: /\b(AW-\d{9,})\b/,
   },
-  {
-    id: 'universalAnalytics',
-    label: 'Universal Analytics (retired)',
-    html: [/google-analytics\.com\/analytics\.js/i, /\bUA-\d{4,}-\d+\b/],
-    requests: [/google-analytics\.com\/collect/i],
-    id_pattern: /\b(UA-\d{4,}-\d+)\b/,
-  },
+  /* Universal Analytics was REMOVED 2026-08-06. It was retired by
+     Google in 2023/24; a signal whose absence means nothing and whose
+     presence means "counting nothing" earned a permanent dead row in
+     the scorecard. If a yard is running only a dead UA tag, the
+     GA4-missing row already tells the true story: no working
+     analytics. */
 ]
 
 /**
@@ -347,14 +363,13 @@ export function trackingVerdict(result) {
   }
 
   const t = result.trackers
-  const anyGoogle = t.ga4.detected || t.googleTagManager.detected || t.universalAnalytics.detected
+  const anyGoogle = t.ga4.detected || t.googleTagManager.detected
   const retargeting = t.facebookPixel.detected || t.googleAds.detected
-  const legacyOnly = t.universalAnalytics.detected && !t.ga4.detected
 
   if (!anyGoogle && !retargeting) {
     return {
       headline: 'No analytics and no retargeting on your site',
-      body: 'Nothing is counting your visitors, so nobody — you included — knows how many people looked for a machine and left without calling. That is the leak you cannot argue about, because there is no record of it either way.',
+      body: 'Nothing is counting your visitors, so nobody, you included, knows how many people looked for a machine and left without calling. That is the leak you cannot argue about, because there is no record of it either way.',
       tone: 'bad',
       blind: true,
     }
@@ -362,17 +377,15 @@ export function trackingVerdict(result) {
   if (anyGoogle && !retargeting) {
     return {
       headline: 'You can count visitors, but you cannot follow them',
-      body: legacyOnly
-        ? 'Your analytics is the retired Universal Analytics tag, which stopped collecting data. In practice you are counting nothing.'
-        : 'Analytics is installed, so you can see traffic. But with no retargeting tag, a contractor who leaves your site without calling is gone for good.',
+      body: 'Analytics is installed, so you can see traffic. But with no retargeting tag, a contractor who leaves your site without calling is gone for good.',
       tone: 'warn',
-      blind: legacyOnly,
+      blind: false,
     }
   }
   if (!anyGoogle && retargeting) {
     return {
       headline: 'You are running ads you cannot measure',
-      body: 'A retargeting tag is installed with no analytics behind it — spend goes out, and nothing tells you what came back.',
+      body: 'A retargeting tag is installed with no analytics behind it. Spend goes out, and nothing tells you what came back.',
       tone: 'warn',
       blind: true,
     }
