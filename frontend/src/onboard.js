@@ -2417,14 +2417,14 @@ function cookingOverlay(L, S) {
       { ic: '◍', t: callLeak && callLeak.amount > 0 ? `Pricing the missed calls: ${money(callLeak.amount)} a month` : 'Checking the phone line: running clean' },
       L.pileStanding > 0 ? { ic: '▤', t: `Valuing the standing quote pile: ${money(L.pileStanding)} on the shelf` } : null,
       { ic: '∑', t: 'Running the conservative recovery math' },
-      S.fastest ? { ic: '⚡', t: `Picking the fastest fix: ${S.fastest.fix}` } : null,
-      { ic: '⌘', t: `Sequencing the 60 day plan and testing it against the desk gate` },
+      S.fastest ? { ic: '⚡', t: `Picking the fastest fix: ${S.fastest.engine}` } : null,
+      { ic: '⌘', t: `Sequencing the ninety days` },
     ].filter(Boolean)
 
     const cook = el('div', 'cook')
     cook.innerHTML = `
       <div class="cook-inner">
-        <span class="cook-brand"><span class="star"></span>QUICKYQUOTES <em>by RentalRevive</em></span>
+        <span class="cook-brand"><span class="star"></span>RENTALREVIVE <em>by HeyDozr</em></span>
         <h2 class="cook-title">Building your recovery plan.</h2>
         <div class="cook-list">
           ${stages.map((s, i) => `
@@ -2479,12 +2479,10 @@ function cookingOverlay(L, S) {
    FASTEST FIX, recommended offer, next step. §7–§8: the close
    is two paths, never yes/no.
    ============================================================ */
-/* The desk is never sold instead of the sprint — 08-SPRINT-DELIVERY-SOP §9
-   only recommends it after a sprint has proven the number — so a desk
-   recommendation still highlights the managed path. */
+/* A low-urgency read picks neither door — we say so rather than
+   highlighting one out of habit. 03-MISSED-RENTAL-AUDIT §6 band 1. */
 function isPickedPath(p, S) {
-  const k = S.recommendation.key
-  return p.key === 'self' ? k === 'starter' : (k === 'sprint' || k === 'desk')
+  return p.key === S.read.key
 }
 
 function renderSolution(L, S) {
@@ -2495,14 +2493,14 @@ function renderSolution(L, S) {
     <div class="sol-head">
       <span class="lab">The plan</span>
       <h2>Here is what actually closes it.</h2>
-      <p>Five leaks, but they do not all get fixed the same way, in the same week, or by the same people. This is the order that pays first, and what each path can genuinely close, priced against your own numbers.</p>
+      <p>Five leaks, but they do not all get fixed the same way, in the same week, or by the same people. This is the order that pays first, and what each door can genuinely close, measured against your own numbers.</p>
     </div>
 
     ${S.fastest ? `
     <div class="sol-fastest">
       <span class="lab panel-lab">Fastest fix</span>
       <div class="sf-head">
-        <h3>${esc(S.fastest.fix)}</h3>
+        <h3>${esc(S.fastest.engine)}</h3>
         <span class="sf-when">Live in ${esc(S.fastest.live.toLowerCase())}</span>
       </div>
       <p>${esc(S.fastest.what)}</p>
@@ -2526,23 +2524,39 @@ function renderSolution(L, S) {
       </div>
     </div>
 
+    <div class="panel">
+      <span class="lab panel-lab">What your yard needs standing up</span>
+      <div class="seq">
+        ${S.build.map((b) => `
+          <div class="seq-row">
+            <span class="seq-when">${esc(b.live)}</span>
+            <div class="seq-body">
+              <h4>${esc(b.engine)}</h4>
+              <p>${esc(b.what)}</p>
+              ${b.gated
+                ? `<p class="sv-note">${esc(b.gatedNote)}</p>`
+                : b.people ? `<p class="sv-note">${esc(b.peopleNote)}</p>` : ''}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+
     <div class="sol-head" style="padding-top:8px">
       <span class="lab">Two ways to run it</span>
-      <h2>Your team, or our desk.</h2>
-      <p>Not a yes or a no, a choice of delivery. The honest difference is not the price, it is which of your leaks each one is actually able to close.</p>
+      <h2>Your team, or ours.</h2>
+      <p>Not a yes or a no, a choice of who does the work. The honest difference is which of your leaks each door is actually able to close.</p>
     </div>
 
     <div class="sol-paths">
       ${S.paths.map((p) => `
         <div class="path${isPickedPath(p, S) ? ' pick' : ''}">
-          <span class="path-tag">${esc(p.kind)}${isPickedPath(p, S) ? ' · recommended' : ''}</span>
+          <span class="path-tag">${esc(p.kind)}${isPickedPath(p, S) ? ' · the fit on your answers' : ''}</span>
           <h3>${esc(p.name)}</h3>
-          <span class="path-price">${esc(p.price)}</span>
           <div class="path-recovers">
             <b>${money(p.recovers)}</b>
             <span>of your ${money(L.monthly)} monthly leak</span>
           </div>
-          ${p.gap > 0 ? `<p class="path-gap">Leaves ${money(p.gap)} a month still leaking: ${esc(p.leaves.join(', ').toLowerCase())} are not in scope.</p>` : ''}
+          ${p.gap > 0 ? `<p class="path-gap">Leaves ${money(p.gap)} a month still leaking: ${esc(p.leaves.join(', ').toLowerCase())} ${p.leaves.length > 1 ? 'are' : 'is'} not in scope.</p>` : ''}
           <div class="path-list">
             ${p.closes.map((c) => `<div class="yes">${ICON.check}<span>${esc(c)}</span></div>`).join('')}
             ${p.leaves.map((c) => `<div class="no">${ICON.minus}<span>${esc(c)}</span></div>`).join('')}
@@ -2553,26 +2567,10 @@ function renderSolution(L, S) {
     </div>
 
     <div class="sol-rec">
-      <span class="lab panel-lab">On your answers, we would sell you this</span>
-      <h3>${esc(S.recommendation.headline)}</h3>
-      <div class="rec-name">
-        <b>${esc(S.recommendation.name)}</b>
-        <span>${esc(S.recommendation.price)}</span>
-      </div>
-      <p>${esc(S.recommendation.why)}</p>
-      <p class="rec-next">${esc(S.recommendation.next)}</p>
-
-      <div class="gate">
-        <div class="gate-title">
-          <span class="lab">Full Revenue Desk gate</span>
-          <b>${S.gate.met} of ${S.gate.criteria.length} met · ${S.gate.needed} needed</b>
-        </div>
-        ${S.gate.criteria.map((c) => `
-          <div class="gate-row${c.met ? ' met' : ''}${c.unknown ? ' unknown' : ''}">
-            <span class="gate-mark">${c.met ? ICON.check : ICON.minus}</span>
-            <span class="gate-txt"><b>${esc(c.label)}</b><small>${esc(c.detail)}</small></span>
-          </div>`).join('')}
-      </div>
+      <span class="lab panel-lab">The honest read on your answers</span>
+      <h3>${esc(S.read.headline)}</h3>
+      <p>${esc(S.read.why)}</p>
+      <p class="rec-next">${esc(S.read.next)}</p>
     </div>
 
     <div class="sol-verify">
@@ -2580,6 +2578,12 @@ function renderSolution(L, S) {
       <h3>${esc(S.verification.title)}</h3>
       <p>${esc(S.verification.body)}</p>
       <p class="sv-note">${esc(S.verification.note)}</p>
+    </div>
+
+    <div class="sol-verify">
+      <span class="lab panel-lab">And then</span>
+      <h3>${esc(S.nextStep.title)}</h3>
+      <p>${esc(S.nextStep.body)}</p>
     </div>
 
     <button class="btn-commit rev-cta" id="solNext" type="button" style="align-self:center">Show me the arithmetic behind all this</button>
@@ -2694,8 +2698,8 @@ async function renderReport(L, S) {
     <div class="panel rep-paths">
       <span class="lab panel-lab">The two ways to close it</span>
       ${S.paths.map((pt) => `
-        <div class="rp-path${S.recommendation.key === (pt.key === 'self' ? 'starter' : 'sprint') ? ' pick' : ''}">
-          <div class="rp-top"><b>${esc(pt.kind)} · ${esc(pt.name)}</b><span>${esc(pt.price)}</span></div>
+        <div class="rp-path${isPickedPath(pt, S) ? ' pick' : ''}">
+          <div class="rp-top"><b>${esc(pt.kind)} · ${esc(pt.name)}</b></div>
           <p>Closes ${pt.closes.join(', ').toLowerCase() || 'nothing yet'} · recovers ≈ ${money(pt.recovers)}/mo${pt.leaves.length ? ` · leaves ${pt.leaves.join(', ').toLowerCase()} open` : ' · leaves nothing open'}.</p>
         </div>`).join('')}
     </div>
@@ -2964,15 +2968,16 @@ function buildPayload(L, S) {
       dominant: L.dominant?.id || null,
       pileStanding: Math.round(L.pileStanding),
     },
-    /* the plan, so the desk works the same answer the owner saw */
+    /* the plan, so whoever takes the call works the same answer the
+       owner saw. No price is carried — the number is discussed live,
+       per 16-WEBSITE-AND-SCAN-PAGE-COPY-BRIEF §1. */
     plan: {
-      recommended: S.recommendation.key,
-      recommendedName: S.recommendation.name,
-      fastestFix: S.fastest?.fix || null,
-      selfManagedRecovers: Math.round(S.selfAmount),
-      selfManagedGap: Math.round(S.selfGap),
-      deskGateMet: S.gate.met,
-      deskGatePasses: S.gate.passes,
+      read: S.read.key,
+      fastestFix: S.fastest?.engine || null,
+      engines: S.build.filter((b) => !b.gated).map((b) => b.engine),
+      gatedEngines: S.build.filter((b) => b.gated).map((b) => b.engine),
+      softwareRecovers: Math.round(S.softwareAmount),
+      softwareGap: Math.round(S.softwareGap),
     },
   }
 }

@@ -4,10 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run render && vite",
     "dev:convex": "convex dev",
     "dev:probe": "node services/form-probe/index.mjs",
-    "build": "vite build",
+    "render": "node build/render.mjs",
+    "build": "npm run render && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "tsc -p services/convex"

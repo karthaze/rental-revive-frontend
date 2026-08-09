@@ -1,0 +1,199 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "$description": "Owner.com reference tokens, extracted for the RentalRevive multi-page rebuild. Colour values are vision-inferred from desktop screenshots — WebFetch could not recover CSS custom properties. Confidence is annotated per token.",
+  "color": {
+    "surface": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "$description": "Base page ground and nav bar",
+      "$extensions": { "anydesign.confidence": "high" }
+    },
+    "surface-warm": {
+      "$value": "#FAF6F1",
+      "$type": "color",
+      "$description": "Section slab ground — the default marketing section tone",
+      "$extensions": { "anydesign.confidence": "medium" }
+    },
+    "surface-card": {
+      "$value": "#F7F3EC",
+      "$type": "color",
+      "$description": "Card ground and carousel-arrow ground",
+      "$extensions": { "anydesign.confidence": "medium" }
+    },
+    "surface-mint": {
+      "$value": "#DAECD5",
+      "$type": "color",
+      "$description": "Soft accent panel — library/escape-hatch CTA card only",
+      "$extensions": { "anydesign.confidence": "medium" }
+    },
+    "ink": {
+      "$value": "#1A1A1A",
+      "$type": "color",
+      "$description": "Primary text: headings, quotes, stat figures",
+      "$extensions": { "anydesign.confidence": "high" }
+    },
+    "ink-body": {
+      "$value": "#4A4A46",
+      "$type": "color",
+      "$description": "Body copy",
+      "$extensions": { "anydesign.confidence": "medium" }
+    },
+    "ink-muted": {
+      "$value": "#6E6E68",
+      "$type": "color",
+      "$description": "Attribution, stat labels, de-emphasised half of a two-tone heading. Do not use below 15px.",
+      "$extensions": { "anydesign.confidence": "medium" }
+    },
+    "action": {
+      "$value": "#1C4A2E",
+      "$type": "color",
+      "$description": "In-content action button. Deliberately dark and muted.",
+      "$extensions": { "anydesign.confidence": "medium" }
+    },
+    "action-contrast": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "$description": "Text on action and nav-cta grounds",
+      "$extensions": { "anydesign.confidence": "high" }
+    },
+    "nav-cta": {
+      "$value": "#161616",
+      "$type": "color",
+      "$description": "The single persistent conversion CTA. Never interchangeable with action.",
+      "$extensions": { "anydesign.confidence": "high" }
+    },
+    "border-hairline": {
+      "$value": "#E3DDD4",
+      "$type": "color",
+      "$description": "Warm hairline divider. Row separators only.",
+      "$extensions": { "anydesign.confidence": "medium" }
+    },
+    "overlay-image": {
+      "$value": "rgba(16,16,16,0.55)",
+      "$type": "color",
+      "$description": "Bottom-anchored scrim on photographic cards for white-text legibility",
+      "$extensions": { "anydesign.confidence": "medium" }
+    }
+  },
+  "fontFamily": {
+    "sans": {
+      "$value": "Aeonik, 'PP Neue Montreal', 'General Sans', Satoshi, Inter, system-ui, sans-serif",
+      "$type": "fontFamily",
+      "$description": "Geometric grotesk. Family inferred from letterforms only — General Sans or Satoshi are the recommended free substitutes.",
+      "$extensions": { "anydesign.confidence": "low" }
+    }
+  },
+  "fontWeight": {
+    "regular": { "$value": 400, "$type": "fontWeight" },
+    "semibold": {
+      "$value": 600,
+      "$type": "fontWeight",
+      "$description": "System weight ceiling. Nothing above 600 was observed, including at 54px."
+    }
+  },
+  "typography": {
+    "display": {
+      "$value": {
+        "fontFamily": "{fontFamily.sans}",
+        "fontSize": "54px",
+        "fontWeight": "{fontWeight.semibold}",
+        "lineHeight": "1.08",
+        "letterSpacing": "-0.025em"
+      },
+      "$type": "typography",
+      "$description": "Section titles"
+    },
+    "h2": {
+      "$value": {
+        "fontFamily": "{fontFamily.sans}",
+        "fontSize": "30px",
+        "fontWeight": "{fontWeight.semibold}",
+        "lineHeight": "1.25",
+        "letterSpacing": "-0.015em"
+      },
+      "$type": "typography",
+      "$description": "Card quotes"
+    },
+    "stat": {
+      "$value": {
+        "fontFamily": "{fontFamily.sans}",
+        "fontSize": "34px",
+        "fontWeight": "{fontWeight.semibold}",
+        "lineHeight": "1.1",
+        "letterSpacing": "-0.02em"
+      },
+      "$type": "typography",
+      "$description": "Proof figures. Absolute dollars or deltas only."
+    },
+    "claim": {
+      "$value": {
+        "fontFamily": "{fontFamily.sans}",
+        "fontSize": "19px",
+        "fontWeight": "{fontWeight.semibold}",
+        "lineHeight": "1.35"
+      },
+      "$type": "typography",
+      "$description": "Belief-row claims and media-card titles"
+    },
+    "body": {
+      "$value": {
+        "fontFamily": "{fontFamily.sans}",
+        "fontSize": "16px",
+        "fontWeight": "{fontWeight.regular}",
+        "lineHeight": "1.55"
+      },
+      "$type": "typography"
+    },
+    "label": {
+      "$value": {
+        "fontFamily": "{fontFamily.sans}",
+        "fontSize": "15px",
+        "fontWeight": "{fontWeight.regular}",
+        "lineHeight": "1.4"
+      },
+      "$type": "typography",
+      "$description": "Bylines, stat captions, button labels"
+    }
+  },
+  "spacing": {
+    "base": { "$value": "4px", "$type": "dimension" },
+    "1x": { "$value": "4px", "$type": "dimension" },
+    "2x": { "$value": "8px", "$type": "dimension" },
+    "3x": { "$value": "12px", "$type": "dimension" },
+    "4x": { "$value": "16px", "$type": "dimension" },
+    "6x": { "$value": "24px", "$type": "dimension" },
+    "8x": { "$value": "32px", "$type": "dimension" },
+    "12x": { "$value": "48px", "$type": "dimension" },
+    "16x": { "$value": "64px", "$type": "dimension" },
+    "24x": { "$value": "96px", "$type": "dimension" },
+    "32x": { "$value": "128px", "$type": "dimension" },
+    "40x": {
+      "$value": "160px",
+      "$type": "dimension",
+      "$description": "Desktop section padding. Scale to ~72px at mobile."
+    }
+  },
+  "radius": {
+    "sm": { "$value": "12px", "$type": "dimension", "$description": "Chips, inline media" },
+    "md": { "$value": "16px", "$type": "dimension", "$description": "Media cards, accent cards" },
+    "lg": { "$value": "24px", "$type": "dimension", "$description": "Testimonial cards, photography" },
+    "slab": {
+      "$value": "40px",
+      "$type": "dimension",
+      "$description": "Section container, top two corners only. The brand device — do not scale down on mobile."
+    },
+    "pill": { "$value": "9999px", "$type": "dimension", "$description": "All buttons and carousel arrows" }
+  },
+  "elevation": {
+    "flat": {
+      "$value": "none",
+      "$type": "shadow",
+      "$description": "Level 0 — the default. Separation is done by surface tone, not by shadow."
+    },
+    "hairline": {
+      "$value": "inset 0 -1px 0 {color.border-hairline}",
+      "$type": "shadow",
+      "$description": "Level 1 — row dividers only. There is no level 2; do not add one."
+    }
+  }
+}

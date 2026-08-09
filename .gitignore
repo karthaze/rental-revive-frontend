@@ -10,3 +10,19 @@
 
 # graphify build output (regenerate with /graphify .)
 graphify-out/
+
+# Rendered pages. Source of truth is frontend/pages/ + frontend/templates/;
+# `npm run render` composes them into frontend/ as Vite MPA entry points.
+# Edit the sources — anything listed here is overwritten on every build.
+# Whole directories are generated:
+frontend/the-leak/
+frontend/catch/
+frontend/quote/
+frontend/recover/
+frontend/run/
+frontend/yards/
+# Root-level generated pages, listed individually because onboard.html,
+# privacy.html and terms.html are still hand-written:
+frontend/heydozr.html
+frontend/index.html
+.gstack/

@@ -7,12 +7,19 @@
    halftone star mark.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@500;600;700&display=swap');
 
 :root{
-  --bg:#f5f5f7;
-  --bg-dark:#ebebeb;
-  --bg-mute:#d2d2d7;
+  /* Ground tones. The whole palette is WARM — the previous #f5f5f7 was
+     Apple's cool grey and it fought the peach every time the two met,
+     which is what made the page read generic. Steps between adjacent
+     sections are deliberately tiny (2-4%); big jumps turn a calm page
+     into a striped one. */
+  --bg:#FAF7F3;            /* page ground — warm off-white */
+  --surface:#FFFFFF;       /* cards and raised chrome (was undefined) */
+  --surface-alt:#F2EDE6;   /* recessed rows, disabled states (was undefined) */
+  --bg-dark:#EFE9E1;
+  --bg-mute:#DCD4C9;
   --peach:#F7EADC;
   --peach-deep:#F1DECA;
   --ink:#241F1C;
@@ -120,11 +127,14 @@ strong,b{color:var(--ink);font-weight:700}
 .nav-logo img{height:26px;width:auto;transition:height .4s var(--ease)}
 .nav.scrolled .nav-logo img{height:23px}
 .nav-links{display:flex;gap:1px;align-items:center}
-.nav-links a{font-size:13.5px;font-weight:600;color:var(--body);padding:8px 11px;border-radius:var(--pill);
+/* Child combinator on purpose: the old `.nav-links a` also matched every
+   link INSIDE the dropdown panels, and its white-space:nowrap is what
+   clipped panel description lines mid-word. */
+.nav-links > a{font-size:13.5px;font-weight:600;color:var(--body);padding:8px 11px;border-radius:var(--pill);
   white-space:nowrap;
   transition:color .35s var(--ease),background .35s var(--ease)}
-.nav-links a:hover{color:var(--red);background:rgba(228,38,44,.08)}
-.nav-links a.active{color:var(--red);background:rgba(228,38,44,.08)}
+.nav-links > a:hover{color:var(--red);background:rgba(228,38,44,.08)}
+.nav-links > a.active{color:var(--red);background:rgba(228,38,44,.08)}
 .nav-right{display:flex;align-items:center;gap:8px}
 .nav-cta{font-size:14px;padding:10px 6px 10px 17px}
 .nav-cta .chip{width:29px;height:29px;font-size:14px}
@@ -978,3 +988,484 @@ footer::before{content:"";position:absolute;top:-1px;left:0;right:0;height:3px;
 
 .segs-cta{margin-top:36px;display:flex;flex-wrap:wrap;align-items:center;gap:18px}
 .segs-cta span{color:var(--mut);font-size:14.5px;max-width:32em}
+
+/* ============================================================
+   MEGA NAV — outcome-grouped, one page per capability.
+   Groups mirror templates/nav.html and the footer exactly.
+   ============================================================ */
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-byline{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--mut);white-space:nowrap}
+
+.nav-group{position:relative}
+.nav-trigger{background:none;border:0;font:inherit;font-size:14.5px;font-weight:600;color:var(--ink);
+  cursor:pointer;padding:8px 2px;display:inline-flex;align-items:center;gap:5px;opacity:.82;
+  transition:opacity .2s var(--ease)}
+.nav-trigger::after{content:"";width:5px;height:5px;border-right:1.6px solid currentColor;
+  border-bottom:1.6px solid currentColor;transform:rotate(45deg) translateY(-1px);
+  transition:transform .25s var(--ease)}
+.nav-trigger:hover,.nav-group:hover .nav-trigger{opacity:1}
+.nav-group:hover .nav-trigger::after{transform:rotate(225deg) translateY(-2px)}
+
+.nav-menu{position:absolute;top:calc(100% + 12px);left:50%;transform:translateX(-50%) translateY(-6px);
+  width:330px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:10px;
+  box-shadow:0 18px 44px rgba(36,31,28,.10);opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .22s var(--ease),transform .22s var(--ease),visibility .22s;z-index:60}
+/* the gap between trigger and panel would drop the hover — bridge it */
+.nav-group::after{content:"";position:absolute;top:100%;left:0;right:0;height:14px}
+.nav-group:hover .nav-menu,.nav-menu:focus-within{opacity:1;visibility:visible;pointer-events:auto;
+  transform:translateX(-50%) translateY(0)}
+.nav-menu a{display:block;padding:11px 13px;border-radius:13px;text-decoration:none;
+  transition:background .18s var(--ease)}
+.nav-menu a:hover{background:var(--peach)}
+.nav-menu b{display:block;font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.nav-menu span{display:block;font-size:12.8px;line-height:1.45;color:var(--mut)}
+
+.foot-parent{margin-top:16px;font-size:13.5px;line-height:1.55;color:var(--mut)}
+.foot-parent a{color:var(--ink);font-weight:600}
+
+/* (engine-group grid removed — the 16-card wall became .desk-slabs) */
+
+/* ============================================================
+   5UPR YARDS — the cohort rail.
+   Cards peek past the viewport on both edges; the clip IS the
+   affordance, so there are no dots and no counter.
+   ============================================================ */
+.cohort-sec{background:var(--peach);border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.cohort-head{display:grid;grid-template-columns:1.6fr .9fr;gap:38px;align-items:end;margin-bottom:34px}
+.cohort-head h2{font-size:var(--h2);font-weight:800;letter-spacing:-.02em;line-height:1.05;
+  color:var(--ink);margin:14px 0 12px}
+.cohort-head p{font-size:var(--lead);line-height:1.55;color:var(--body);max-width:60ch}
+.cohort-meta{border-top:1px solid var(--line);padding-top:6px}
+.cm-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  padding:11px 0;border-bottom:1px solid var(--line)}
+.cm-row span{font-size:13.5px;color:var(--mut)}
+.cm-row b{font-size:15.5px;font-weight:700;color:var(--ink)}
+
+.cohort-rail-wrap{margin:0 -24px}
+.cohort-rail{display:flex;gap:18px;overflow-x:auto;padding:4px 24px 10px;
+  scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none}
+.cohort-rail::-webkit-scrollbar{display:none}
+
+.seatcard{flex:0 0 clamp(276px,27vw,346px);scroll-snap-align:start;display:flex;flex-direction:column;
+  background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px 22px;min-height:340px}
+.seatcard.open{background:rgba(255,255,255,.55);border-style:dashed;border-color:rgba(36,31,28,.22)}
+.sc-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
+.sc-tag{font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+.sc-state{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--red);background:rgba(228,38,44,.09);border-radius:var(--pill);padding:4px 10px}
+.seatcard h3{font-size:18.5px;font-weight:800;line-height:1.3;letter-spacing:-.01em;
+  color:var(--ink);margin-bottom:10px}
+.seatcard p{font-size:14.2px;line-height:1.58;color:var(--body)}
+.sc-list{list-style:none;margin:12px 0 0;padding:0}
+.sc-list li{position:relative;padding-left:19px;margin-bottom:7px;font-size:13.8px;line-height:1.5;
+  color:var(--body)}
+.sc-list li::before{content:"";position:absolute;left:0;top:7px;width:9px;height:5px;
+  border-left:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(-45deg)}
+.sc-stats{display:flex;gap:26px;margin:auto 0 16px;padding-top:18px}
+.sc-stats b{display:block;font-size:26px;font-weight:800;color:rgba(36,31,28,.28);line-height:1}
+.sc-stats span{display:block;font-size:12px;color:var(--mut);margin-top:5px}
+.sc-cta{margin-top:auto;align-self:flex-start;font-size:14.5px;font-weight:700;color:var(--ink);
+  text-decoration:none;border-bottom:2px solid var(--red);padding-bottom:2px;
+  transition:gap .3s var(--ease)}
+.sc-cta:hover{color:var(--red)}
+.sc-cta.solid{border:0;background:var(--red);color:#fff;border-radius:var(--pill);
+  padding:12px 22px;margin-top:18px}
+.sc-cta.solid:hover{background:var(--red-d);color:#fff}
+
+.seatcard.waitlist{background:var(--char);border-color:transparent}
+.seatcard.waitlist h3,.seatcard.waitlist .cm-row b{color:#fff}
+.seatcard.waitlist p,.seatcard.waitlist .sc-list li{color:rgba(255,255,255,.76)}
+.seatcard.waitlist p strong{color:#fff}
+.seatcard.waitlist .sc-tag{color:rgba(255,255,255,.55)}
+.seatcard.waitlist .sc-state{color:#fff;background:rgba(255,255,255,.15)}
+.seatcard.waitlist .sc-list li::before{border-color:#7FD1A0}
+
+.cohort-fine{margin-top:20px}
+
+@media(max-width:1080px){
+  .cohort-head{grid-template-columns:1fr;gap:26px;align-items:start}
+}
+@media(max-width:760px){
+  .seatcard{flex-basis:82vw;min-height:0}
+  .nav-menu{position:static;transform:none;width:auto;box-shadow:none;border:0;padding:0 0 0 10px;
+    opacity:1;visibility:visible;pointer-events:auto}
+  .nav-group::after{display:none}
+}
+
+/* ============================================================
+   DESIGN PASS — 2026-08
+   ------------------------------------------------------------
+   Six things were making this read as machine-made. Each fix
+   below names the tell it removes.
+   ============================================================ */
+
+/* 1 · WEIGHT CEILING.
+   Display type was 800 at 72px, which is shouting. Size carries
+   the emphasis; weight carries the voice. 700 is the ceiling. */
+h1,h2,h3,.disp{font-weight:700}
+.hero-c h1{font-weight:700;letter-spacing:-.032em}
+.engrp-head h3,.cohort-head h2,.seatcard h3{font-weight:700}
+
+/* 2 · THE HERO STOPS BEING A POSTER.
+   Eyebrow, headline, lead, search and chips were all centred on
+   one axis with even gaps — the single loudest AI tell there is.
+   Left-align on desktop and let the search box sit under a real
+   measure instead of floating in the middle of the viewport. */
+@media(min-width:900px){
+  .hero-c{text-align:left;padding-top:132px}
+  .hero-c h1{margin-left:0;max-width:15ch;font-size:clamp(44px,5vw,64px)}
+  .hero-c .lead{margin-left:0;max-width:46ch}
+  .hero-c .yard-search.center{margin-left:0}
+  .hero-c .hero-trust{justify-content:flex-start;padding-left:2px}
+  .hero-c .eyebrow{margin-left:0}
+}
+
+/* 3 · NO GLOW ON THE ACTION.
+   A saturated red pill throwing a coloured shadow is the stock
+   "SaaS button" look. The colour is the emphasis; it does not
+   need a halo underneath it. */
+.btn-red{box-shadow:none}
+.btn-red:hover{box-shadow:none;transform:translateY(-1px)}
+
+/* 4 · THE NAV WAS BROKEN, NOT JUST TIGHT.
+   .nav-links a carried white-space:nowrap, but the outcome
+   triggers are <button>, so they wrapped to two lines, grew the
+   pill, and dropped it on top of the page content. */
+.nav-trigger{white-space:nowrap}
+.nav{padding:6px 6px 6px 18px;background:rgba(250,247,243,.82);
+  border-color:rgba(36,31,28,.07);
+  box-shadow:0 10px 30px -22px rgba(36,31,28,.30)}
+.nav-links{gap:2px}
+.nav-cta{box-shadow:none}
+
+/* 5 · SEAT CARDS READ AS SEATS, NOT AS EMPTY STATES.
+   A dashed outline says "placeholder, something failed to load".
+   These are scarce seats. Give them a solid card, a hairline
+   ledger rule, and a seat number heavy enough to be the object. */
+.seatcard.open{background:rgba(255,255,255,.72);border-style:solid;
+  border-color:rgba(36,31,28,.10)}
+.seatcard{border-radius:20px;transition:transform .45s var(--ease),background .45s var(--ease)}
+.seatcard:hover{transform:translateY(-4px)}
+.seatcard.open:hover{background:#fff}
+.sc-top{padding-bottom:14px;border-bottom:1px solid var(--line);align-items:baseline}
+.sc-tag{color:var(--ink);font-weight:800}
+.sc-state{background:transparent;padding:0;color:var(--green);letter-spacing:.09em}
+.seatcard.waitlist .sc-state{color:#7FD1A0}
+.sc-stats b{color:rgba(36,31,28,.20);font-weight:700}
+
+/* 6 · TONAL RHYTHM.
+   Sections were all one ground, so nothing felt like a chapter.
+   Alternate white against the warm ground in small steps, and
+   give the peach slabs the rounded top edge that makes a long
+   page read as stacked chapters rather than one scroll. */
+.section.peach{border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.stat-strip{background:var(--surface)}
+.leaks-grid .leakcard,.engcard,.run{background:var(--surface)}
+.faq{background:var(--surface)}
+
+/* 2b · TWO-COLUMN HERO.
+   Left-aligning the copy alone just moved the imbalance — the right
+   half went empty. The leak meter was already the strongest thing on
+   the page and it was buried in a full-width band underneath, so it
+   comes up beside the copy and becomes the proof you see first. */
+@media(min-width:1080px){
+  .hero-c .wrap{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);
+    column-gap:52px;align-items:center}
+  .hero-c h1{max-width:none;font-size:clamp(42px,3.9vw,56px)}
+  .hero-c .lead{max-width:40ch;font-size:19px}
+  .hero-c .yard-search.center{max-width:none;margin-top:30px}
+  .hero-demo{margin-top:0}
+  .hero-demo .hd-img{height:520px;object-fit:cover}
+  /* the meter is the hero image's point — let it sit lower-left and
+     bigger relative to a narrower frame */
+  .hero-demo .hd-meter{right:auto;left:18px;bottom:18px;top:auto}
+  .hero-demo .toast.a{top:18px;left:auto;right:18px}
+  .hero-demo .toast.b{display:none}
+}
+@media(min-width:900px) and (max-width:1079px){
+  .hero-c h1{max-width:18ch}
+}
+
+/* --- design pass, corrections after looking at it in the browser --- */
+
+/* The stat strip is a DARK band by design: white numerals, red rule on
+   the left of each stat. Painting it white in the tonal-rhythm pass
+   erased the text and left four floating red bars. It is also the
+   page's one polarity flip, which is worth keeping. */
+.stat-strip{background:var(--char)}
+
+/* The meter had a vertical-centring transform from its full-width
+   layout. Pinned bottom-left in the two-column hero, that transform
+   dragged it up over the whole frame and buried the toast behind it. */
+@media(min-width:1080px){
+  .hero-demo .hd-meter{transform:none;width:min(272px,52%);
+    padding:18px 18px 14px;border-radius:20px;
+    box-shadow:0 24px 60px -28px rgba(36,31,28,.55)}
+  .hero-demo .hdm-fig{font-size:34px}
+  .hero-demo .toast.a{max-width:230px}
+  /* two lines, breaking after "equipment" — "out." alone on a third
+     line was the tell that the measure was wrong, not the copy */
+  .hero-c h1{max-width:16ch}
+}
+
+@media(min-width:1080px){.hero-c h1{max-width:none}}
+
+/* ============================================================
+   DESIGN PASS 2 — pacing, density, and the menu
+   ============================================================ */
+
+/* The fixed engineering grid sat over every light section at .55
+   opacity. At 46px it reads as generic tech-startup wallpaper and it
+   fought the warm ground the palette is built on. */
+body::before{display:none}
+
+/* --- NAV: four groups with room to breathe --- */
+.nav{padding:8px 8px 8px 22px}
+.nav-links{gap:6px}
+.nav-trigger{font-size:14.5px;padding:10px 14px;border-radius:var(--pill);opacity:1;
+  color:var(--ink);transition:background .25s var(--ease)}
+.nav-trigger::after{opacity:.45;margin-left:1px}
+.nav-group:hover .nav-trigger{background:rgba(36,31,28,.05)}
+
+/* The mega grid is gone. Panels are small, anchored to their trigger,
+   and sized so they cannot leave the viewport; geometry lives in the
+   HUMAN PASS block at the end of this file. */
+
+/* --- HERO: fewer things, more air --- */
+/* The trust chips sat hard under the search box with no gap and read
+   as three orphaned words. The claims they made are already in the
+   scan itself and in the stat strip. */
+.hero-trust{display:none}
+.hero-c .yard-search.center{margin-bottom:0}
+@media(min-width:1080px){
+  .hero-c{padding-top:150px;padding-bottom:24px}
+  .hero-c .wrap{column-gap:64px}
+  .hero-c .lead{margin-bottom:6px}
+}
+
+/* --- SECTION PACING --- */
+/* Sections were all padded identically, so fourteen of them read as
+   one undifferentiated scroll. Give the quiet ones less and the
+   anchor ones more. */
+.section{padding:clamp(64px,7.5vw,104px) 0}
+.section.peach,.cohort-sec{padding:clamp(76px,9vw,124px) 0}
+.head{margin-bottom:38px}
+.head p{max-width:62ch}
+
+/* --- The merged leak close, and the Desk sub-lead --- */
+.leak-close{margin-top:34px;padding-top:26px;border-top:1px solid var(--line);
+  font-size:var(--lead);line-height:1.55;color:var(--body);max-width:78ch}
+.leak-close strong{color:var(--ink)}
+.desk-lead{margin:6px 0 4px;padding-top:30px;border-top:1px solid var(--line)}
+.desk-lead h3{font-size:clamp(22px,2.4vw,29px);font-weight:700;color:var(--ink);margin-bottom:8px}
+.desk-lead p{font-size:17px;line-height:1.55;color:var(--body);max-width:70ch}
+
+/* --- Segments: eight full cards was a wall. The pick is the name;
+       the description belonged on the page it links to. --- */
+.segs-grid{grid-template-columns:repeat(4,1fr);gap:12px}
+.segcard{padding:18px 16px;border-radius:16px}
+.segcard p,.segcard .sg-go{display:none}
+.segcard h3{font-size:15.5px;font-weight:700;margin:0}
+.segcard .sg-ic{margin-bottom:12px}
+@media(max-width:900px){.segs-grid{grid-template-columns:repeat(2,1fr)}}
+
+.nav-menu .nm-foot{color:var(--red)}
+.nav-menu .nm-foot:hover{color:var(--red-d);background:transparent}
+
+/* ============================================================
+   HUMAN PASS — 2026-08-10
+   ------------------------------------------------------------
+   Reference: colinandsamir.com/creator-startup. What that page
+   does that ours didn't: ONE loud accent used with total
+   confidence, real photos, hand-drawn annotations, designed
+   number moments, dark cinematic bands, and a giant wordmark to
+   end on. Everything below ports the moves, not the palette.
+   ============================================================ */
+:root{
+  --hand:'Caveat',cursive;
+  --red-glow:#FF564F; /* red tuned for dark grounds; --red vibrates on char */
+}
+
+/* --- HAND ANNOTATIONS ------------------------------------- */
+.hand-note{display:inline-flex;align-items:flex-start;gap:8px;margin-top:16px;
+  font-family:var(--hand);font-size:22px;font-weight:600;color:var(--red);
+  transform:rotate(-1.5deg);line-height:1.1}
+.hn-arrow{width:40px;height:30px;flex:none;fill:none;stroke:var(--red);
+  stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;margin-top:-14px}
+@media(max-width:899px){.hand-note{justify-content:center;width:100%}}
+
+/* scribbled ellipse around the last words of the H1 */
+.circled{position:relative;font-style:normal;display:inline-block}
+.circled svg{position:absolute;left:-5%;top:-14%;width:110%;height:130%;
+  fill:none;stroke:var(--red);stroke-width:3;stroke-linecap:round;
+  vector-effect:non-scaling-stroke;pointer-events:none}
+.circled svg path{vector-effect:non-scaling-stroke}
+
+/* marker underline for one phrase per section, never more */
+.mku{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M4,10 C60,3 140,2 196,7' fill='none' stroke='%23E4262C' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left bottom/100% .34em;
+  padding-bottom:.16em}
+
+/* dashed survey brackets on the hero photo corners */
+.hero-demo{position:relative}
+.hero-demo::before{content:"";position:absolute;top:-13px;right:-13px;width:58px;height:58px;
+  border-top:2.5px dashed var(--red);border-right:2.5px dashed var(--red);
+  border-radius:0 20px 0 0;pointer-events:none}
+.hero-demo::after{content:"";position:absolute;bottom:-13px;left:-13px;width:58px;height:58px;
+  border-bottom:2.5px dashed var(--red);border-left:2.5px dashed var(--red);
+  border-radius:0 0 0 20px;pointer-events:none}
+
+/* --- NAV PANELS: small, wrapping, viewport-safe ------------ */
+.nav-menu{width:min(400px,calc(100vw - 40px));padding:12px;border-radius:22px;
+  box-shadow:0 24px 60px -30px rgba(36,31,28,.34)}
+.nav-menu a,.nav-menu b,.nav-menu span{white-space:normal}
+.nav-menu.cols2{width:min(480px,calc(100vw - 40px));display:grid;
+  grid-template-columns:1fr 1fr;gap:2px 6px;padding:14px}
+.nav-menu.cols2 a{font-size:14px;font-weight:600;color:var(--ink);padding:10px 12px}
+.nm-foot{display:block;grid-column:1/-1;margin-top:8px;padding:12px 12px 4px;
+  border-top:1px solid var(--line);font-size:13.5px;font-weight:700;text-decoration:none}
+/* the two right-most groups anchor to their trigger's right edge so a
+   400px panel can never leave the viewport on a narrow desktop */
+@media(min-width:821px){
+  .nav-links .nav-group:nth-last-child(-n+2) .nav-menu{left:auto;right:0;
+    transform:translateY(-6px)}
+  .nav-links .nav-group:nth-last-child(-n+2):hover .nav-menu,
+  .nav-links .nav-group:nth-last-child(-n+2) .nav-menu:focus-within{
+    transform:translateY(0)}
+}
+
+/* --- STAT STRIP: the numbers go loud ----------------------- */
+.stat-strip{padding:44px 0}
+.stat b{color:var(--red-glow);font-size:clamp(36px,3.6vw,52px);letter-spacing:-.03em}
+
+/* --- DESK SLABS: 4 dark checklists instead of 16 cards ----- */
+.desk-slabs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px}
+.dslab{position:relative;display:flex;flex-direction:column;background:var(--char);
+  border-radius:22px;padding:26px 20px 20px;text-decoration:none;overflow:hidden;
+  transition:transform .4s var(--ease),background .4s var(--ease)}
+.dslab:hover{transform:translateY(-4px);background:#2F2B26}
+.ds-no{position:absolute;top:14px;right:14px;font-family:var(--disp);font-size:44px;
+  font-weight:800;letter-spacing:-.04em;line-height:1;color:transparent;
+  -webkit-text-stroke:1.2px rgba(255,255,255,.22)}
+.dslab h3{padding-right:56px}
+.dslab > p{padding-right:56px}
+.dslab h3{color:#fff;font-size:19.5px;letter-spacing:-.015em;margin-bottom:4px;position:relative}
+.dslab > p{font-size:13.5px;color:rgba(255,255,255,.55);margin-bottom:16px}
+.ds-list{list-style:none;margin:0 0 20px;padding:16px 0 0;
+  border-top:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:10px}
+.ds-list li{position:relative;padding-left:23px;font-size:14px;font-weight:600;
+  color:rgba(255,255,255,.9);line-height:1.35}
+.ds-list li::before{content:"";position:absolute;left:0;top:3px;width:14px;height:14px;
+  border-radius:50%;background:var(--red)}
+.ds-list li::after{content:"";position:absolute;left:3.6px;top:7.4px;width:6.4px;height:3.6px;
+  border-left:1.7px solid #fff;border-bottom:1.7px solid #fff;transform:rotate(-45deg)}
+.ds-go{margin-top:auto;font-size:13.5px;font-weight:700;color:var(--red-glow)}
+@media(max-width:1080px){.desk-slabs{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.desk-slabs{grid-template-columns:1fr}}
+
+/* --- TWO TRACKS: real machines, tilted like taped photos --- */
+.tracks-split{align-items:start}
+.tc-photo{position:relative;margin:0 6px 26px;border-radius:18px}
+.tc-photo img{width:100%;height:225px;object-fit:cover;border-radius:16px;
+  border:6px solid #fff;box-shadow:0 22px 44px -24px rgba(36,31,28,.4)}
+.tilt-l{transform:rotate(-1.7deg)}
+.tilt-r{transform:rotate(1.4deg)}
+.tc-cap{position:absolute;bottom:-13px;right:16px;font-family:var(--hand);font-size:21px;
+  font-weight:600;color:var(--ink);background:#fff;padding:1px 14px;border-radius:4px;
+  box-shadow:0 10px 22px -12px rgba(36,31,28,.45);transform:rotate(1.8deg)}
+.trackcard h3{margin:18px 0 12px}
+.trackcard .lead{font-size:16.5px}
+
+/* inspection-stamp badge: the eyebrow pill's louder cousin */
+.stamp{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--red);
+  border:1.7px solid currentColor;border-radius:7px;padding:6px 13px;
+  transform:rotate(-1.3deg);background:rgba(255,255,255,.55)}
+.stamp .star{width:9px;height:9px;background:currentColor}
+.stamp.qr{color:var(--ink);transform:rotate(.9deg)}
+
+/* --- 5UPR YARDS: the dark cinematic band ------------------- */
+.cohort-sec{background:var(--char);position:relative;overflow:hidden}
+.cohort-ghost{position:absolute;top:-60px;right:-10px;font-family:var(--disp);
+  font-size:clamp(300px,32vw,520px);font-weight:800;letter-spacing:-.06em;line-height:1;
+  color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.07);pointer-events:none;user-select:none}
+.cohort-sec .eyebrow{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);
+  color:rgba(255,255,255,.78)}
+.cohort-head{position:relative}
+.cohort-head h2{color:#fff}
+.cohort-head p{color:rgba(255,255,255,.62)}
+.cohort-meta{border-top-color:rgba(255,255,255,.18)}
+.cm-row{border-bottom-color:rgba(255,255,255,.12)}
+.cm-row span{color:rgba(255,255,255,.5)}
+.cm-row b{color:#fff}
+.cohort-sec .cohort-fine{color:rgba(255,255,255,.4)}
+.cohort-rail{position:relative}
+.cohort-rail .seatcard{background:var(--bg);border-color:transparent}
+.cohort-rail .seatcard:nth-child(odd){transform:rotate(-.5deg)}
+.cohort-rail .seatcard:nth-child(even){transform:rotate(.5deg)}
+.cohort-rail .seatcard:hover{transform:translateY(-5px) rotate(0deg)}
+.cohort-rail .seatcard.open:hover{background:#fff}
+/* the waitlist card is the accent object of the whole rail */
+.seatcard.waitlist{background:var(--red)}
+.seatcard.waitlist p,.seatcard.waitlist .sc-list li{color:rgba(255,255,255,.88)}
+.seatcard.waitlist .sc-tag{color:rgba(255,255,255,.7)}
+.seatcard.waitlist .sc-state{color:#fff}
+.seatcard.waitlist .sc-top{border-bottom-color:rgba(255,255,255,.25)}
+.seatcard.waitlist .sc-list li::before{border-color:#fff}
+.seatcard.waitlist .sc-cta.solid{background:#fff;color:var(--red)}
+.seatcard.waitlist .sc-cta.solid:hover{background:var(--peach);color:var(--red-d)}
+
+/* --- GUARANTEES: three promises, three big numerals -------- */
+.gwall{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.gcard{position:relative;background:var(--surface);border:1px solid var(--line);
+  border-radius:22px;padding:26px 24px 24px}
+.g-no{display:block;font-family:var(--disp);font-size:52px;font-weight:800;
+  letter-spacing:-.05em;line-height:1;margin-bottom:18px;color:var(--red)}
+@supports (-webkit-text-stroke:1px #000){
+  .g-no{color:transparent;-webkit-text-stroke:1.7px var(--red)}
+}
+.gcard h3{font-size:20.5px;letter-spacing:-.015em;margin-bottom:8px}
+.gcard p{font-size:14.5px;line-height:1.55;color:var(--body)}
+@media(max-width:900px){.gwall{grid-template-columns:1fr}}
+
+/* --- FOOTER: dark, three columns, ends on the wordmark ----- */
+footer{background:var(--char);border-top:0;color:rgba(255,255,255,.6);overflow:hidden}
+footer::before{display:none}
+.foot-top{grid-template-columns:1.1fr 1.9fr;gap:56px;padding-top:76px;padding-bottom:40px}
+.foot-brand img{height:26px}
+.foot-brand p{color:rgba(255,255,255,.6)}
+.foot-brand p a{color:#fff;font-weight:600}
+.foot-cols{grid-template-columns:repeat(3,minmax(130px,1fr));gap:36px}
+.foot-col h4{color:rgba(255,255,255,.42)}
+.foot-col a{color:rgba(255,255,255,.75)}
+.foot-col a:hover{color:#fff}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.38);
+  padding-top:18px;padding-bottom:0}
+.foot-mega{line-height:.7;pointer-events:none;user-select:none;margin-top:8px}
+.foot-mega span{display:block;text-align:center;font-family:var(--disp);font-weight:800;
+  letter-spacing:-.045em;font-size:clamp(64px,13vw,188px);color:var(--red);
+  transform:translateY(22%);white-space:nowrap}
+@media(max-width:900px){
+  .foot-top{grid-template-columns:1fr;gap:36px}
+  .foot-cols{grid-template-columns:repeat(2,1fr)}
+}
+
+/* --- small dignities ---------------------------------------- */
+.head.left h2{max-width:26ch}
+.head.left p{max-width:56ch}
+@media (prefers-reduced-motion:reduce){
+  .tilt-l,.tilt-r,.tc-cap,.stamp,.hand-note,
+  .cohort-rail .seatcard:nth-child(odd),.cohort-rail .seatcard:nth-child(even){transform:none}
+}
+
+/* --- BURGER MENU: panels inline flat, and at the same breakpoint the
+   burger appears (820px), not the old 760 — the 60px band between the
+   two left absolute-positioned panels floating inside a hidden menu. */
+@media(max-width:820px){
+  .nav-menu,.nav-menu.cols2{position:static;transform:none;width:auto;box-shadow:none;
+    border:0;border-radius:0;background:transparent;padding:2px 0 12px 8px;
+    opacity:1;visibility:visible;pointer-events:auto}
+  .nav-menu a{padding:9px 10px}
+  .nm-foot{border-top:0;padding:6px 10px 0}
+  .nav-group::after{display:none}
+}

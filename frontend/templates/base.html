@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>{{TITLE}}</title>
+<meta name="description" content="{{DESCRIPTION}}" />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#E4262C" />
+<link rel="canonical" href="https://rentalrevive.com{{CANONICAL}}" />
+
+<!-- Stylesheet linked here, not imported from main.js: a JS-side import
+     paints one unstyled frame before the module graph loads (the giant-logo
+     flash). A head link blocks first paint until the page has its skin. -->
+<link rel="stylesheet" href="/src/style.css" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="alternate icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/favicon.png" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="RentalRevive" />
+<meta property="og:url" content="https://rentalrevive.com{{CANONICAL}}" />
+<meta property="og:title" content="{{TITLE}}" />
+<meta property="og:description" content="{{DESCRIPTION}}" />
+<meta property="og:image" content="https://rentalrevive.com/img/hero-excavator.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{TITLE}}" />
+<meta name="twitter:description" content="{{DESCRIPTION}}" />
+<meta name="twitter:image" content="https://rentalrevive.com/img/hero-excavator.jpg" />
+
+{{HEAD_EXTRA}}
+</head>
+<body class="{{BODY_CLASS}}">
+
+<!--include: nav -->
+
+{{BODY}}
+
+<!--include: footer -->
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
