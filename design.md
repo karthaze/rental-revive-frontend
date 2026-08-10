@@ -550,30 +550,33 @@ cream above the hero and charcoal below the footer instead of bare white.
 
 ### Skeleton machines (2026-08-10)
 
-The cohort's ghost `5` proved the treatment, so machinery got it too: three
-**blueprint elevations** drawn as stroke-only SVG (`fill:none`, no filled
-shapes anywhere), one per section, in the empty half beside a left-aligned
-head. Excavator → the leak, dozer → the guarantees, crawler crane → the
-segments. Rules:
+**Two** blueprint machines on the page, and they are *background*, not
+objects: an excavator in the leak section and a crawler crane in the
+segments. There was a third (a dozer in the guarantees) and it was the one
+that broke the effect — three sections each carrying a machine in the same
+right-hand corner read as a repeat, and the pair in adjacent sections read
+as a tic. Fewer, bigger, quieter.
 
-- Outline only. A filled machine reads as clip-art; that is exactly what the
-  little solid digger looked like and why it got cut.
-- `stroke: rgba(36,31,28,.15)` at 2.4px, load-bearing members at 4px.
-- **viewBox must be cropped to the drawing's bounds.** The first pass left the
-  machines sitting in the left half of a loose box, so half of every watermark
-  was empty space and no CSS position could put them where they belonged.
-- **Anchored to real page structure, or they read as random.** Each machine
-  hangs off its section head (`.head.head-mach`, `right:0; bottom:0`), which
-  pins both edges to something the eye already sees: the right edge lands flush
-  with the right edge of the card grid below, and the bottom rests 38px above
-  the row where those cards start. All three sections measure identically.
-- The head **reserves** a column with `padding-right: var(--mach-col)` rather
-  than capping the text — the h2 already carries a 26ch measure, and two
-  competing max-widths is a fight the wrong one wins. Gives a constant 50px
-  of clearance.
-- Hidden under 1180px, and the reserved column collapses with them.
+What makes them read as part of the page rather than clip-art dropped in a
+gap:
 
-Two carry motion: the excavator's arm digs, the crane's hoist line sways.
+- **Big enough to bleed off the page edge.** A machine that fits inside the
+  content column is an object sitting in a gap. One that runs off the edge is
+  the paper it is printed on. 560–700px, cropped by the section.
+- **Filled a single tone darker than the ground** (`--bg-dark` on `--bg`, a
+  ~3% step) with hairline linework over it. The tone gives it mass; the lines
+  keep it a drawing.
+- **`vector-effect: non-scaling-stroke`.** Without it a 3× machine gets 3×
+  fatter lines and turns into a cartoon. With it the linework stays a hairline
+  at any scale.
+- **Radial mask** so it dissolves into the ground instead of ending on a hard
+  crop. Centre it on the machine's *mass*, per machine (`--mx`/`--my`) — a
+  one-directional fade wiped the crane's body and left its boom hanging in the
+  corner as loose diagonals.
+- Open paths (a boom, a stick) have no area to fill, so they carry their mass
+  as a thick stroke in the fill tone (`.thick`).
+- Cards overlap them, and that is the point: a machine partly behind the
+  content is behind the page, not on it.
 
 ### Two fixes worth not repeating
 

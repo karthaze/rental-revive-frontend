@@ -1322,48 +1322,37 @@ body::before{display:none}
    is peach, so the notches read as two cream chips against it. --- */
 .cohort-shell{background:var(--peach)}
 
-/* --- SKELETON MACHINES: blueprint elevations, drawn as outline only,
-   the same treatment as the cohort's ghost 5. One per section, parked in
-   the empty half beside a left-aligned head, never behind text. --- */
-.mwatch{position:absolute;pointer-events:none;z-index:0;display:block}
+/* --- SKELETON MACHINES ------------------------------------
+   Two, not three, and they are BACKGROUND, not objects. As small
+   corner stickers they read as clip-art dropped in a gap, and two
+   adjacent sections carrying one on the same side read as a repeat.
+   So: big enough to bleed off the page edge, filled a single tone
+   darker than the ground with hairline linework on top, and masked
+   so they dissolve before they reach the text instead of ending on
+   a hard crop. The machine becomes part of the paper. --- */
+/* radial, not linear: a one-directional fade cut the machine in half —
+   it wiped the crane's whole body while leaving its boom hanging in the
+   corner as loose diagonals. A radial fade keeps the machine intact and
+   dissolves it evenly on every side. */
+.mwatch{position:absolute;pointer-events:none;z-index:0;
+  --mx:58%;--my:48%;
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at var(--mx) var(--my),#000 44%,rgba(0,0,0,.45) 76%,transparent 100%);
+  mask-image:radial-gradient(ellipse 80% 80% at var(--mx) var(--my),#000 44%,rgba(0,0,0,.45) 76%,transparent 100%)}
 .mwatch svg{width:100%;height:auto;display:block;overflow:visible}
-.mwatch g{fill:none;stroke:rgba(36,31,28,.15);stroke-width:2.4;
-  stroke-linecap:round;stroke-linejoin:round}
-.mwatch .thick{stroke-width:4}
-#leaks,#guarantees,#segments{position:relative;overflow:hidden}
-
-/* ANCHORING — the whole reason the first placement read as random.
-   Every machine now hangs off its section head, which pins BOTH edges to
-   real page structure: right:0 puts it flush with the right edge of the
-   card grid below, bottom:0 rests its tracks on the line where the cards
-   start. So each machine is parked ON the card row in the empty half beside
-   a left-aligned headline, never floating in the middle of a gap. */
-.head{position:relative}
-/* A head is capped at 760px, which would put right:0 in the middle of the
-   headline. Only the heads that carry a machine open to the full column, and
-   the 760px measure moves onto the text itself so nothing reflows — the head
-   just gains an empty right column for the machine to park in. */
-/* The head RESERVES a column for the machine with padding rather than
-   capping the text — the h2 already carries its own 26ch measure, and two
-   competing max-widths is a fight the wrong one keeps winning. Padding is
-   inside the border box, so the text simply cannot reach the machine, and
-   right:0 still resolves against the padding box's outer edge. */
-.head.head-mach{max-width:none;padding-right:var(--mach-col)}
-#leaks .head-mach{--mach-col:300px}
-#guarantees .head-mach{--mach-col:280px}
-#segments .head-mach{--mach-col:350px}
-.head > .eyebrow,.head > h2,.head > p{position:relative;z-index:1}
-.mwatch{right:0;bottom:0}
-.mw-leaks{width:250px}
-.mw-guar{width:230px}
-.mw-segs{width:300px}
-/* The excavator replaces the old sticker digger, so it keeps the dig. */
-.ex-arm{transform-box:view-box;transform-origin:100px 202px;animation:dig 5s ease-in-out infinite}
-.cr-line{transform-box:view-box;transform-origin:399px 85px;animation:sway 6s ease-in-out infinite}
-@media(max-width:1180px){
-  .mwatch{display:none}
-  .head.head-mach{padding-right:0}   /* no machine, no reserved column */
-}
+/* non-scaling-stroke keeps the linework a hairline no matter how far the
+   drawing is scaled up — without it a 3x machine gets 3x fatter lines. */
+.mwatch g *{fill:var(--bg-dark);stroke:rgba(36,31,28,.13);stroke-width:1.1;
+  vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
+/* the boom and stick are open lines: nothing to fill, so they carry the
+   mass as a thick stroke in the fill tone instead */
+.mwatch g .thick{stroke:var(--bg-dark);stroke-width:15}
+#leaks,#segments{position:relative;overflow:hidden}
+#leaks .wrap,#segments .wrap{position:relative;z-index:1}
+.mw-leaks{right:-40px;top:44px;width:560px}
+.mw-segs{right:-72px;top:-24px;width:700px;--mx:33%;--my:66%}
+.ex-arm{transform-box:view-box;transform-origin:100px 202px;animation:dig 7s ease-in-out infinite}
+.cr-line{transform-box:view-box;transform-origin:399px 85px;animation:sway 8s ease-in-out infinite}
+@media(max-width:1080px){.mwatch{display:none}}
 
 /* --- NAV PANELS: small, wrapping, viewport-safe ------------ */
 .nav-menu{width:min(400px,calc(100vw - 40px));padding:12px;border-radius:22px;
