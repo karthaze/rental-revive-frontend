@@ -11,21 +11,20 @@
 # graphify build output (regenerate with /graphify .)
 graphify-out/
 
-# Rendered pages. Source of truth is frontend/pages/ + frontend/templates/;
-# `npm run render` composes them into frontend/ as Vite MPA entry points.
-# Edit the sources — anything listed here is overwritten on every build.
-# Whole directories are generated:
+# Rendered pages. Source of truth is frontend/pages/ + frontend/templates/
+# (and common/segments.js, via build/yards.mjs). `npm run render` composes
+# them into frontend/ as Vite MPA entry points. Edit the sources — anything
+# matched here is overwritten on every build.
+#
+# Inverted on purpose: ignore every root-level .html and re-admit the three
+# that are still hand-written. Listing generated pages individually meant
+# every new page needed a new line here, and the one nobody remembered got
+# committed as source.
+frontend/*.html
+!frontend/onboard.html
+!frontend/privacy.html
+!frontend/terms.html
+# Generated directories:
 frontend/the-leak/
-frontend/catch/
-frontend/quote/
-frontend/recover/
-frontend/run/
 frontend/yards/
-# Root-level generated pages, listed individually because onboard.html,
-# privacy.html and terms.html are still hand-written:
-frontend/heydozr.html
-frontend/index.html
-.gstack/
-frontend/the-desk.html
 frontend/pages/yards/
-frontend/yards/

@@ -484,83 +484,11 @@ strong,b{color:var(--ink);font-weight:700}
   background-image:radial-gradient(rgba(36,31,28,.05) 1px,transparent 1.4px);
   background-size:23px 23px}
 
-/* ============ ENGINE (live system diagram) ============ */
-.engine-sec{background:var(--bg)}
-.engine{position:relative;max-width:940px;margin:0 auto;aspect-ratio:940/460;
-  border-radius:var(--radius-lg);overflow:hidden;
-  background:
-    radial-gradient(120% 130% at 50% -10%,#ffffff 0%,var(--bg) 62%),
-    var(--surface);
-  border:1px solid var(--line);
-  box-shadow:0 46px 100px -60px rgba(36,31,28,.42),inset 0 1px 0 rgba(255,255,255,.7)}
-.engine::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.5;
-  background-image:radial-gradient(rgba(36,31,28,.06) 1px,transparent 1px);background-size:22px 22px;
-  -webkit-mask-image:radial-gradient(75% 75% at 50% 50%,#000,transparent);mask-image:radial-gradient(75% 75% at 50% 50%,#000,transparent)}
-
-.engine-wires{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
-.engine-wires path{stroke:rgba(228,38,44,.18);stroke-width:2;stroke-linecap:round}
-.engine-wires circle{fill:var(--red);filter:drop-shadow(0 0 5px rgba(228,38,44,.65))}
-
-.enode{position:absolute;transform:translate(-50%,-50%);z-index:2;width:196px;
-  background:#fff;border:1px solid var(--line);border-radius:15px;padding:11px 14px;
-  box-shadow:0 22px 44px -28px rgba(36,31,28,.5);display:flex;gap:11px;align-items:center}
-.enode .eic{width:36px;height:36px;border-radius:10px;background:var(--peach);display:grid;place-items:center;flex:none}
-.enode .eic svg{width:20px;height:20px;stroke:var(--red);fill:none;stroke-width:1.7}
-.enode b{font-family:var(--disp);font-weight:800;font-size:13.5px;color:var(--ink);letter-spacing:-.01em;line-height:1.15}
-.enode span{display:block;font-size:11.5px;color:var(--mut);line-height:1.25;margin-top:1px}
-.enode.p1{left:15%;top:22%}.enode.p2{left:85%;top:22%}.enode.p3{left:15%;top:78%}.enode.p4{left:85%;top:78%}
-.enode::after{content:"";position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;
-  background:var(--red);box-shadow:0 0 0 0 rgba(228,38,44,.5);animation:ndot 2.2s ease-out infinite}
-.enode.p2::after{animation-delay:.5s}.enode.p3::after{animation-delay:1.1s}.enode.p4::after{animation-delay:1.6s}
-@keyframes ndot{0%{box-shadow:0 0 0 0 rgba(228,38,44,.45)}70%,100%{box-shadow:0 0 0 8px rgba(228,38,44,0)}}
-
-.hub{position:absolute;left:50%;top:55%;transform:translate(-50%,-50%);z-index:3;text-align:center}
-.hub-core{width:106px;height:106px;border-radius:50%;margin:0 auto;position:relative;
-  background:radial-gradient(circle at 38% 30%,#ff6154,var(--red) 58%,var(--red-d));
-  display:grid;place-items:center;
-  box-shadow:0 24px 54px -14px rgba(228,38,44,.7),inset 0 2px 8px rgba(255,255,255,.45)}
-.hub-core svg{width:46px;height:46px;stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.hub-core::before,.hub-core::after{content:"";position:absolute;inset:-2px;border-radius:50%;
-  border:1.5px solid rgba(228,38,44,.5);animation:hpulse 3s ease-out infinite}
-.hub-core::after{animation-delay:1.5s}
-@keyframes hpulse{0%{transform:scale(1);opacity:.65}100%{transform:scale(2.2);opacity:0}}
-.hub-lab{margin-top:15px;font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:.01em;color:var(--ink)}
-.hub-lab span{display:block;font-family:var(--sans);font-weight:600;font-size:11px;color:var(--mut);margin-top:2px;letter-spacing:0}
-
-.etoast{position:absolute;left:50%;transform:translateX(-50%);z-index:4;width:256px;
-  background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 15px;
-  box-shadow:0 28px 56px -26px rgba(36,31,28,.5);font-size:12.5px;line-height:1.42;color:var(--body);
-  transition:opacity .45s var(--ease),transform .45s var(--ease)}
-.etoast.top{top:7%}
-.etoast .tt{font-family:var(--disp);font-weight:800;font-size:12px;color:var(--ink);margin-bottom:3px;
-  display:flex;align-items:center;gap:7px}
-.etoast .dot{width:8px;height:8px;border-radius:50%;flex:none;transition:background .3s}
-.etoast.swap{opacity:0;transform:translateX(-50%) translateY(6px)}
-
-.echip{position:absolute;left:50%;bottom:6.5%;transform:translateX(-50%);z-index:4;white-space:nowrap;
-  background:var(--ink);color:#fff;border-radius:var(--pill);padding:9px 17px;font-size:12.5px;font-weight:700;
-  display:flex;gap:9px;align-items:center;box-shadow:0 22px 44px -22px rgba(0,0,0,.55)}
-.echip .g{width:8px;height:8px;border-radius:50%;background:#4ade80;flex:none;
-  box-shadow:0 0 0 0 rgba(74,222,128,.5);animation:ndot 2.4s ease-out infinite}
-
-/* stat pills under the diagram */
-.estats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:940px;margin:22px auto 0}
-.epill{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 22px;text-align:center}
-.epill .num{font-family:var(--disp);font-weight:800;font-size:clamp(28px,3.4vw,38px);letter-spacing:-.03em;color:var(--ink);line-height:1}
-.epill em{display:block;font-style:normal;font-size:13px;color:var(--mut);margin-top:6px;font-weight:600}
-.estats-note{max-width:940px;margin:14px auto 0;text-align:center;font-size:12.5px;color:var(--mut)}
-@media(max-width:640px){.estats{grid-template-columns:1fr}}
-
-/* mobile: collapse the diagram to a clean vertical flow */
-@media(max-width:760px){
-  .engine{aspect-ratio:auto;padding:26px 18px;display:flex;flex-direction:column;gap:12px}
-  .engine::before,.engine-wires,.etoast{display:none}
-  .enode{position:static;transform:none;width:100%}
-  .hub{position:static;transform:none;order:2;margin:4px auto}
-  .enode.p1{order:1}.enode.p2{order:1}.enode.p3{order:1}.enode.p4{order:1}
-  .echip{position:static;transform:none;order:3;margin:6px auto 0;align-self:center}
-}
-
+/* The old ENGINE live-system-diagram component was removed here: no page
+   had used it since the landing page was rebuilt, and its `.engine` selector
+   silently collided with the Desk's engine cards — its aspect-ratio:940/460
+   pinned every card to 182px and its overflow:hidden clipped the badge off
+   the bottom. Dead CSS is not free; it fails at a distance. */
 /* ============ DESK: always-on pillars + offer band ============ */
 .runs{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
 .run{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px 22px;
@@ -1757,3 +1685,15 @@ footer::before{content:"";display:block;position:absolute;top:0;left:0;right:0;h
   .tb-row{grid-template-columns:1fr;gap:7px}
   .tb-bar{height:12px}
 }
+
+/* Spine pages: the Charter grid runs six across two rows, and the guides
+   index reuses .segcard, which the landing page had stripped to name-only. */
+.charter-grid{grid-template-columns:repeat(3,1fr)}
+@media(max-width:1080px){.charter-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.charter-grid{grid-template-columns:1fr}}
+.cohort-shell-lite{background:var(--peach)}
+.page-guides .segcard{padding:22px 20px}
+.page-guides .segcard p{display:block;font-size:13px;line-height:1.5;color:var(--mut);margin-top:6px}
+.page-guides .segcard h3{font-size:16.5px}
+.engine h3 a{color:inherit;text-decoration:none;border-bottom:2px solid rgba(228,38,44,.35)}
+.engine h3 a:hover{color:var(--red);border-bottom-color:var(--red)}
