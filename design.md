@@ -531,3 +531,19 @@ their trigger (the two right-most groups right-anchor so no panel can leave
 the viewport), and `white-space:normal` — the clipped-dropdown bug was
 `.nav-links a{white-space:nowrap}` leaking into panel rows; the selector is
 now `.nav-links > a`.
+
+### Motion layer (2026-08-10)
+
+Machinery does the animating, nothing else does. The truck hauls the install
+across the steps route once per visit (`.steps-route.in .route-truck`), the
+excavator's arm digs on a 3.8s loop at the leak line, the cohort hook sways
+±2.2°, the hero toasts pop in staggered (missed call, then caught-and-booked)
+and idle-bob, the stat numerals count up once, and segment icons wiggle on
+hover. Every animation is disabled or pre-settled under
+`prefers-reduced-motion`. Gauge needles rotate via the SVG `rotate(deg cx cy)`
+attribute, never CSS transforms — CSS `transform-origin` resolved against the
+wrong box and pivoted the needle around the dial centre.
+
+The canvas behind the page is two-tone
+(`html{background:linear-gradient(...)}`) so rubber-band overscroll shows
+cream above the hero and charcoal below the footer instead of bare white.

@@ -30,16 +30,16 @@
 
 
   <script type="module" crossorigin src="/assets/places-CuyG_Ndh.js"></script>
-  <script type="module" crossorigin src="/assets/main-B6MmiAfF.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/main-Dr0NZ9i9.css">
+  <script type="module" crossorigin src="/assets/main-BHeLqOmc.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-CSidhGZo.css">
 </head>
 <body class="page-home">
 
-<!-- NAV, four groups, not six. Six outcome labels crammed into a pill
-     read as a list of words rather than a menu, so the outcome grouping
-     moved DOWN into the panel where it has room to be columns. The
-     trigger names what you'd click; the panel does the teaching.
-     One persistent CTA sitewide: run the free scan. -->
+<!-- NAV — four groups, each with a SMALL panel. The 16-engine mega grid
+     moved to /the-desk.html where it has a whole page; a dropdown's job
+     is to route, not to teach. Panels are narrow (≤560px), anchored to
+     their trigger, and every line is allowed to wrap, which is what
+     killed the clipped-text overflow. One persistent CTA sitewide. -->
 <nav class="nav" id="top">
   <a class="nav-logo" href="/">
     <img src="/img/logo.png" alt="RentalRevive" />
@@ -49,73 +49,45 @@
 
     <div class="nav-group">
       <button class="nav-trigger" type="button" aria-expanded="false" aria-controls="m-desk">The Desk</button>
-      <div class="nav-menu wide" id="m-desk">
-        <div class="nm-col">
-          <span class="nm-head">Catch every inquiry</span>
-          <a href="/catch/never-missed-counter.html">The Never-Missed Counter</a>
-          <a href="/catch/after-hours.html">After-hours cover</a>
-          <a href="/catch/voice-agent.html">The Voice Agent</a>
-          <a href="/catch/every-channel.html">Every channel, caught</a>
-        </div>
-        <div class="nm-col">
-          <span class="nm-head">Quote faster</span>
-          <a href="/quote/60-second-quote.html">The 60-Second Quote</a>
-          <a href="/quote/instant-reserve.html">Instant Reserve</a>
-          <a href="/quote/quote-required.html">Quote Required</a>
-          <a href="/quote/pricing-rules.html">Your pricing rules</a>
-        </div>
-        <div class="nm-col">
-          <span class="nm-head">Win back what's yours</span>
-          <a href="/recover/dead-quotes.html">The dead quote pile</a>
-          <a href="/recover/comeback-engine.html">The Comeback Engine</a>
-          <a href="/recover/reviews.html">Reviews that come back</a>
-          <a href="/recover/your-list.html">Your own list, worked</a>
-        </div>
-        <div class="nm-col">
-          <span class="nm-head">Run the yard</span>
-          <a href="/run/yard-online.html">Your yard, online</a>
-          <a href="/run/live-availability.html">Live availability</a>
-          <a href="/run/paperwork.html">Paperwork, signed</a>
-          <a href="/run/response-clock.html">The Response Clock</a>
-        </div>
-        <a class="nm-foot" href="/the-desk.html">See all sixteen engines in one place →</a>
+      <div class="nav-menu" id="m-desk">
+        <a href="/the-desk.html#catch"><b>Catch every inquiry</b><span>Phone, form, text, walk-in. Answered in fifteen minutes.</span></a>
+        <a href="/the-desk.html#quote"><b>Quote faster</b><span>The first real number usually wins the job.</span></a>
+        <a href="/the-desk.html#recover"><b>Win back what's yours</b><span>Dead quotes and quiet accounts, worked in your name.</span></a>
+        <a href="/the-desk.html#run"><b>Run the yard</b><span>Live availability, signed paperwork, the Response Clock.</span></a>
+        <a class="nm-foot" href="/the-desk.html">All sixteen engines, one page →</a>
       </div>
     </div>
 
     <div class="nav-group">
       <button class="nav-trigger" type="button" aria-expanded="false" aria-controls="m-yards">Your yard</button>
       <div class="nav-menu cols2" id="m-yards">
-        <div class="nm-col">
-          <a href="/yards/cranes-lifting.html">Cranes &amp; lifting</a>
-          <a href="/yards/earthmoving.html">Earthmoving</a>
-          <a href="/yards/aerial-access.html">Aerial &amp; access</a>
-          <a href="/yards/compact-machinery.html">Compact machinery</a>
-        </div>
-        <div class="nm-col">
-          <a href="/yards/material-handling.html">Material handling</a>
-          <a href="/yards/road-concrete-compaction.html">Road &amp; compaction</a>
-          <a href="/yards/power-climate-site-services.html">Power &amp; site services</a>
-          <a href="/yards/heavy-haul-specialty.html">Heavy haul &amp; specialty</a>
-        </div>
-        <a class="nm-foot" href="/onboard.html">Not sure? Run the scan and it asks your questions →</a>
+        <a href="/yards/cranes-lifting.html">Cranes &amp; lifting</a>
+        <a href="/yards/earthmoving.html">Earthmoving</a>
+        <a href="/yards/aerial-access.html">Aerial &amp; access</a>
+        <a href="/yards/compact-machinery.html">Compact machinery</a>
+        <a href="/yards/material-handling.html">Material handling</a>
+        <a href="/yards/road-concrete-compaction.html">Road &amp; compaction</a>
+        <a href="/yards/power-climate-site-services.html">Power &amp; site services</a>
+        <a href="/yards/heavy-haul-specialty.html">Heavy haul &amp; specialty</a>
+        <a class="nm-foot" href="/onboard.html">Not sure? The scan asks your questions →</a>
       </div>
     </div>
 
     <div class="nav-group">
       <button class="nav-trigger" type="button" aria-expanded="false" aria-controls="m-cohort">5UPR Yards</button>
       <div class="nav-menu" id="m-cohort">
-        <a href="/founding-partners.html"><b>How the cohort works</b><span>Five yards every ninety days, then the intake closes</span></a>
-        <a href="/case-studies.html"><b>Case studies</b><span>Real numbers, published with permission</span></a>
-        <a href="/heydozr.html"><b>HeyDozr</b><span>The system that stays after we leave</span></a>
+        <a href="/founding-partners.html"><b>How the cohort works</b><span>Five yards every ninety days, then the intake closes.</span></a>
+        <a href="/case-studies.html"><b>Case studies</b><span>Real numbers, published with permission.</span></a>
+        <a href="/heydozr.html"><b>HeyDozr</b><span>The system that stays after we leave.</span></a>
       </div>
     </div>
 
     <div class="nav-group">
       <button class="nav-trigger" type="button" aria-expanded="false" aria-controls="m-more">Resources</button>
       <div class="nav-menu" id="m-more">
-        <a href="/the-leak.html"><b>What's leaking</b><span>The four places a yard quietly loses work</span></a>
-        <a href="/the-leak/how-we-find-it.html"><b>How we find it</b><span>We call your yard as a contractor would, and time it</span></a>
-        <a href="/guides.html"><b>Guides</b><span>How to run the revenue side of a yard</span></a>
+        <a href="/the-leak.html"><b>What's leaking</b><span>The four places a yard quietly loses work.</span></a>
+        <a href="/the-leak/how-we-find-it.html"><b>How we find it</b><span>We call your yard like a contractor would, and time it.</span></a>
+        <a href="/guides.html"><b>Guides</b><span>Running the revenue side of a yard.</span></a>
       </div>
     </div>
 
@@ -137,7 +109,7 @@
   <div class="wrap">
    <div class="hero-copy">
     <span class="eyebrow rv"><span class="star"></span>For independent equipment rental yards</span>
-    <h1 class="rv d1">Get more of your equipment<br class="h1-br"/> rented out.</h1>
+    <h1 class="rv d1">Get more of your equipment<br class="h1-br"/> <em class="circled">rented out.<svg viewBox="0 0 320 110" preserveAspectRatio="none" aria-hidden="true"><path d="M24,64 C34,24 236,6 290,30 C330,49 296,90 158,97 C62,102 10,84 24,56 C36,32 96,17 156,14"/></svg></em></h1>
     <p class="lead rv d2">Every missed call answered and booked. Every cold quote chased to a yes or a no. Every quiet account brought back. <strong>In your name, with nothing new to run.</strong></p>
 
     <div class="yard-search center rv d3" id="yardSearch">
@@ -153,11 +125,10 @@
       <ul class="ys-list" id="ysList" role="listbox"></ul>
     </div>
 
-    <ul class="hero-trust rv d3">
-      <li>Free 2-minute scan</li>
-      <li>No forms, no sign-up</li>
-      <li>Your leak priced live</li>
-    </ul>
+    <span class="hand-note rv d3" aria-hidden="true">
+      <svg class="hn-arrow" viewBox="0 0 60 44" aria-hidden="true"><path d="M54,40 C46,18 32,8 12,8 M20,2 L10,8 L18,16"/></svg>
+      free, no email, two minutes
+    </span>
    </div>
 
     <div class="hero-demo rv d4" aria-hidden="true">
@@ -200,7 +171,7 @@
   <div class="wrap">
     <div class="head left rv">
       <span class="eyebrow"><span class="star"></span>Where the money leaks</span>
-      <h2>A missed call used to cost you nothing. Now it costs you the rental.</h2>
+      <h2>A missed call used to cost you nothing. Now it costs you the <span class="mku">rental</span>.</h2>
       <p>He used to call back in five minutes. Now the national answers at midnight, so he just calls them instead. Nothing about your yard got worse. The cost of missing him did.</p>
     </div>
     <div class="leaks-grid">
@@ -233,7 +204,23 @@
       </div>
     </div>
 
-    <p class="leak-close rv">Not one rental platform on the market tracks how long your yard takes to answer a quote request, or how many of those quotes you win. Ask your software what last month's average response time was. It does not know, because nobody ever asked it to. <strong>You cannot feel a leak you never metered.</strong></p>
+    <div class="digger-row" aria-hidden="true">
+      <svg class="digger" viewBox="0 0 150 84">
+        <g fill="var(--peach)" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="36" width="42" height="22" rx="4"/>
+          <rect x="38" y="20" width="22" height="16" rx="3"/>
+          <path d="M24 64 h58 l-7 11 h-44 z"/>
+        </g>
+        <circle cx="36" cy="69" r="3.2" fill="var(--ink)"/>
+        <circle cx="52" cy="69" r="3.2" fill="var(--ink)"/>
+        <circle cx="68" cy="69" r="3.2" fill="var(--ink)"/>
+        <g class="dg-arm" fill="none" stroke="var(--ink)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M72 42 L106 22 L132 42"/>
+          <path d="M132 42 l7 13 -16 3 z" fill="var(--red)" stroke-width="2.4"/>
+        </g>
+      </svg>
+    </div>
+    <p class="leak-close rv">No rental platform on the market tracks how long your yard takes to answer a quote, or how many of those quotes you win. <strong>You cannot feel a leak you never metered.</strong></p>
   </div>
 </section>
 
@@ -303,74 +290,104 @@
     <div class="head left rv">
       <span class="eyebrow"><span class="star"></span>What we actually do</span>
       <h2>We are your sales department for ninety days. Not an answering service.</h2>
-      <p>We're not selling you traffic. Everyone we work already called your yard, asked you for a price, or rented from you before. You paid for all of them once already. We just make sure not one of them slips away while your team is loading a truck.</p>
+      <p>The machine goes in first, then the people go to work on top of it. And everyone they call already called you, asked for a price, or rented from you before.</p>
     </div>
-    <div class="steps">
+    <div class="steps-route rv" aria-hidden="true">
+      <svg class="route-truck" viewBox="0 0 96 46">
+        <g fill="var(--bg)" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="16" width="50" height="16" rx="2"/>
+          <path d="M16 16 v-5 l8 -6 6 6 8 -3 v8"/>
+          <path d="M54 32 v-14 h16 l12 9 v5 z"/>
+          <path d="M58 18 v7 h10"/>
+        </g>
+        <circle cx="17" cy="36" r="6" fill="#26231F" stroke="currentColor" stroke-width="2.6"/>
+        <circle cx="41" cy="36" r="6" fill="#26231F" stroke="currentColor" stroke-width="2.6"/>
+        <circle cx="73" cy="36" r="6" fill="#26231F" stroke="currentColor" stroke-width="2.6"/>
+      </svg>
+    </div>
+    <div class="steps four">
       <div class="step rv">
-        <span class="step-no">1</span>
-        <h3>Type your company.</h3>
-        <p>The free scan pulls your Google footprint, maps every yard renting against you, and prices your leak live: missed calls, dead quotes, quiet accounts. About two minutes.</p>
-        <a class="step-link" href="/onboard.html">Run the scan →</a>
+        <span class="step-no">1</span><span class="step-day">Day 0</span>
+        <h3>The scan.</h3>
+        <p>Type your company. Your leak, priced from your own footprint, in two minutes.</p>
+        <a class="step-link" href="/onboard.html">Run it now →</a>
       </div>
       <div class="step rv d1">
-        <span class="step-no">2</span>
-        <h3>Our closers work your pipeline.</h3>
-        <p>They answer as your yard, using your name, from scripts you approve and pricing rules you set. Every inquiry inside fifteen minutes. Every open quote chased until it's won or dead.</p>
-        <a class="step-link" href="/the-desk.html">See every engine →</a>
+        <span class="step-no">2</span><span class="step-day">Week 1</span>
+        <h3>The install.</h3>
+        <p><strong>HeyDozr goes in first.</strong> Quote intake live on your own website, your fleet specced, availability wired. The machine is running before a single call is made.</p>
+        <a class="step-link" href="/heydozr.html">How HeyDozr works →</a>
       </div>
       <div class="step rv d2">
-        <span class="step-no">3</span>
-        <h3>You read one page a month.</h3>
-        <p>Calls caught, quotes worked, rentals booked, dollars recovered. Numbers, not activity. What counts as recovered gets agreed and signed at kickoff, before we make a single call.</p>
+        <span class="step-no">3</span><span class="step-day">Day 7–90</span>
+        <h3>The closers go to work.</h3>
+        <p>On top of that machine. Answering as your yard, from scripts you approve, every inquiry inside fifteen minutes.</p>
+        <a class="step-link" href="/the-desk.html">See every engine →</a>
+      </div>
+      <div class="step rv d3">
+        <span class="step-no">4</span><span class="step-day">Monthly</span>
+        <h3>You read one page.</h3>
+        <p>Calls caught, quotes worked, dollars recovered. What counts got signed at kickoff.</p>
       </div>
     </div>
 
     <div class="desk-lead rv" id="desk">
       <h3>Sixteen engines close that gap.</h3>
-      <p>Most of what you're losing isn't a machine problem. It's the gap between a man wanting your equipment and your team having a minute to get back to him. These arrive together, and they're all running by week two.</p>
+      <p>They arrive together, and they are all running by week two.</p>
     </div>
 
-    <div class="engrp rv">
-      <div class="engrp-head"><span class="engrp-no">01</span><h3>Catch every inquiry</h3><p>Nothing waits for Monday.</p></div>
-      <div class="engrp-grid">
-        <a class="engcard" href="/catch/never-missed-counter.html"><b>The Never-Missed Counter</b><span>Answered before the next yard picks up</span></a>
-        <a class="engcard" href="/catch/after-hours.html"><b>After-hours cover</b><span>6pm, Sunday, and the lunch rush</span></a>
-        <a class="engcard" href="/catch/voice-agent.html"><b>The Voice Agent</b><span>Picks up when nobody can. Never prices a lift.</span></a>
-        <a class="engcard" href="/catch/every-channel.html"><b>Every channel, caught</b><span>Phone, form, email, text, walk-in, one thread</span></a>
-      </div>
+    <div class="desk-slabs">
+      <a class="dslab rv" href="/the-desk.html#catch">
+        <span class="ds-no" aria-hidden="true">01</span>
+        <h3>Catch every inquiry</h3>
+        <p>Nothing waits for Monday.</p>
+        <ul class="ds-list">
+          <li>The Never-Missed Counter</li>
+          <li>After-hours cover</li>
+          <li>The Voice Agent</li>
+          <li>Every channel, caught</li>
+        </ul>
+        <span class="ds-go">See how it runs →</span>
+      </a>
+      <a class="dslab rv d1" href="/the-desk.html#quote">
+        <span class="ds-no" aria-hidden="true">02</span>
+        <h3>Quote faster</h3>
+        <p>The first real number usually wins.</p>
+        <ul class="ds-list">
+          <li>The 60-Second Quote</li>
+          <li>Instant Reserve</li>
+          <li>Quote Required</li>
+          <li>Your pricing rules</li>
+        </ul>
+        <span class="ds-go">See how it runs →</span>
+      </a>
+      <a class="dslab rv d2" href="/the-desk.html#recover">
+        <span class="ds-no" aria-hidden="true">03</span>
+        <h3>Win back what's yours</h3>
+        <p>You paid for these once already.</p>
+        <ul class="ds-list">
+          <li>The dead quote pile</li>
+          <li>The Comeback Engine</li>
+          <li>Reviews that come back</li>
+          <li>Your own list, worked</li>
+        </ul>
+        <span class="ds-go">See how it runs →</span>
+      </a>
+      <a class="dslab rv d3" href="/the-desk.html#run">
+        <span class="ds-no" aria-hidden="true">04</span>
+        <h3>Run the yard</h3>
+        <p>The part you keep forever.</p>
+        <ul class="ds-list">
+          <li>Your yard, online</li>
+          <li>Live availability</li>
+          <li>Paperwork, signed</li>
+          <li>The Response Clock</li>
+        </ul>
+        <span class="ds-go">See how it runs →</span>
+      </a>
     </div>
 
-    <div class="engrp rv d1">
-      <div class="engrp-head"><span class="engrp-no">02</span><h3>Quote faster than the yard across town</h3><p>The first real number usually wins.</p></div>
-      <div class="engrp-grid">
-        <a class="engcard" href="/quote/60-second-quote.html"><b>The 60-Second Quote</b><span>Described, priced, approved, signed, booked</span></a>
-        <a class="engcard" href="/quote/instant-reserve.html"><b>Instant Reserve</b><span>Dig depth, working height, transport width</span></a>
-        <a class="engcard" href="/quote/quote-required.html"><b>Quote Required</b><span>Lifting work goes to your estimator, brief already built</span></a>
-        <a class="engcard" href="/quote/pricing-rules.html"><b>Your pricing rules</b><span>Nothing reaches a customer outside them</span></a>
-      </div>
-    </div>
-
-    <div class="engrp rv d2">
-      <div class="engrp-head"><span class="engrp-no">03</span><h3>Win back what's already yours</h3><p>You paid to get these once already.</p></div>
-      <div class="engrp-grid">
-        <a class="engcard" href="/recover/dead-quotes.html"><b>The dead quote pile</b><span>Worked to a yes, a no, or a logged reason</span></a>
-        <a class="engcard" href="/recover/comeback-engine.html"><b>The Comeback Engine</b><span>Quiet accounts revived, in your name</span></a>
-        <a class="engcard" href="/recover/reviews.html"><b>Reviews that come back</b><span>Every happy renter asked, at the right moment</span></a>
-        <a class="engcard" href="/recover/your-list.html"><b>Your own list, worked</b><span>The "still need that trencher?" nudge</span></a>
-      </div>
-    </div>
-
-    <div class="engrp rv d3">
-      <div class="engrp-head"><span class="engrp-no">04</span><h3>Run the yard</h3><p>The part you keep forever.</p></div>
-      <div class="engrp-grid">
-        <a class="engcard" href="/run/yard-online.html"><b>Your yard, online</b><span>What's actually open this week</span></a>
-        <a class="engcard" href="/run/live-availability.html"><b>Live availability</b><span>Buffers, holds, no double-bookings</span></a>
-        <a class="engcard" href="/run/paperwork.html"><b>Paperwork, signed</b><span>Quote to contract without a trip to the counter</span></a>
-        <a class="engcard" href="/run/response-clock.html"><b>The Response Clock</b><span>The number the whole engagement runs on</span></a>
-      </div>
-    </div>
-
-    <p class="estats-note" style="margin-top:8px">Installed on top of the counter platform you already run. Nothing gets replaced, nobody gets retrained, and nobody on your team has to log into anything new.</p>
+    <p class="estats-note" style="margin-top:26px">Installed on top of the software you already run. Nothing replaced, nobody retrained.</p>
   </div>
 </section>
 
@@ -379,27 +396,44 @@
   <div class="wrap">
     <div class="head left rv">
       <span class="eyebrow"><span class="star"></span>How it answers</span>
-      <h2>Two tracks, and the equipment decides which — not the customer.</h2>
-      <p>A contractor should never have to work out whether his job is the simple kind. He describes it, and the machine itself settles what happens next.</p>
+      <h2>Two tracks. The equipment decides which, not the customer.</h2>
+      <p>A contractor describes the job. The machine settles what happens next.</p>
     </div>
-    <div class="split">
-      <div class="rv">
-        <span class="eyebrow"><span class="star"></span>Instant Reserve</span>
-        <h3 style="margin:16px 0 14px">For machines a number can describe.</h3>
-        <p class="lead">Dig depth, working height, transport width, operating weight. Figures off a spec sheet, not judgment calls. He needs three metres of depth behind a building with a 2.4 metre gate; it matches, checks what is actually free on those dates, and holds the unit. At ten at night, without waiting on anybody.</p>
+    <div class="split tracks-split">
+      <div class="trackcard rv">
+        <figure class="tc-photo tilt-l">
+          <img src="/equipment/carry_deck.jpg" alt="Carry deck crane staged in a rental yard" loading="lazy" decoding="async" />
+          <figcaption class="tc-cap">books itself at 10pm</figcaption>
+        </figure>
+        <span class="stamp"><span class="star"></span>Instant Reserve</span>
+        <h3>For machines a number can describe.</h3>
+        <p class="lead">Dig depth, working height, transport width. If the spec sheet can answer it, the system matches the job, checks what is actually free on those dates, and holds the unit. At ten at night, without waiting on anybody.</p>
       </div>
-      <div class="rv d1">
-        <span class="eyebrow"><span class="star"></span>Quote Required</span>
-        <h3 style="margin:16px 0 14px">For anything that comes off a load chart.</h3>
-        <p class="lead">Crane and rigging capacity changes with radius, so it is never priced automatically. Not by us, not by software, not ever. The job gets captured properly. Weight, pick height, set height, radius, access and ground, all of it, and it lands with <strong>your</strong> estimator as a complete brief. He still prices it. He just stops ringing the customer back to find out what the job is.</p>
+      <div class="trackcard rv d1">
+        <figure class="tc-photo tilt-r">
+          <img src="/equipment/crawler_crane.jpg" alt="Crawler crane with lattice boom on a job site" loading="lazy" decoding="async" />
+          <figcaption class="tc-cap">never priced by software</figcaption>
+        </figure>
+        <span class="stamp qr"><span class="star"></span>Quote Required</span>
+        <h3>For anything off a load chart.</h3>
+        <p class="lead">Crane capacity changes with radius, so it is never priced automatically. Not by us, not by software, not ever. The job lands with <strong>your</strong> estimator as a complete brief. He still prices it. He just stops ringing people back to ask what the job is.</p>
       </div>
     </div>
-    <p class="estats-note" style="margin-top:26px">Read that second one twice. Every owner in this business has been pitched software that claims it can quote a lift. We are telling you plainly that we refuse to, and why.</p>
+    <p class="estats-note" style="margin-top:30px">Every owner in this business has been pitched software that claims it can quote a lift. We refuse to. That is the point.</p>
   </div>
 </section>
 
 <!-- 5UPR YARDS — the cohort -->
 <section class="section cohort-sec" id="cohort">
+  <span class="cohort-ghost" aria-hidden="true">5</span>
+  <svg class="cohort-hook" viewBox="0 0 64 230" aria-hidden="true">
+    <g class="hook-swing" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2.4" stroke-linecap="round">
+      <line x1="32" y1="0" x2="32" y2="168"/>
+      <path d="M32 168 v12"/>
+      <path d="M32 198 a13 13 0 1 1 13 -13"/>
+      <circle cx="32" cy="174" r="4" fill="rgba(255,255,255,.28)" stroke="none"/>
+    </g>
+  </svg>
   <div class="wrap">
     <div class="cohort-head rv">
       <div>
@@ -481,27 +515,26 @@
   <div class="wrap">
     <div class="head left rv">
       <span class="eyebrow"><span class="star"></span>Three guarantees</span>
-      <h2>Setup, operations, outcome. There is no window where you carry this alone.</h2>
-      <p>One guarantee is a promise. Three of them, covering every stage, mean you never have to take our word for anything.</p>
+      <h2>Setup, operations, outcome. <span class="mku">Covered in writing.</span></h2>
     </div>
-    <div class="runs">
-      <div class="run rv">
-        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></svg></div>
-        <h4>The 7-Day Live Guarantee</h4>
-        <p>Live and taking real inquiries within seven business days of us getting what we need. If we miss it, your activation comes back and we keep working.</p>
+    <div class="gwall">
+      <div class="gcard rv">
+        <span class="g-no" aria-hidden="true">01</span>
+        <h3>Live in seven days</h3>
+        <p>Or your activation comes back, and we keep working anyway.</p>
       </div>
-      <div class="run rv d1">
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.5 2.8.7a2 2 0 0 1 1.7 2z"/></svg></div>
-        <h4>The 15-Minute Guarantee</h4>
-        <p>Every inquiry gets a real response inside fifteen minutes during your business hours. Miss it once and that month is free. You watch the timestamps yourself, live.</p>
+      <div class="gcard rv d1">
+        <span class="g-no" aria-hidden="true">02</span>
+        <h3>Answered in fifteen minutes</h3>
+        <p>Miss one inquiry in business hours and that month is free. You watch the timestamps live.</p>
       </div>
-      <div class="run rv d2">
-        <div class="ic"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.5 15a9 9 0 1 1-2-9.4L23 10"/></svg></div>
-        <h4>The Recovery Guarantee</h4>
-        <p>If we don't book more revenue than you paid us across the ninety days, we work the next ninety free. What counts gets signed at kickoff, on one page, before we make a single call.</p>
+      <div class="gcard rv d2">
+        <span class="g-no" aria-hidden="true">03</span>
+        <h3>We book more than we cost</h3>
+        <p>Or the next ninety days are free. What counts gets signed at kickoff, on one page.</p>
       </div>
     </div>
-    <p class="estats-note" style="margin-top:22px">There are four things we need from you, and we say them out loud on the call rather than burying them: your fleet data inside five days, script approvals inside two, your estimator turning quotes around in a business day, and you personally on the weekly twenty minutes. Those four are also the only things that make this fail.</p>
+    <p class="estats-note" style="margin-top:26px">Four things we need from you: fleet data in five days, script approvals in two, quotes turned in a business day, twenty minutes a week. Those four are also the only ways this fails.</p>
   </div>
 </section>
 
@@ -511,7 +544,7 @@
     <div class="head left rv">
       <span class="eyebrow"><span class="star"></span>Built for your kind of yard</span>
       <h2>Eight kinds of rental yard. Eight different leaks.</h2>
-      <p>A crane company quoting an operated lift and a tool yard renting to a guy with a trailer hitched leak money in completely different places. Pick your yard and the scan asks your questions, in your language, with your ticket sizes.</p>
+      <p>A crane company and a tool yard leak money in completely different places. Pick yours and the scan asks your questions, with your ticket sizes.</p>
     </div>
     <div class="segs-grid">
       <a class="segcard rv" href="/yards/cranes-lifting.html"><span class="sg-ic"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M6 21V4h2"/><path d="M6 4h13l-2.5 4H6"/><path d="M16.5 8v3"/><path d="M15 11h3l-1.5 3.5z"/><path d="M8 21v-4h4v4"/></svg></span><h3>Cranes &amp; Lifting</h3><p>Mobile cranes, boom trucks, crawlers, carry decks, rigging</p><span class="sg-go">See the leak →</span></a>
@@ -533,11 +566,12 @@
       <div class="rv">
         <span class="eyebrow"><span class="star"></span>What you keep</span>
         <h2 style="margin:16px 0 14px">RentalRevive is the people. HeyDozr is what stays.</h2>
-        <p class="lead" style="margin-bottom:26px">Our closers work your pipeline for ninety days and then they leave. That is the plan, not a catch. What they leave behind is the quoting and reservation system on your own website, still answering, still holding dates, still writing down what your estimator needs. Along with your fleet built and specced, your rate cards, your pricing rules and every script. You are not renting those from us.</p>
+        <p class="lead" style="margin-bottom:26px">Our closers work your pipeline for ninety days and then they leave. That is the plan, not a catch. What stays is the quoting system on your own website, your fleet built and specced, your rate cards and every script. You are not renting those from us.</p>
         <a class="btn btn-dark" href="/heydozr.html">How HeyDozr works <span class="chip">↗</span></a>
       </div>
       <div class="logcard rv d1">
-        <div class="lab"><span class="star"></span>What you still have on day 91</div>
+        <span class="stamp d91"><span class="star"></span>Day 91</span>
+        <div class="lab"><span class="star"></span>What you still have</div>
         <div class="logrow"><span class="t">Quote intake on your site</span><span class="ok">Running</span></div>
         <div class="logrow"><span class="t">Your fleet, built and specced</span><span class="ok">Yours</span></div>
         <div class="logrow"><span class="t">Rate cards and pricing rules</span><span class="ok">Yours</span></div>
@@ -622,83 +656,50 @@
 </section>
 
 
-<!-- FOOTER, deliberately a mirror of the nav. On a content-heavy site the
-     footer IS the sitemap; that is how owner.com carries 235 URLs without a
-     search box. Keep these groups identical to templates/nav.html. -->
+<!-- FOOTER — dark, short, and it ends with the wordmark instead of a
+     link forest. Deep links live in the nav panels and on /the-desk;
+     the footer routes to spine pages only. -->
 <footer>
   <div class="wrap foot-top">
     <div class="foot-brand">
-      <img src="/img/logo.png" alt="RentalRevive" />
-      <p>Recovered rentals for independent equipment rental yards. Every call answered, every quote chased, one page a month in dollars.</p>
+      <img src="/img/logo-light.png" alt="RentalRevive" />
+      <p>Recovered rentals for independent equipment yards. Every call answered, every quote chased, one page a month in dollars. The managed side of <a href="/heydozr.html">HeyDozr</a>.</p>
       <a class="btn btn-red" href="/onboard.html">Run the free scan <span class="chip">↗</span></a>
-      <span class="foot-badge"><span class="star"></span>Founding cohort open</span>
-      <p class="foot-parent">RentalRevive is the managed side of <a href="/heydozr.html">HeyDozr</a>, the quoting and reservation system that keeps running after our closers walk away.</p>
     </div>
 
     <div class="foot-cols">
       <div class="foot-col">
-        <h4>The leak</h4>
+        <h4>The Desk</h4>
+        <a href="/the-desk.html#catch">Catch every inquiry</a>
+        <a href="/the-desk.html#quote">Quote faster</a>
+        <a href="/the-desk.html#recover">Win back what's yours</a>
+        <a href="/the-desk.html#run">Run the yard</a>
+        <a href="/the-desk.html">All sixteen engines</a>
+      </div>
+      <div class="foot-col">
+        <h4>5UPR Yards</h4>
+        <a href="/founding-partners.html">How the cohort works</a>
+        <a href="/case-studies.html">Case studies</a>
+        <a href="/heydozr.html">HeyDozr</a>
+        <a href="/onboard.html">Hold a seat</a>
+      </div>
+      <div class="foot-col">
+        <h4>Resources</h4>
         <a href="/the-leak.html">What's leaking</a>
         <a href="/the-leak/how-we-find-it.html">How we find it</a>
-        <a href="/run/response-clock.html">The Response Clock</a>
-        <a href="/onboard.html">Run the free scan</a>
-      </div>
-      <div class="foot-col">
-        <h4>Catch every inquiry</h4>
-        <a href="/catch/never-missed-counter.html">The Never-Missed Counter</a>
-        <a href="/catch/after-hours.html">After-hours cover</a>
-        <a href="/catch/voice-agent.html">The Voice Agent</a>
-        <a href="/catch/every-channel.html">Every channel, caught</a>
-      </div>
-      <div class="foot-col">
-        <h4>Quote faster</h4>
-        <a href="/quote/60-second-quote.html">The 60-Second Quote</a>
-        <a href="/quote/instant-reserve.html">Instant Reserve</a>
-        <a href="/quote/quote-required.html">Quote Required</a>
-        <a href="/quote/pricing-rules.html">Your pricing rules</a>
-      </div>
-      <div class="foot-col">
-        <h4>Win back what's yours</h4>
-        <a href="/recover/dead-quotes.html">The dead quote pile</a>
-        <a href="/recover/comeback-engine.html">The Comeback Engine</a>
-        <a href="/recover/reviews.html">Reviews that come back</a>
-        <a href="/recover/your-list.html">Your own list, worked</a>
-      </div>
-      <div class="foot-col">
-        <h4>Run the yard</h4>
-        <a href="/run/yard-online.html">Your yard, online</a>
-        <a href="/run/live-availability.html">Live availability</a>
-        <a href="/run/paperwork.html">Paperwork, signed</a>
-        <a href="/run/one-page-a-month.html">One page a month</a>
-      </div>
-      <div class="foot-col">
-        <h4>Your kind of yard</h4>
-        <a href="/yards/cranes-lifting.html">Cranes &amp; lifting</a>
-        <a href="/yards/earthmoving.html">Earthmoving</a>
-        <a href="/yards/aerial-access.html">Aerial &amp; access</a>
-        <a href="/yards/compact-machinery.html">Compact machinery</a>
-        <a href="/yards/material-handling.html">Material handling</a>
-        <a href="/yards/road-concrete-compaction.html">Road, concrete &amp; compaction</a>
-        <a href="/yards/power-climate-site-services.html">Power, climate &amp; site services</a>
-        <a href="/yards/heavy-haul-specialty.html">Heavy haul &amp; specialty</a>
-      </div>
-      <div class="foot-col">
-        <h4>Company</h4>
-        <a href="/the-desk.html">The Desk</a>
-        <a href="/heydozr.html">HeyDozr</a>
-        <a href="/case-studies.html">Case studies</a>
-        <a href="/founding-partners.html">Founding partners</a>
         <a href="/guides.html">Guides</a>
-        <a href="/privacy">Privacy policy</a>
-        <a href="/terms">Terms of service</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
       </div>
     </div>
   </div>
 
   <div class="wrap foot-bottom">
     <span>© 2026 RentalRevive by HeyDozr. All rights reserved.</span>
-    <span>Independent rental yards in the US, Australia and the Gulf · the scan is free either way.</span>
+    <span>Independent yards in the US, Australia and the Gulf · the scan is free either way.</span>
   </div>
+
+  <div class="foot-mega" aria-hidden="true"><span>RentalRevive</span></div>
 </footer>
 
 

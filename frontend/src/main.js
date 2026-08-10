@@ -11,6 +11,29 @@ const io = new IntersectionObserver(
 )
 document.querySelectorAll('.rv').forEach((el) => io.observe(el))
 
+/* stat strip: the numerals count up once, like a panel powering on */
+const strip = document.querySelector('.stat-strip')
+if (strip && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const sio = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (!e.isIntersecting) return
+    sio.disconnect()
+    strip.querySelectorAll('.stat b').forEach((b) => {
+      const m = b.textContent.match(/^(\d+)([\s\S]*)$/)
+      if (!m) return
+      const to = +m[1]
+      const rest = m[2]
+      const t0 = performance.now()
+      const tick = (now) => {
+        const p = Math.min(1, (now - t0) / 900)
+        b.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))) + rest
+        if (p < 1) requestAnimationFrame(tick)
+      }
+      requestAnimationFrame(tick)
+    })
+  }), { threshold: 0.4 })
+  sio.observe(strip)
+}
+
 /* nav: frost + shrink on scroll (cheap, class-toggle only) */
 const nav = document.querySelector('.nav')
 let navOn = false
@@ -143,7 +166,10 @@ if (rig) {
   }
   const renderGauge = (g) => {
     const val = Math.max(0, Math.min(100, g.s.v))
-    g.needle.style.transform = `rotate(${(val * 1.8 - 90).toFixed(2)}deg)`
+    /* SVG attribute rotation with an explicit pivot: CSS transform-origin on
+       the <g> resolved against the wrong box in Chrome, which pivoted the
+       needle around the dial centre instead of the hub. */
+    g.needle.setAttribute('transform', `rotate(${(val * 1.8 - 90).toFixed(2)} 100 112)`)
     const iv = Math.round(val)
     if (iv !== g.shown) { g.shown = iv; g.valEl.textContent = iv }
   }

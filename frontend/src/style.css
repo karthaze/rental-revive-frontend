@@ -660,7 +660,7 @@ strong,b{color:var(--ink);font-weight:700}
 .g-dial .tk-maj{stroke:rgba(251,246,240,.6);stroke-width:2}
 .g-dial .tk-num{fill:rgba(251,246,240,.5);font-family:ui-monospace,Menlo,monospace;font-size:10px;text-anchor:middle}
 .g-base{stroke:rgba(255,255,255,.12);stroke-width:1}
-.g-needle{transform-box:view-box;transform-origin:100px 112px;will-change:transform}
+.g-needle{will-change:transform} /* pivot comes from the SVG rotate() attribute, not CSS */
 .g-needle path{fill:#ff5347;filter:drop-shadow(0 2px 2px rgba(0,0,0,.55));transition:fill .5s var(--ease)}
 .g-needle path:last-child{fill:#c9c2b8}
 .rig.on .g-needle path{fill:#4ade80}
@@ -1468,4 +1468,76 @@ footer::before{display:none}
   .nav-menu a{padding:9px 10px}
   .nm-foot{border-top:0;padding:6px 10px 0}
   .nav-group::after{display:none}
+}
+
+/* ============================================================
+   HUMAN PASS 2 — machinery in motion
+   ------------------------------------------------------------
+   The page had one moving thing (the rig). Now the machines do
+   the talking: a truck hauls the install across the steps, an
+   excavator digs at the leak line, the cohort's 5 hangs off a
+   crane hook, and the hero finishes its own story.
+   ============================================================ */
+
+/* Overscroll rubber-banding showed the white canvas above the cream
+   page and below the dark footer. The canvas is two-tone now. */
+html{background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 50%,var(--char) 50%,var(--char) 100%)}
+
+/* --- HERO: the payoff toast was hidden on desktop, so the demo told
+   half a story — a missed call with no catch. Show the catch. --- */
+@media(min-width:1080px){
+  .hero-demo .toast.b{display:block;top:auto;left:auto;bottom:22px;right:18px;max-width:240px}
+}
+.hero-demo.in .toast.a{animation:toastIn .6s var(--ease) .5s backwards,bob 5.5s ease-in-out 1.4s infinite}
+.hero-demo.in .toast.b{animation:toastIn .6s var(--ease) 1.5s backwards,bob 6.5s ease-in-out 2.4s infinite}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/* --- STEPS: four beats, install before closers, truck hauls it --- */
+.steps.four{grid-template-columns:repeat(4,1fr);gap:16px}
+.steps.four .step h3{font-size:18.5px}
+.steps.four .step p{font-size:13.8px}
+.step-day{display:inline-block;margin-left:10px;font-family:ui-monospace,Menlo,monospace;
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);
+  vertical-align:6px}
+.steps-route{position:relative;height:48px;margin:4px 2px 20px;
+  border-bottom:2.5px dashed rgba(36,31,28,.25)}
+.route-truck{position:absolute;bottom:-3px;left:0;width:66px;height:auto;color:var(--ink)}
+.steps-route.in .route-truck{animation:haul 3.4s cubic-bezier(.45,.05,.35,1) .3s forwards}
+@keyframes haul{to{left:calc(100% - 70px)}}
+@media(max-width:1080px){.steps.four{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.steps.four{grid-template-columns:1fr}}
+
+/* --- LEAK: the excavator digs at the section's closing line --- */
+.digger-row{display:flex;justify-content:flex-end;padding-right:5%;margin:26px 0 -14px;pointer-events:none}
+.digger{width:132px;height:auto}
+.dg-arm{transform-box:view-box;transform-origin:72px 42px;animation:dig 3.8s ease-in-out infinite}
+@keyframes dig{0%,100%{transform:rotate(0)}35%{transform:rotate(-8deg)}70%{transform:rotate(4deg)}}
+.digger-row + .leak-close{margin-top:0}
+
+/* --- COHORT: the ghost 5 hangs off a crane hook --- */
+.cohort-hook{position:absolute;top:0;right:clamp(90px,14vw,260px);width:56px;height:auto;pointer-events:none}
+.hook-swing{transform-box:view-box;transform-origin:32px 0;animation:sway 5.5s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-2.2deg)}50%{transform:rotate(2.2deg)}}
+
+/* --- FOOTER: hazard tape across the top edge --- */
+footer::before{content:"";display:block;position:absolute;top:0;left:0;right:0;height:6px;
+  background:repeating-linear-gradient(-45deg,var(--red) 0 14px,var(--char) 14px 28px);opacity:.85}
+
+/* --- SEGMENTS: name-only cards read as empty; the fleet line comes
+   back short, and the machine icon does a little dig on hover --- */
+.segcard{padding:20px 18px}
+.segcard p{display:block;font-size:12.5px;line-height:1.45;color:var(--mut);margin-top:5px}
+.segcard h3{font-size:15.5px}
+.segcard:hover{transform:translateY(-4px) rotate(-.5deg)}
+.segcard:hover .sg-ic svg{animation:wiggle .7s ease-in-out}
+@keyframes wiggle{0%,100%{transform:rotate(0)}30%{transform:rotate(-9deg)}65%{transform:rotate(6deg)}}
+
+/* --- WHAT YOU KEEP: the ledger wears its own inspection tag --- */
+.logcard{position:relative}
+.stamp.d91{position:absolute;top:-15px;right:18px;background:var(--surface);z-index:2}
+
+@media (prefers-reduced-motion:reduce){
+  .hero-demo.in .toast.a,.hero-demo.in .toast.b,.dg-arm,.hook-swing{animation:none}
+  .steps-route.in .route-truck{animation:none;left:calc(100% - 70px)}
 }

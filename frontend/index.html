@@ -202,6 +202,22 @@
       </div>
     </div>
 
+    <div class="digger-row" aria-hidden="true">
+      <svg class="digger" viewBox="0 0 150 84">
+        <g fill="var(--peach)" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="36" width="42" height="22" rx="4"/>
+          <rect x="38" y="20" width="22" height="16" rx="3"/>
+          <path d="M24 64 h58 l-7 11 h-44 z"/>
+        </g>
+        <circle cx="36" cy="69" r="3.2" fill="var(--ink)"/>
+        <circle cx="52" cy="69" r="3.2" fill="var(--ink)"/>
+        <circle cx="68" cy="69" r="3.2" fill="var(--ink)"/>
+        <g class="dg-arm" fill="none" stroke="var(--ink)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M72 42 L106 22 L132 42"/>
+          <path d="M132 42 l7 13 -16 3 z" fill="var(--red)" stroke-width="2.4"/>
+        </g>
+      </svg>
+    </div>
     <p class="leak-close rv">No rental platform on the market tracks how long your yard takes to answer a quote, or how many of those quotes you win. <strong>You cannot feel a leak you never metered.</strong></p>
   </div>
 </section>
@@ -272,25 +288,44 @@
     <div class="head left rv">
       <span class="eyebrow"><span class="star"></span>What we actually do</span>
       <h2>We are your sales department for ninety days. Not an answering service.</h2>
-      <p>Everyone we work already called you, asked for a price, or rented from you before. We just stop them slipping away while your team is loading a truck.</p>
+      <p>The machine goes in first, then the people go to work on top of it. And everyone they call already called you, asked for a price, or rented from you before.</p>
     </div>
-    <div class="steps">
+    <div class="steps-route rv" aria-hidden="true">
+      <svg class="route-truck" viewBox="0 0 96 46">
+        <g fill="var(--bg)" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="16" width="50" height="16" rx="2"/>
+          <path d="M16 16 v-5 l8 -6 6 6 8 -3 v8"/>
+          <path d="M54 32 v-14 h16 l12 9 v5 z"/>
+          <path d="M58 18 v7 h10"/>
+        </g>
+        <circle cx="17" cy="36" r="6" fill="#26231F" stroke="currentColor" stroke-width="2.6"/>
+        <circle cx="41" cy="36" r="6" fill="#26231F" stroke="currentColor" stroke-width="2.6"/>
+        <circle cx="73" cy="36" r="6" fill="#26231F" stroke="currentColor" stroke-width="2.6"/>
+      </svg>
+    </div>
+    <div class="steps four">
       <div class="step rv">
-        <span class="step-no">1</span>
-        <h3>Type your company.</h3>
-        <p>The free scan prices your leak from your own footprint. Missed calls, dead quotes, quiet accounts. Two minutes.</p>
-        <a class="step-link" href="/onboard.html">Run the scan →</a>
+        <span class="step-no">1</span><span class="step-day">Day 0</span>
+        <h3>The scan.</h3>
+        <p>Type your company. Your leak, priced from your own footprint, in two minutes.</p>
+        <a class="step-link" href="/onboard.html">Run it now →</a>
       </div>
       <div class="step rv d1">
-        <span class="step-no">2</span>
-        <h3>Our closers work your pipeline.</h3>
-        <p>They answer as your yard, from scripts you approve. Every inquiry inside fifteen minutes, every quote chased to a yes or a no.</p>
-        <a class="step-link" href="/the-desk.html">See every engine →</a>
+        <span class="step-no">2</span><span class="step-day">Week 1</span>
+        <h3>The install.</h3>
+        <p><strong>HeyDozr goes in first.</strong> Quote intake live on your own website, your fleet specced, availability wired. The machine is running before a single call is made.</p>
+        <a class="step-link" href="/heydozr.html">How HeyDozr works →</a>
       </div>
       <div class="step rv d2">
-        <span class="step-no">3</span>
-        <h3>You read one page a month.</h3>
-        <p>Calls caught, quotes worked, dollars recovered. What counts as recovered gets signed at kickoff.</p>
+        <span class="step-no">3</span><span class="step-day">Day 7–90</span>
+        <h3>The closers go to work.</h3>
+        <p>On top of that machine. Answering as your yard, from scripts you approve, every inquiry inside fifteen minutes.</p>
+        <a class="step-link" href="/the-desk.html">See every engine →</a>
+      </div>
+      <div class="step rv d3">
+        <span class="step-no">4</span><span class="step-day">Monthly</span>
+        <h3>You read one page.</h3>
+        <p>Calls caught, quotes worked, dollars recovered. What counts got signed at kickoff.</p>
       </div>
     </div>
 
@@ -389,6 +424,14 @@
 <!-- 5UPR YARDS — the cohort -->
 <section class="section cohort-sec" id="cohort">
   <span class="cohort-ghost" aria-hidden="true">5</span>
+  <svg class="cohort-hook" viewBox="0 0 64 230" aria-hidden="true">
+    <g class="hook-swing" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2.4" stroke-linecap="round">
+      <line x1="32" y1="0" x2="32" y2="168"/>
+      <path d="M32 168 v12"/>
+      <path d="M32 198 a13 13 0 1 1 13 -13"/>
+      <circle cx="32" cy="174" r="4" fill="rgba(255,255,255,.28)" stroke="none"/>
+    </g>
+  </svg>
   <div class="wrap">
     <div class="cohort-head rv">
       <div>
@@ -525,7 +568,8 @@
         <a class="btn btn-dark" href="/heydozr.html">How HeyDozr works <span class="chip">↗</span></a>
       </div>
       <div class="logcard rv d1">
-        <div class="lab"><span class="star"></span>What you still have on day 91</div>
+        <span class="stamp d91"><span class="star"></span>Day 91</span>
+        <div class="lab"><span class="star"></span>What you still have</div>
         <div class="logrow"><span class="t">Quote intake on your site</span><span class="ok">Running</span></div>
         <div class="logrow"><span class="t">Your fleet, built and specced</span><span class="ok">Yours</span></div>
         <div class="logrow"><span class="t">Rate cards and pricing rules</span><span class="ok">Yours</span></div>

@@ -30,16 +30,16 @@
 
 
   <script type="module" crossorigin src="/assets/places-CuyG_Ndh.js"></script>
-  <script type="module" crossorigin src="/assets/main-B6MmiAfF.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/main-Dr0NZ9i9.css">
+  <script type="module" crossorigin src="/assets/main-BHeLqOmc.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-CSidhGZo.css">
 </head>
 <body class="page-heydozr">
 
-<!-- NAV, four groups, not six. Six outcome labels crammed into a pill
-     read as a list of words rather than a menu, so the outcome grouping
-     moved DOWN into the panel where it has room to be columns. The
-     trigger names what you'd click; the panel does the teaching.
-     One persistent CTA sitewide: run the free scan. -->
+<!-- NAV — four groups, each with a SMALL panel. The 16-engine mega grid
+     moved to /the-desk.html where it has a whole page; a dropdown's job
+     is to route, not to teach. Panels are narrow (≤560px), anchored to
+     their trigger, and every line is allowed to wrap, which is what
+     killed the clipped-text overflow. One persistent CTA sitewide. -->
 <nav class="nav" id="top">
   <a class="nav-logo" href="/">
     <img src="/img/logo.png" alt="RentalRevive" />
@@ -49,73 +49,45 @@
 
     <div class="nav-group">
       <button class="nav-trigger" type="button" aria-expanded="false" aria-controls="m-desk">The Desk</button>
-      <div class="nav-menu wide" id="m-desk">
-        <div class="nm-col">
-          <span class="nm-head">Catch every inquiry</span>
-          <a href="/catch/never-missed-counter.html">The Never-Missed Counter</a>
-          <a href="/catch/after-hours.html">After-hours cover</a>
-          <a href="/catch/voice-agent.html">The Voice Agent</a>
-          <a href="/catch/every-channel.html">Every channel, caught</a>
-        </div>
-        <div class="nm-col">
-          <span class="nm-head">Quote faster</span>
-          <a href="/quote/60-second-quote.html">The 60-Second Quote</a>
-          <a href="/quote/instant-reserve.html">Instant Reserve</a>
-          <a href="/quote/quote-required.html">Quote Required</a>
-          <a href="/quote/pricing-rules.html">Your pricing rules</a>
-        </div>
-        <div class="nm-col">
-          <span class="nm-head">Win back what's yours</span>
-          <a href="/recover/dead-quotes.html">The dead quote pile</a>
-          <a href="/recover/comeback-engine.html">The Comeback Engine</a>
-          <a href="/recover/reviews.html">Reviews that come back</a>
-          <a href="/recover/your-list.html">Your own list, worked</a>
-        </div>
-        <div class="nm-col">
-          <span class="nm-head">Run the yard</span>
-          <a href="/run/yard-online.html">Your yard, online</a>
-          <a href="/run/live-availability.html">Live availability</a>
-          <a href="/run/paperwork.html">Paperwork, signed</a>
-          <a href="/run/response-clock.html">The Response Clock</a>
-        </div>
-        <a class="nm-foot" href="/the-desk.html">See all sixteen engines in one place →</a>
+      <div class="nav-menu" id="m-desk">
+        <a href="/the-desk.html#catch"><b>Catch every inquiry</b><span>Phone, form, text, walk-in. Answered in fifteen minutes.</span></a>
+        <a href="/the-desk.html#quote"><b>Quote faster</b><span>The first real number usually wins the job.</span></a>
+        <a href="/the-desk.html#recover"><b>Win back what's yours</b><span>Dead quotes and quiet accounts, worked in your name.</span></a>
+        <a href="/the-desk.html#run"><b>Run the yard</b><span>Live availability, signed paperwork, the Response Clock.</span></a>
+        <a class="nm-foot" href="/the-desk.html">All sixteen engines, one page →</a>
       </div>
     </div>
 
     <div class="nav-group">
       <button class="nav-trigger" type="button" aria-expanded="false" aria-controls="m-yards">Your yard</button>
       <div class="nav-menu cols2" id="m-yards">
-        <div class="nm-col">
-          <a href="/yards/cranes-lifting.html">Cranes &amp; lifting</a>
-          <a href="/yards/earthmoving.html">Earthmoving</a>
-          <a href="/yards/aerial-access.html">Aerial &amp; access</a>
-          <a href="/yards/compact-machinery.html">Compact machinery</a>
-        </div>
-        <div class="nm-col">
-          <a href="/yards/material-handling.html">Material handling</a>
-          <a href="/yards/road-concrete-compaction.html">Road &amp; compaction</a>
-          <a href="/yards/power-climate-site-services.html">Power &amp; site services</a>
-          <a href="/yards/heavy-haul-specialty.html">Heavy haul &amp; specialty</a>
-        </div>
-        <a class="nm-foot" href="/onboard.html">Not sure? Run the scan and it asks your questions →</a>
+        <a href="/yards/cranes-lifting.html">Cranes &amp; lifting</a>
+        <a href="/yards/earthmoving.html">Earthmoving</a>
+        <a href="/yards/aerial-access.html">Aerial &amp; access</a>
+        <a href="/yards/compact-machinery.html">Compact machinery</a>
+        <a href="/yards/material-handling.html">Material handling</a>
+        <a href="/yards/road-concrete-compaction.html">Road &amp; compaction</a>
+        <a href="/yards/power-climate-site-services.html">Power &amp; site services</a>
+        <a href="/yards/heavy-haul-specialty.html">Heavy haul &amp; specialty</a>
+        <a class="nm-foot" href="/onboard.html">Not sure? The scan asks your questions →</a>
       </div>
     </div>
 
     <div class="nav-group">
       <button class="nav-trigger" type="button" aria-expanded="false" aria-controls="m-cohort">5UPR Yards</button>
       <div class="nav-menu" id="m-cohort">
-        <a href="/founding-partners.html"><b>How the cohort works</b><span>Five yards every ninety days, then the intake closes</span></a>
-        <a href="/case-studies.html"><b>Case studies</b><span>Real numbers, published with permission</span></a>
-        <a href="/heydozr.html"><b>HeyDozr</b><span>The system that stays after we leave</span></a>
+        <a href="/founding-partners.html"><b>How the cohort works</b><span>Five yards every ninety days, then the intake closes.</span></a>
+        <a href="/case-studies.html"><b>Case studies</b><span>Real numbers, published with permission.</span></a>
+        <a href="/heydozr.html"><b>HeyDozr</b><span>The system that stays after we leave.</span></a>
       </div>
     </div>
 
     <div class="nav-group">
       <button class="nav-trigger" type="button" aria-expanded="false" aria-controls="m-more">Resources</button>
       <div class="nav-menu" id="m-more">
-        <a href="/the-leak.html"><b>What's leaking</b><span>The four places a yard quietly loses work</span></a>
-        <a href="/the-leak/how-we-find-it.html"><b>How we find it</b><span>We call your yard as a contractor would, and time it</span></a>
-        <a href="/guides.html"><b>Guides</b><span>How to run the revenue side of a yard</span></a>
+        <a href="/the-leak.html"><b>What's leaking</b><span>The four places a yard quietly loses work.</span></a>
+        <a href="/the-leak/how-we-find-it.html"><b>How we find it</b><span>We call your yard like a contractor would, and time it.</span></a>
+        <a href="/guides.html"><b>Guides</b><span>Running the revenue side of a yard.</span></a>
       </div>
     </div>
 
@@ -251,83 +223,50 @@
 </section>
 
 
-<!-- FOOTER, deliberately a mirror of the nav. On a content-heavy site the
-     footer IS the sitemap; that is how owner.com carries 235 URLs without a
-     search box. Keep these groups identical to templates/nav.html. -->
+<!-- FOOTER — dark, short, and it ends with the wordmark instead of a
+     link forest. Deep links live in the nav panels and on /the-desk;
+     the footer routes to spine pages only. -->
 <footer>
   <div class="wrap foot-top">
     <div class="foot-brand">
-      <img src="/img/logo.png" alt="RentalRevive" />
-      <p>Recovered rentals for independent equipment rental yards. Every call answered, every quote chased, one page a month in dollars.</p>
+      <img src="/img/logo-light.png" alt="RentalRevive" />
+      <p>Recovered rentals for independent equipment yards. Every call answered, every quote chased, one page a month in dollars. The managed side of <a href="/heydozr.html">HeyDozr</a>.</p>
       <a class="btn btn-red" href="/onboard.html">Run the free scan <span class="chip">↗</span></a>
-      <span class="foot-badge"><span class="star"></span>Founding cohort open</span>
-      <p class="foot-parent">RentalRevive is the managed side of <a href="/heydozr.html">HeyDozr</a>, the quoting and reservation system that keeps running after our closers walk away.</p>
     </div>
 
     <div class="foot-cols">
       <div class="foot-col">
-        <h4>The leak</h4>
+        <h4>The Desk</h4>
+        <a href="/the-desk.html#catch">Catch every inquiry</a>
+        <a href="/the-desk.html#quote">Quote faster</a>
+        <a href="/the-desk.html#recover">Win back what's yours</a>
+        <a href="/the-desk.html#run">Run the yard</a>
+        <a href="/the-desk.html">All sixteen engines</a>
+      </div>
+      <div class="foot-col">
+        <h4>5UPR Yards</h4>
+        <a href="/founding-partners.html">How the cohort works</a>
+        <a href="/case-studies.html">Case studies</a>
+        <a href="/heydozr.html">HeyDozr</a>
+        <a href="/onboard.html">Hold a seat</a>
+      </div>
+      <div class="foot-col">
+        <h4>Resources</h4>
         <a href="/the-leak.html">What's leaking</a>
         <a href="/the-leak/how-we-find-it.html">How we find it</a>
-        <a href="/run/response-clock.html">The Response Clock</a>
-        <a href="/onboard.html">Run the free scan</a>
-      </div>
-      <div class="foot-col">
-        <h4>Catch every inquiry</h4>
-        <a href="/catch/never-missed-counter.html">The Never-Missed Counter</a>
-        <a href="/catch/after-hours.html">After-hours cover</a>
-        <a href="/catch/voice-agent.html">The Voice Agent</a>
-        <a href="/catch/every-channel.html">Every channel, caught</a>
-      </div>
-      <div class="foot-col">
-        <h4>Quote faster</h4>
-        <a href="/quote/60-second-quote.html">The 60-Second Quote</a>
-        <a href="/quote/instant-reserve.html">Instant Reserve</a>
-        <a href="/quote/quote-required.html">Quote Required</a>
-        <a href="/quote/pricing-rules.html">Your pricing rules</a>
-      </div>
-      <div class="foot-col">
-        <h4>Win back what's yours</h4>
-        <a href="/recover/dead-quotes.html">The dead quote pile</a>
-        <a href="/recover/comeback-engine.html">The Comeback Engine</a>
-        <a href="/recover/reviews.html">Reviews that come back</a>
-        <a href="/recover/your-list.html">Your own list, worked</a>
-      </div>
-      <div class="foot-col">
-        <h4>Run the yard</h4>
-        <a href="/run/yard-online.html">Your yard, online</a>
-        <a href="/run/live-availability.html">Live availability</a>
-        <a href="/run/paperwork.html">Paperwork, signed</a>
-        <a href="/run/one-page-a-month.html">One page a month</a>
-      </div>
-      <div class="foot-col">
-        <h4>Your kind of yard</h4>
-        <a href="/yards/cranes-lifting.html">Cranes &amp; lifting</a>
-        <a href="/yards/earthmoving.html">Earthmoving</a>
-        <a href="/yards/aerial-access.html">Aerial &amp; access</a>
-        <a href="/yards/compact-machinery.html">Compact machinery</a>
-        <a href="/yards/material-handling.html">Material handling</a>
-        <a href="/yards/road-concrete-compaction.html">Road, concrete &amp; compaction</a>
-        <a href="/yards/power-climate-site-services.html">Power, climate &amp; site services</a>
-        <a href="/yards/heavy-haul-specialty.html">Heavy haul &amp; specialty</a>
-      </div>
-      <div class="foot-col">
-        <h4>Company</h4>
-        <a href="/the-desk.html">The Desk</a>
-        <a href="/heydozr.html">HeyDozr</a>
-        <a href="/case-studies.html">Case studies</a>
-        <a href="/founding-partners.html">Founding partners</a>
         <a href="/guides.html">Guides</a>
-        <a href="/privacy">Privacy policy</a>
-        <a href="/terms">Terms of service</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
       </div>
     </div>
   </div>
 
   <div class="wrap foot-bottom">
     <span>© 2026 RentalRevive by HeyDozr. All rights reserved.</span>
-    <span>Independent rental yards in the US, Australia and the Gulf · the scan is free either way.</span>
+    <span>Independent yards in the US, Australia and the Gulf · the scan is free either way.</span>
   </div>
+
+  <div class="foot-mega" aria-hidden="true"><span>RentalRevive</span></div>
 </footer>
 
 
