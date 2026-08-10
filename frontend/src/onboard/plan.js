@@ -43,8 +43,8 @@ import { segmentById } from '../../../common/segments.js'
    02-INDUSTRY-LANGUAGE-GUIDE §1.
    ------------------------------------------------------------ */
 export const BRAND = {
-  software: 'HeyDozr',
-  managed: 'RentalRevive by HeyDozr',
+  software: 'Captain Yard',
+  managed: 'RentalRevive by Captain Yard',
   engine: 'Rent at Scale Engine',
 }
 

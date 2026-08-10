@@ -2424,7 +2424,7 @@ function cookingOverlay(L, S) {
     const cook = el('div', 'cook')
     cook.innerHTML = `
       <div class="cook-inner">
-        <span class="cook-brand"><span class="star"></span>RENTALREVIVE <em>by HeyDozr</em></span>
+        <span class="cook-brand"><span class="star"></span>RENTALREVIVE <em>by Captain Yard</em></span>
         <h2 class="cook-title">Building your recovery plan.</h2>
         <div class="cook-list">
           ${stages.map((s, i) => `
