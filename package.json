@@ -7,11 +7,12 @@
     "dev": "npm run render && vite",
     "dev:convex": "convex dev",
     "dev:probe": "node services/form-probe/index.mjs",
-    "render": "node build/render.mjs",
+    "render": "node build/yards.mjs && node build/render.mjs",
     "build": "npm run render && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "tsc -p services/convex"
+    "typecheck": "tsc -p services/convex",
+    "yards": "node build/yards.mjs"
   },
   "devDependencies": {
     "@edge-runtime/vm": "^5.0.0",

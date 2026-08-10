@@ -1700,3 +1700,60 @@ footer::before{content:"";display:block;position:absolute;top:0;left:0;right:0;h
   .desk-jump{gap:8px}
   .desk-jump a{font-size:13.5px;padding:12px 15px}
 }
+
+/* ============================================================
+   YARD PAGES — eight segments, generated from common/segments.js
+   ============================================================ */
+.yard-hero{padding-top:clamp(120px,14vw,168px);padding-bottom:clamp(36px,4.5vw,58px)}
+.yard-hero h1{font-size:clamp(38px,5.4vw,62px);letter-spacing:-.035em;margin-bottom:18px}
+.yard-hero .lead{max-width:62ch;margin-bottom:30px}
+
+.yard-leaks{grid-template-columns:repeat(4,1fr)}
+.yard-leaks .leakcard{padding:26px 24px}
+.yard-leaks .lk-top{margin-bottom:14px}
+.yard-leaks .lk-no{font-family:var(--disp);font-size:34px;font-weight:800;letter-spacing:-.04em;
+  line-height:1;color:transparent;-webkit-text-stroke:1.4px rgba(228,38,44,.5)}
+.yard-leaks h3{font-size:18px;margin-bottom:9px}
+.yard-leaks p{font-size:14.4px;line-height:1.6;color:var(--body)}
+@media(max-width:1080px){.yard-leaks{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.yard-leaks{grid-template-columns:1fr}}
+
+.yard-cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,52px);align-items:start}
+@media(max-width:900px){.yard-cols{grid-template-columns:1fr;gap:28px}}
+
+/* fleet: a checked list, two columns of it on a wide screen */
+.tick-list{list-style:none;margin:0;padding:0;columns:2;column-gap:26px}
+.tick-list li{position:relative;padding-left:26px;margin-bottom:13px;font-size:15px;
+  line-height:1.45;color:var(--ink);font-weight:600;break-inside:avoid}
+.tick-list li::before{content:"";position:absolute;left:0;top:2px;width:16px;height:16px;
+  border-radius:50%;background:var(--peach)}
+.tick-list li::after{content:"";position:absolute;left:4.4px;top:6.6px;width:7px;height:4px;
+  border-left:2px solid var(--red);border-bottom:2px solid var(--red);transform:rotate(-45deg)}
+@media(max-width:560px){.tick-list{columns:1}}
+
+.brief-list{list-style:none;margin:4px 0 0;padding:0}
+.brief-list li{display:flex;align-items:center;gap:10px;padding:11px 0;
+  border-bottom:1px solid var(--line);font-size:14.6px;color:var(--ink);font-weight:600}
+.brief-list li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red);flex:none}
+.brief-note{margin-top:16px;font-size:13.4px;line-height:1.55;color:var(--mut)}
+
+/* demand signals: the work types that create rentals */
+.signal-list{list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(3,1fr);gap:12px}
+.signal-list li{background:rgba(255,255,255,.66);border:1px solid var(--line);
+  border-radius:16px;padding:18px 20px;font-size:15px;font-weight:600;color:var(--ink)}
+@media(max-width:900px){.signal-list{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.signal-list{grid-template-columns:1fr}}
+
+/* ticket bands: relative scale, no invented dollar promises */
+.tb{display:flex;flex-direction:column;gap:14px;max-width:760px}
+.tb-row{display:grid;grid-template-columns:minmax(140px,180px) 1fr;gap:18px;align-items:center}
+.tb-lab{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--ink);font-weight:700}
+.tb-bar{display:block;height:14px;border-radius:var(--pill);background:var(--surface-alt);
+  border:1px solid var(--line);overflow:hidden}
+.tb-bar i{display:block;height:100%;border-radius:var(--pill);
+  background:linear-gradient(90deg,var(--red),#ff6f61);min-width:6%}
+@media(max-width:560px){
+  .tb-row{grid-template-columns:1fr;gap:7px}
+  .tb-bar{height:12px}
+}
