@@ -1330,21 +1330,40 @@ body::before{display:none}
 .mwatch g{fill:none;stroke:rgba(36,31,28,.15);stroke-width:2.4;
   stroke-linecap:round;stroke-linejoin:round}
 .mwatch .thick{stroke-width:4}
-#guarantees,#segments{position:relative;overflow:hidden}
-#guarantees .wrap,#segments .wrap{position:relative;z-index:1}
-/* The excavator is LAID OUT beside the closing line rather than floated
-   over it — absolutely positioned, it landed on top of the paragraph. */
-.leak-foot{display:flex;align-items:center;gap:clamp(24px,4vw,56px);
-  margin-top:34px;padding-top:26px;border-top:1px solid var(--line)}
-.leak-foot .leak-close{margin-top:0;padding-top:0;border-top:0;flex:1 1 auto}
-.mw-leaks{position:static;flex:0 0 250px;width:250px;margin-left:auto}
-.mw-guar{right:10px;top:44px;width:240px}
-.mw-segs{right:14px;top:26px;width:320px}
-@media(max-width:1180px){.leak-foot{display:block}}
+#leaks,#guarantees,#segments{position:relative;overflow:hidden}
+
+/* ANCHORING — the whole reason the first placement read as random.
+   Every machine now hangs off its section head, which pins BOTH edges to
+   real page structure: right:0 puts it flush with the right edge of the
+   card grid below, bottom:0 rests its tracks on the line where the cards
+   start. So each machine is parked ON the card row in the empty half beside
+   a left-aligned headline, never floating in the middle of a gap. */
+.head{position:relative}
+/* A head is capped at 760px, which would put right:0 in the middle of the
+   headline. Only the heads that carry a machine open to the full column, and
+   the 760px measure moves onto the text itself so nothing reflows — the head
+   just gains an empty right column for the machine to park in. */
+/* The head RESERVES a column for the machine with padding rather than
+   capping the text — the h2 already carries its own 26ch measure, and two
+   competing max-widths is a fight the wrong one keeps winning. Padding is
+   inside the border box, so the text simply cannot reach the machine, and
+   right:0 still resolves against the padding box's outer edge. */
+.head.head-mach{max-width:none;padding-right:var(--mach-col)}
+#leaks .head-mach{--mach-col:300px}
+#guarantees .head-mach{--mach-col:280px}
+#segments .head-mach{--mach-col:350px}
+.head > .eyebrow,.head > h2,.head > p{position:relative;z-index:1}
+.mwatch{right:0;bottom:0}
+.mw-leaks{width:250px}
+.mw-guar{width:230px}
+.mw-segs{width:300px}
 /* The excavator replaces the old sticker digger, so it keeps the dig. */
 .ex-arm{transform-box:view-box;transform-origin:100px 202px;animation:dig 5s ease-in-out infinite}
 .cr-line{transform-box:view-box;transform-origin:399px 85px;animation:sway 6s ease-in-out infinite}
-@media(max-width:1180px){.mwatch{display:none}}
+@media(max-width:1180px){
+  .mwatch{display:none}
+  .head.head-mach{padding-right:0}   /* no machine, no reserved column */
+}
 
 /* --- NAV PANELS: small, wrapping, viewport-safe ------------ */
 .nav-menu{width:min(400px,calc(100vw - 40px));padding:12px;border-radius:22px;

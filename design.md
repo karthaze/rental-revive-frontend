@@ -562,9 +562,16 @@ segments. Rules:
 - **viewBox must be cropped to the drawing's bounds.** The first pass left the
   machines sitting in the left half of a loose box, so half of every watermark
   was empty space and no CSS position could put them where they belonged.
-- Laid out, not floated, wherever text could reach them: the excavator is a
-  flex sibling of the closing line (`.leak-foot`), not an absolute overlay.
-- Hidden under 1180px — there is no empty half to park in.
+- **Anchored to real page structure, or they read as random.** Each machine
+  hangs off its section head (`.head.head-mach`, `right:0; bottom:0`), which
+  pins both edges to something the eye already sees: the right edge lands flush
+  with the right edge of the card grid below, and the bottom rests 38px above
+  the row where those cards start. All three sections measure identically.
+- The head **reserves** a column with `padding-right: var(--mach-col)` rather
+  than capping the text — the h2 already carries a 26ch measure, and two
+  competing max-widths is a fight the wrong one wins. Gives a constant 50px
+  of clearance.
+- Hidden under 1180px, and the reserved column collapses with them.
 
 Two carry motion: the excavator's arm digs, the crane's hoist line sways.
 
