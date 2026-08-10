@@ -38,7 +38,7 @@ RentalRevive                                    [ Run the free scan ]  ← the o
   Company                     Resources
   ───────                     ─────────
   Our story                   Guides
-  HeyDozr                     Case studies
+  Captain Yard                     Case studies
   Founding partners           The Response Clock report
   Contact                     Downloads
 ```
@@ -58,7 +58,7 @@ RentalRevive                                    [ Run the free scan ]  ← the o
 | `/how-it-works` | Catch → work → your counter books → you count | Run the free scan | new |
 | `/the-desk` | The system hub: all 16 engines, grouped | Run the free scan | new |
 | `/case-studies` | Proof rail + founding-partner offer | Become a founding partner | new |
-| `/heydozr` | The parent brand and what you keep afterwards | Run the free scan | new |
+| `/captain-yard` | The parent brand and what you keep afterwards | Run the free scan | new |
 | `/founding-partners` | The cohort offer, terms, what they owe us | Apply | new |
 
 ### Tier 1 — capability pages, one per engine
@@ -150,15 +150,15 @@ So the rail ships **as an offer, not as an empty state.** Same `{components.peek
 
 ---
 
-## Where HeyDozr sits
+## Where Captain Yard sits
 
-The doc set specifies **two sites** — `rentalrevive.com` books the Scan, `heydozr.com` explains the software and carries the machine-readable fleet catalogue. That stays true. But RentalRevive is *"by HeyDozr"*, and a prospect who never hears the parent brand cannot understand what he keeps at day 90.
+The doc set specifies **two sites** — `rentalrevive.com` books the Scan, `captainyard.com` explains the software and carries the machine-readable fleet catalogue. That stays true. But RentalRevive is *"by Captain Yard"*, and a prospect who never hears the parent brand cannot understand what he keeps at day 90.
 
 So: **one page on this site, plus one line everywhere.**
 
-- `/heydozr` — the software that stays running after the closers walk away. What it is, the two tracks, and what happens at day 90.
-- The nav wordmark reads **RentalRevive** with `by HeyDozr` set small beneath in `{colors.ink-muted}`.
-- The footer carries the brand line and a link out to `heydozr.com`.
+- `/captain-yard` — the software that stays running after the closers walk away. What it is, the two tracks, and what happens at day 90.
+- The nav wordmark reads **RentalRevive** alone. The `by Captain Yard` byline was removed — it crowded the logo and the relationship is carried by /captain-yard and the footer instead.
+- The footer carries the brand line and a link out to `captainyard.com`.
 - Every capability page that is actually software rather than labour ends on the same sentence: *this one keeps running after we leave.*
 
 That answers the objection the sales script says closes skeptics — *"what happens when you walk away?"* — before it is asked.
@@ -205,7 +205,7 @@ Three reasons, in order of weight:
 
 Shipped instead: **`/the-desk`** — one page, four anchored sections
 (`#catch`, `#quote`, `#recover`, `#run`), all sixteen engines with what each
-does, who runs it (HeyDozr / our closers / you), and the week it goes live.
+does, who runs it (Captain Yard / our closers / you), and the week it goes live.
 
 Remaining build: 8 segment pages under `/yards/*` (these *do* map to real
 search intent), plus `/case-studies`, `/founding-partners`, `/the-leak`,
