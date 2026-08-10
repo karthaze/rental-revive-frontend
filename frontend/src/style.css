@@ -1588,3 +1588,115 @@ footer::before{content:"";display:block;position:absolute;top:0;left:0;right:0;h
   .ex-arm,.cr-line{animation:none}
   .steps-route.in .route-truck{animation:none;left:calc(100% - 70px)}
 }
+
+/* ============================================================
+   THE DESK — one page for all sixteen engines.
+   Replaces the sixteen orphan capability pages: those were named
+   after engines we invented, so nobody searches them, and the
+   whole site already routes to /the-desk#catch|quote|recover|run.
+   ============================================================ */
+.desk-hero{padding-top:clamp(120px,14vw,168px);padding-bottom:clamp(40px,5vw,64px)}
+.desk-hero h1{font-size:clamp(38px,5.2vw,60px);letter-spacing:-.035em;margin-bottom:20px}
+.desk-hero .lead{max-width:60ch}
+
+.desk-jump{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.desk-jump a{font-size:14px;font-weight:700;color:var(--ink);text-decoration:none;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--pill);
+  padding:11px 18px;transition:border-color .3s var(--ease),color .3s var(--ease)}
+.desk-jump a:hover{border-color:var(--red);color:var(--red)}
+
+.desk-key{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:44px;
+  padding-top:30px;border-top:1px solid var(--line)}
+.dk p{font-size:13.8px;line-height:1.55;color:var(--mut);margin-top:10px}
+
+/* who runs it — the label that keeps software and people distinct */
+.eng-by{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;border-radius:var(--pill);padding:6px 12px;
+  border:1px solid currentColor}
+.eng-by::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.eng-by.soft{color:var(--red)}
+.eng-by.people{color:var(--green)}
+.eng-by.you{color:var(--mut)}
+.eng-by.split{border:0;padding:0;gap:8px;flex-wrap:wrap}
+.eng-by.split::before{display:none}
+.eng-by.split i{display:inline-flex;align-items:center;gap:7px;font-style:normal;
+  border:1px solid currentColor;border-radius:var(--pill);padding:6px 12px}
+.eng-by.split i::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.eng-by.split i.soft{color:var(--red)}
+.eng-by.split i.people{color:var(--green)}
+.eng-by.split i.you{color:var(--mut)}
+
+.engines{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.engine{display:flex;flex-direction:column;align-items:flex-start;gap:12px;
+  background:var(--surface);border:1px solid var(--line);border-radius:22px;
+  padding:26px 24px;transition:border-color .4s var(--ease),transform .4s var(--ease)}
+.engine:hover{transform:translateY(-3px);border-color:rgba(36,31,28,.2)}
+.eng-top{display:flex;align-items:baseline;justify-content:space-between;gap:14px;width:100%}
+.engine h3{font-size:20px;letter-spacing:-.015em;margin:0}
+.eng-when{flex:none;font-family:ui-monospace,Menlo,monospace;font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.engine p{font-size:14.6px;line-height:1.6;color:var(--body);margin:0}
+.engine .eng-by{margin-top:auto}
+.eng-sec.peach .engine{background:rgba(255,255,255,.72)}
+
+@media(max-width:900px){
+  .engines{grid-template-columns:1fr}
+  .desk-key{grid-template-columns:1fr;gap:18px}
+}
+
+/* ============================================================
+   MOBILE PASS — 2026-08-10
+   ------------------------------------------------------------
+   Layout already reflowed correctly at every breakpoint; what was
+   missing was touch ergonomics. Measured on a 390px viewport:
+   footer links were 20px tall, inline CTAs 23-29px, and the
+   instrument labels fell to 9.5px. Targets go to 44px (the Apple
+   and WCAG 2.5.5 minimum) and nothing prints below 11px.
+   ============================================================ */
+@media(max-width:820px){
+  /* --- tap targets --- */
+  .foot-col a{min-height:44px;display:flex;align-items:center}
+  .foot-col{gap:2px}
+  .step-link,.sc-cta,.ds-go,.nm-foot,.sg-go{min-height:44px;display:inline-flex;
+    align-items:center}
+  .sc-cta.solid{min-height:48px}
+  .nav-menu a{min-height:46px;display:flex;flex-direction:column;justify-content:center}
+  .nav-menu.cols2 a{min-height:46px}
+  .desk-jump a{min-height:46px;display:inline-flex;align-items:center}
+  .nav-logo{min-height:44px;display:flex;align-items:center}
+  .faq summary{min-height:52px}
+  /* the whole engine card is the target on touch, so the label inside
+     does not need to be one */
+  .engine{padding:24px 20px}
+
+  /* --- nothing below 11px on a phone --- */
+  .f-scale{font-size:11px}
+  .rig-meta,.hdm-note,.hdm-lab,.ra-note{font-size:11px}
+  .estats-note{font-size:13px}
+  .sc-stats span,.cm-row span{font-size:12.5px}
+  .foot-bottom{font-size:12.5px;gap:10px}
+
+  /* --- touch feel --- */
+  a,button,summary,[role="option"]{-webkit-tap-highlight-color:rgba(228,38,44,.14)}
+  /* hover lifts are meaningless on touch and leave cards stuck mid-transform
+     after a tap */
+  .engine:hover,.leakcard:hover,.segcard:hover,.dslab:hover,.seatcard:hover,
+  .gcard:hover{transform:none}
+}
+
+/* iOS zooms the whole page when a text field under 16px takes focus, which
+   throws the layout off and cannot be undone by pinching back. */
+@media(max-width:820px){
+  input[type="text"],input[type="email"],input[type="tel"],input[type="number"],
+  input[type="search"],select,textarea{font-size:16px}
+}
+
+/* The two hero search boxes are the primary action on the whole site; give
+   them room to be hit and keep the arrow button a proper square. */
+@media(max-width:560px){
+  .ys-box input,.gate-box input{font-size:16px}
+  .ys-go,.gate-go{width:52px;height:52px;flex:none}
+  .desk-hero{padding-top:clamp(104px,26vw,132px)}
+  .desk-jump{gap:8px}
+  .desk-jump a{font-size:13.5px;padding:12px 15px}
+}

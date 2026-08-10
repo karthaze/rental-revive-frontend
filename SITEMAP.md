@@ -185,3 +185,28 @@ Waves 2 and 3 are where the "content-rich" character actually arrives. Wave 1 al
 2. **Do the three geographies get their own pages?** US / Australia / the Gulf currently exist only as a claim in a stat strip. If we want them for search, they need real pages, and each needs its own compliance and hours story.
 3. **Typeface.** `design.md` §7 — pick before any copy is set. General Sans or Satoshi recommended.
 4. **Founding-partner perks** beyond the documented trade — see above.
+
+---
+
+## Decision — 2026-08-10: sixteen capability pages become one Desk page
+
+The sixteen `/catch/* /quote/* /recover/* /run/*` pages are **cancelled**.
+Three reasons, in order of weight:
+
+1. **Nothing linked to them.** Rebuilding the nav around four outcome groups
+   and replacing the engine-card wall with the four dark slabs repointed
+   every link on the site to `/the-desk` with four anchors. The sixteen URLs
+   were orphaned before a word of them was written.
+2. **Nobody searches our own names.** "The Never-Missed Counter" is a name we
+   invented. Sixteen thin pages named after invented terms earn nothing and
+   split the authority of the one page that could rank.
+3. **Several are not capabilities.** "Your pricing rules" is a constraint.
+   "Quote Required" is a routing rule. Neither is a page.
+
+Shipped instead: **`/the-desk`** — one page, four anchored sections
+(`#catch`, `#quote`, `#recover`, `#run`), all sixteen engines with what each
+does, who runs it (HeyDozr / our closers / you), and the week it goes live.
+
+Remaining build: 8 segment pages under `/yards/*` (these *do* map to real
+search intent), plus `/case-studies`, `/founding-partners`, `/the-leak`,
+`/the-leak/how-we-find-it` and `/guides`. 13 pages, not 24.
