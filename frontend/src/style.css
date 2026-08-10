@@ -1306,14 +1306,11 @@ body::before{display:none}
 .mku{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M4,10 C60,3 140,2 196,7' fill='none' stroke='%23E4262C' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left bottom/100% .34em;
   padding-bottom:.16em}
 
-/* dashed survey brackets on the hero photo corners */
-.hero-demo{position:relative}
-.hero-demo::before{content:"";position:absolute;top:-13px;right:-13px;width:58px;height:58px;
-  border-top:2.5px dashed var(--red);border-right:2.5px dashed var(--red);
-  border-radius:0 20px 0 0;pointer-events:none}
-.hero-demo::after{content:"";position:absolute;bottom:-13px;left:-13px;width:58px;height:58px;
-  border-bottom:2.5px dashed var(--red);border-left:2.5px dashed var(--red);
-  border-radius:0 0 0 20px;pointer-events:none}
+/* NO corner brackets on the hero. The base stylesheet already uses
+   .hero-demo::after as the full-photo cream wash that makes the cards
+   read; a bracket rule on the same pseudo merged with it and produced
+   a cream ghost square in the photo's corner. The photo carries the
+   toasts and the meter — it needs no further decoration. */
 
 /* --- NAV PANELS: small, wrapping, viewport-safe ------------ */
 .nav-menu{width:min(400px,calc(100vw - 40px));padding:12px;border-radius:22px;
@@ -1479,9 +1476,12 @@ footer::before{display:none}
    crane hook, and the hero finishes its own story.
    ============================================================ */
 
-/* Overscroll rubber-banding showed the white canvas above the cream
-   page and below the dark footer. The canvas is two-tone now. */
-html{background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 50%,var(--char) 50%,var(--char) 100%)}
+/* Overscroll rubber-banding showed the bare canvas above the cream page
+   and below the dark footer. The canvas is two-tone, and the gradient is
+   ANCHORED TO THE VIEWPORT (fixed): with the default scroll attachment
+   the gradient tiles past the document's end, so over-scrolling below
+   the dark footer flashed a fresh cream tile. */
+html{background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 50%,var(--char) 50%,var(--char) 100%) no-repeat fixed}
 
 /* --- HERO: the payoff toast was hidden on desktop, so the demo told
    half a story — a missed call with no catch. Show the catch. --- */
@@ -1509,8 +1509,12 @@ html{background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 50%,var(--char) 50
 @media(max-width:640px){.steps.four{grid-template-columns:1fr}}
 
 /* --- LEAK: the excavator digs at the section's closing line --- */
-.digger-row{display:flex;justify-content:flex-end;padding-right:5%;margin:26px 0 -14px;pointer-events:none}
-.digger{width:132px;height:auto}
+/* The digger is anchored to the TEXT COLUMN, not the section width:
+   on wide screens the paragraph stops at 78ch, and a machine floating
+   in the empty half beyond it read as misplaced clip-art. Parked at
+   the end of the line it digs at, exactly on the rule. */
+.digger-row{position:relative;height:0;margin-top:80px;pointer-events:none}
+.digger{position:absolute;right:8px;bottom:-3px;width:118px;height:auto}
 .dg-arm{transform-box:view-box;transform-origin:72px 42px;animation:dig 3.8s ease-in-out infinite}
 @keyframes dig{0%,100%{transform:rotate(0)}35%{transform:rotate(-8deg)}70%{transform:rotate(4deg)}}
 .digger-row + .leak-close{margin-top:0}
