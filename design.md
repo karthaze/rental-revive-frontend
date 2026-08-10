@@ -547,3 +547,38 @@ wrong box and pivoted the needle around the dial centre.
 The canvas behind the page is two-tone
 (`html{background:linear-gradient(...)}`) so rubber-band overscroll shows
 cream above the hero and charcoal below the footer instead of bare white.
+
+### Skeleton machines (2026-08-10)
+
+The cohort's ghost `5` proved the treatment, so machinery got it too: three
+**blueprint elevations** drawn as stroke-only SVG (`fill:none`, no filled
+shapes anywhere), one per section, in the empty half beside a left-aligned
+head. Excavator → the leak, dozer → the guarantees, crawler crane → the
+segments. Rules:
+
+- Outline only. A filled machine reads as clip-art; that is exactly what the
+  little solid digger looked like and why it got cut.
+- `stroke: rgba(36,31,28,.15)` at 2.4px, load-bearing members at 4px.
+- **viewBox must be cropped to the drawing's bounds.** The first pass left the
+  machines sitting in the left half of a loose box, so half of every watermark
+  was empty space and no CSS position could put them where they belonged.
+- Laid out, not floated, wherever text could reach them: the excavator is a
+  flex sibling of the closing line (`.leak-foot`), not an absolute overlay.
+- Hidden under 1180px — there is no empty half to park in.
+
+Two carry motion: the excavator's arm digs, the crane's hoist line sways.
+
+### Two fixes worth not repeating
+
+**Overscroll.** A gradient on the root element cannot solve a two-tone
+rubber band: the canvas background image is sized to the root's box, so
+everything past the document falls back to `background-color` (white), and the
+default `repeat` tiles a fresh cream band under the footer instead. Both are
+dead ends. The fix is `overscroll-behavior-y:none` on `html` plus
+`html{background:var(--char)}` / `body{background:var(--bg)}` as the fallback
+for anything that ignores it.
+
+**Rounded slab corners cut through to what is behind them.** The dark cohort
+band's rounded top corners revealed the page ground as two cream chips against
+the peach section above it. A slab with rounded corners needs a shell painted
+the same colour as the section it sits against — `.cohort-shell`.

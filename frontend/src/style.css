@@ -1306,11 +1306,45 @@ body::before{display:none}
 .mku{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M4,10 C60,3 140,2 196,7' fill='none' stroke='%23E4262C' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left bottom/100% .34em;
   padding-bottom:.16em}
 
-/* NO corner brackets on the hero. The base stylesheet already uses
-   .hero-demo::after as the full-photo cream wash that makes the cards
-   read; a bracket rule on the same pseudo merged with it and produced
-   a cream ghost square in the photo's corner. The photo carries the
-   toasts and the meter — it needs no further decoration. */
+/* Survey brackets on the hero photo. These live on their OWN element:
+   the first version hung them off .hero-demo::before/::after, but the base
+   stylesheet already uses ::after for the full-photo cream wash, so the two
+   rules merged and painted a cream ghost square into the corner. */
+.hd-frame{position:absolute;inset:0;pointer-events:none;z-index:3}
+.hd-frame::before,.hd-frame::after{content:"";position:absolute;width:54px;height:54px}
+.hd-frame::before{top:-12px;left:-12px;border-top:2.5px dashed var(--red);
+  border-left:2.5px dashed var(--red);border-radius:18px 0 0 0}
+.hd-frame::after{bottom:-12px;right:-12px;border-bottom:2.5px dashed var(--red);
+  border-right:2.5px dashed var(--red);border-radius:0 0 18px 0}
+
+/* --- COHORT SHELL: the dark slab's rounded top corners cut through to
+   whatever sits behind them, which was the page ground. The section above
+   is peach, so the notches read as two cream chips against it. --- */
+.cohort-shell{background:var(--peach)}
+
+/* --- SKELETON MACHINES: blueprint elevations, drawn as outline only,
+   the same treatment as the cohort's ghost 5. One per section, parked in
+   the empty half beside a left-aligned head, never behind text. --- */
+.mwatch{position:absolute;pointer-events:none;z-index:0;display:block}
+.mwatch svg{width:100%;height:auto;display:block;overflow:visible}
+.mwatch g{fill:none;stroke:rgba(36,31,28,.15);stroke-width:2.4;
+  stroke-linecap:round;stroke-linejoin:round}
+.mwatch .thick{stroke-width:4}
+#guarantees,#segments{position:relative;overflow:hidden}
+#guarantees .wrap,#segments .wrap{position:relative;z-index:1}
+/* The excavator is LAID OUT beside the closing line rather than floated
+   over it — absolutely positioned, it landed on top of the paragraph. */
+.leak-foot{display:flex;align-items:center;gap:clamp(24px,4vw,56px);
+  margin-top:34px;padding-top:26px;border-top:1px solid var(--line)}
+.leak-foot .leak-close{margin-top:0;padding-top:0;border-top:0;flex:1 1 auto}
+.mw-leaks{position:static;flex:0 0 250px;width:250px;margin-left:auto}
+.mw-guar{right:10px;top:44px;width:240px}
+.mw-segs{right:14px;top:26px;width:320px}
+@media(max-width:1180px){.leak-foot{display:block}}
+/* The excavator replaces the old sticker digger, so it keeps the dig. */
+.ex-arm{transform-box:view-box;transform-origin:100px 202px;animation:dig 5s ease-in-out infinite}
+.cr-line{transform-box:view-box;transform-origin:399px 85px;animation:sway 6s ease-in-out infinite}
+@media(max-width:1180px){.mwatch{display:none}}
 
 /* --- NAV PANELS: small, wrapping, viewport-safe ------------ */
 .nav-menu{width:min(400px,calc(100vw - 40px));padding:12px;border-radius:22px;
@@ -1476,12 +1510,17 @@ footer::before{display:none}
    crane hook, and the hero finishes its own story.
    ============================================================ */
 
-/* Overscroll rubber-banding showed the bare canvas above the cream page
-   and below the dark footer. The canvas is two-tone, and the gradient is
-   ANCHORED TO THE VIEWPORT (fixed): with the default scroll attachment
-   the gradient tiles past the document's end, so over-scrolling below
-   the dark footer flashed a fresh cream tile. */
-html{background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 50%,var(--char) 50%,var(--char) 100%) no-repeat fixed}
+/* OVERSCROLL, properly this time.
+   A gradient on the root can never solve this: the canvas background image
+   is sized to the root element's box, so anything past the document falls
+   back to background-COLOR (white) — and with the default `repeat` it tiles
+   instead, flashing a fresh cream band under the footer. Both of my earlier
+   attempts were versions of that same dead end.
+   So: stop the rubber band, and make the canvas colour the footer's colour
+   for any browser that ignores the first line. Body carries the page ground,
+   and because html has its own background, body's no longer propagates. */
+html{background:var(--char);overscroll-behavior-y:none}
+body{background:var(--bg)}
 
 /* --- HERO: the payoff toast was hidden on desktop, so the demo told
    half a story — a missed call with no catch. Show the catch. --- */
@@ -1509,15 +1548,10 @@ html{background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 50%,var(--char) 50
 @media(max-width:640px){.steps.four{grid-template-columns:1fr}}
 
 /* --- LEAK: the excavator digs at the section's closing line --- */
-/* The digger is anchored to the TEXT COLUMN, not the section width:
-   on wide screens the paragraph stops at 78ch, and a machine floating
-   in the empty half beyond it read as misplaced clip-art. Parked at
-   the end of the line it digs at, exactly on the rule. */
-.digger-row{position:relative;height:0;margin-top:80px;pointer-events:none}
-.digger{position:absolute;right:8px;bottom:-3px;width:118px;height:auto}
-.dg-arm{transform-box:view-box;transform-origin:72px 42px;animation:dig 3.8s ease-in-out infinite}
-@keyframes dig{0%,100%{transform:rotate(0)}35%{transform:rotate(-8deg)}70%{transform:rotate(4deg)}}
-.digger-row + .leak-close{margin-top:0}
+/* (the little sticker digger is gone — it read as clip-art dropped in a
+   random gap. The leak section now carries a full blueprint excavator as
+   a watermark instead; see SKELETON MACHINES below.) */
+@keyframes dig{0%,100%{transform:rotate(0)}35%{transform:rotate(-7deg)}70%{transform:rotate(3deg)}}
 
 /* --- COHORT: the ghost 5 hangs off a crane hook --- */
 .cohort-hook{position:absolute;top:0;right:clamp(90px,14vw,260px);width:56px;height:auto;pointer-events:none}
@@ -1542,6 +1576,7 @@ footer::before{content:"";display:block;position:absolute;top:0;left:0;right:0;h
 .stamp.d91{position:absolute;top:-15px;right:18px;background:var(--surface);z-index:2}
 
 @media (prefers-reduced-motion:reduce){
-  .hero-demo.in .toast.a,.hero-demo.in .toast.b,.dg-arm,.hook-swing{animation:none}
+  .hero-demo.in .toast.a,.hero-demo.in .toast.b,.hook-swing,
+  .ex-arm,.cr-line{animation:none}
   .steps-route.in .route-truck{animation:none;left:calc(100% - 70px)}
 }
