@@ -28,3 +28,4 @@ frontend/*.html
 frontend/the-leak/
 frontend/yards/
 frontend/pages/yards/
+.gstack/
